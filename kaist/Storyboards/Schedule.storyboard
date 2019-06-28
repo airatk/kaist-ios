@@ -10,17 +10,17 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Расписание-->
+        <!--Schedule-->
         <scene sceneID="AQm-cD-S1e">
             <objects>
-                <viewController id="x0u-53-ay7" sceneMemberID="viewController">
+                <viewController id="x0u-53-ay7" userLabel="Schedule" customClass="ScheduleScreen" customModule="kaist" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="JHv-8p-3cV">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="QFW-jO-2lg"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Расписание" image="schedule" id="mqG-4D-4x0"/>
+                    <tabBarItem key="tabBarItem" title="Расписание" id="mqG-4D-4x0"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aqu-Ui-LQG" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -28,7 +28,4 @@
             <point key="canvasLocation" x="94" y="90"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="schedule" width="30" height="30"/>
-    </resources>
 </document>

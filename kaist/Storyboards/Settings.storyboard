@@ -10,10 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Настройки-->
+        <!--Settings-->
         <scene sceneID="7kc-2s-NDJ">
             <objects>
-                <viewController id="wrP-Gn-glE" sceneMemberID="viewController">
+                <viewController id="wrP-Gn-glE" userLabel="Settings" customClass="SettingsScreen" customModule="kaist" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="O8c-HG-Aju">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
