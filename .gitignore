@@ -1,2 +1,9 @@
 # macOS stuff
 **/.DS_store
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Xcode
+*.xcworkspace

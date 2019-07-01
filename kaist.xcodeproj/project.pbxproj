@@ -9,29 +9,25 @@
 /* Begin PBXBuildFile section */
 		6068569722C610420010D324 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6068569622C610420010D324 /* AppDelegate.swift */; };
 		6068569E22C610430010D324 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6068569D22C610430010D324 /* Assets.xcassets */; };
-		606856AB22C611180010D324 /* Schedule.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 606856AA22C611180010D324 /* Schedule.storyboard */; };
-		606856AD22C611270010D324 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 606856AC22C611270010D324 /* Settings.storyboard */; };
-		606856AF22C611470010D324 /* ScheduleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 606856AE22C611470010D324 /* ScheduleScreen.swift */; };
-		606856B122C611590010D324 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 606856B022C611590010D324 /* SettingsScreen.swift */; };
-		606856B322C616500010D324 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 606856B222C616500010D324 /* LaunchScreen.storyboard */; };
-		606856B522C616700010D324 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 606856B422C616700010D324 /* Main.storyboard */; };
-		606856B922C66A840010D324 /* LoginScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 606856B822C66A840010D324 /* LoginScreen.storyboard */; };
-		606856BB22C678850010D324 /* LoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 606856BA22C678850010D324 /* LoginScreen.swift */; };
+		606B379222CA858900929369 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 606B379122CA858900929369 /* Main.swift */; };
+		606B379422CAA07F00929369 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 606B379322CAA07F00929369 /* LaunchScreen.storyboard */; };
+		60B2E42D22CB182600BEAB23 /* ScheduleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E42A22CB182600BEAB23 /* ScheduleScreen.swift */; };
+		60B2E42E22CB182600BEAB23 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E42C22CB182600BEAB23 /* SettingsScreen.swift */; };
+		E2F6EDE69E807E8BA89ECE65 /* Pods_kaist.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2122653EEB719A9CDBF82F16 /* Pods_kaist.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2122653EEB719A9CDBF82F16 /* Pods_kaist.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kaist.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FDD590DF6B6A87C3237CF1B /* Pods-kaist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kaist.debug.xcconfig"; path = "Target Support Files/Pods-kaist/Pods-kaist.debug.xcconfig"; sourceTree = "<group>"; };
 		6068569322C610420010D324 /* kaist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kaist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6068569622C610420010D324 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6068569D22C610430010D324 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		606856A222C610430010D324 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		606856AA22C611180010D324 /* Schedule.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Schedule.storyboard; sourceTree = "<group>"; };
-		606856AC22C611270010D324 /* Settings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Settings.storyboard; sourceTree = "<group>"; };
-		606856AE22C611470010D324 /* ScheduleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleScreen.swift; sourceTree = "<group>"; };
-		606856B022C611590010D324 /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
-		606856B222C616500010D324 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
-		606856B422C616700010D324 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		606856B822C66A840010D324 /* LoginScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LoginScreen.storyboard; sourceTree = "<group>"; };
-		606856BA22C678850010D324 /* LoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreen.swift; sourceTree = "<group>"; };
+		606B379122CA858900929369 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
+		606B379322CAA07F00929369 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		60B2E42A22CB182600BEAB23 /* ScheduleScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleScreen.swift; sourceTree = "<group>"; };
+		60B2E42C22CB182600BEAB23 /* SettingsScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
+		82E52C4120839F419F840368 /* Pods-kaist.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kaist.release.xcconfig"; path = "Target Support Files/Pods-kaist/Pods-kaist.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2F6EDE69E807E8BA89ECE65 /* Pods_kaist.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,6 +47,8 @@
 			children = (
 				6068569522C610420010D324 /* kaist */,
 				6068569422C610420010D324 /* Products */,
+				8DAA9F1620FCA732B176297F /* Pods */,
+				B2C0872559DA49117547C9C4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -64,35 +63,56 @@
 		6068569522C610420010D324 /* kaist */ = {
 			isa = PBXGroup;
 			children = (
+				606B379322CAA07F00929369 /* LaunchScreen.storyboard */,
 				6068569622C610420010D324 /* AppDelegate.swift */,
-				606856A922C610E50010D324 /* Storyboards */,
-				606856A822C610E50010D324 /* Controllers */,
+				606B378622CA83CA00929369 /* Screens */,
 				6068569D22C610430010D324 /* Assets.xcassets */,
 				606856A222C610430010D324 /* Info.plist */,
 			);
 			path = kaist;
 			sourceTree = "<group>";
 		};
-		606856A822C610E50010D324 /* Controllers */ = {
+		606B378622CA83CA00929369 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				606856BA22C678850010D324 /* LoginScreen.swift */,
-				606856AE22C611470010D324 /* ScheduleScreen.swift */,
-				606856B022C611590010D324 /* SettingsScreen.swift */,
+				606B379122CA858900929369 /* Main.swift */,
+				60B2E42922CB182600BEAB23 /* Schedule */,
+				60B2E42B22CB182600BEAB23 /* Settings */,
 			);
-			path = Controllers;
+			path = Screens;
 			sourceTree = "<group>";
 		};
-		606856A922C610E50010D324 /* Storyboards */ = {
+		60B2E42922CB182600BEAB23 /* Schedule */ = {
 			isa = PBXGroup;
 			children = (
-				606856B222C616500010D324 /* LaunchScreen.storyboard */,
-				606856B822C66A840010D324 /* LoginScreen.storyboard */,
-				606856B422C616700010D324 /* Main.storyboard */,
-				606856AA22C611180010D324 /* Schedule.storyboard */,
-				606856AC22C611270010D324 /* Settings.storyboard */,
+				60B2E42A22CB182600BEAB23 /* ScheduleScreen.swift */,
 			);
-			path = Storyboards;
+			path = Schedule;
+			sourceTree = "<group>";
+		};
+		60B2E42B22CB182600BEAB23 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				60B2E42C22CB182600BEAB23 /* SettingsScreen.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		8DAA9F1620FCA732B176297F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4FDD590DF6B6A87C3237CF1B /* Pods-kaist.debug.xcconfig */,
+				82E52C4120839F419F840368 /* Pods-kaist.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		B2C0872559DA49117547C9C4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2122653EEB719A9CDBF82F16 /* Pods_kaist.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -102,6 +122,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 606856A522C610430010D324 /* Build configuration list for PBXNativeTarget "kaist" */;
 			buildPhases = (
+				19D128249DA81650E3A5E0C3 /* [CP] Check Pods Manifest.lock */,
 				6068568F22C610420010D324 /* Sources */,
 				6068569022C610420010D324 /* Frameworks */,
 				6068569122C610420010D324 /* Resources */,
@@ -154,24 +175,45 @@
 			buildActionMask = 2147483647;
 			files = (
 				6068569E22C610430010D324 /* Assets.xcassets in Resources */,
-				606856B522C616700010D324 /* Main.storyboard in Resources */,
-				606856B322C616500010D324 /* LaunchScreen.storyboard in Resources */,
-				606856AB22C611180010D324 /* Schedule.storyboard in Resources */,
-				606856B922C66A840010D324 /* LoginScreen.storyboard in Resources */,
-				606856AD22C611270010D324 /* Settings.storyboard in Resources */,
+				606B379422CAA07F00929369 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		19D128249DA81650E3A5E0C3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-kaist-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6068568F22C610420010D324 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				606856AF22C611470010D324 /* ScheduleScreen.swift in Sources */,
-				606856BB22C678850010D324 /* LoginScreen.swift in Sources */,
-				606856B122C611590010D324 /* SettingsScreen.swift in Sources */,
+				60B2E42E22CB182600BEAB23 /* SettingsScreen.swift in Sources */,
+				606B379222CA858900929369 /* Main.swift in Sources */,
+				60B2E42D22CB182600BEAB23 /* ScheduleScreen.swift in Sources */,
 				6068569722C610420010D324 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -297,6 +339,7 @@
 		};
 		606856A622C610430010D324 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4FDD590DF6B6A87C3237CF1B /* Pods-kaist.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -315,6 +358,7 @@
 		};
 		606856A722C610430010D324 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 82E52C4120839F419F840368 /* Pods-kaist.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
