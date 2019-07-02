@@ -13,6 +13,8 @@
 		606B379422CAA07F00929369 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 606B379322CAA07F00929369 /* LaunchScreen.storyboard */; };
 		60B2E42D22CB182600BEAB23 /* ScheduleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E42A22CB182600BEAB23 /* ScheduleScreen.swift */; };
 		60B2E42E22CB182600BEAB23 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E42C22CB182600BEAB23 /* SettingsScreen.swift */; };
+		60B2E43322CB54EB00BEAB23 /* ScoreScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E43222CB54EB00BEAB23 /* ScoreScreen.swift */; };
+		60B2E43622CB58F800BEAB23 /* MapScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E43522CB58F800BEAB23 /* MapScreen.swift */; };
 		E2F6EDE69E807E8BA89ECE65 /* Pods_kaist.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2122653EEB719A9CDBF82F16 /* Pods_kaist.framework */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +29,8 @@
 		606B379322CAA07F00929369 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		60B2E42A22CB182600BEAB23 /* ScheduleScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleScreen.swift; sourceTree = "<group>"; };
 		60B2E42C22CB182600BEAB23 /* SettingsScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
+		60B2E43222CB54EB00BEAB23 /* ScoreScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreScreen.swift; sourceTree = "<group>"; };
+		60B2E43522CB58F800BEAB23 /* MapScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScreen.swift; sourceTree = "<group>"; };
 		82E52C4120839F419F840368 /* Pods-kaist.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kaist.release.xcconfig"; path = "Target Support Files/Pods-kaist/Pods-kaist.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -63,10 +67,10 @@
 		6068569522C610420010D324 /* kaist */ = {
 			isa = PBXGroup;
 			children = (
-				606B379322CAA07F00929369 /* LaunchScreen.storyboard */,
 				6068569622C610420010D324 /* AppDelegate.swift */,
 				606B378622CA83CA00929369 /* Screens */,
 				6068569D22C610430010D324 /* Assets.xcassets */,
+				606B379322CAA07F00929369 /* LaunchScreen.storyboard */,
 				606856A222C610430010D324 /* Info.plist */,
 			);
 			path = kaist;
@@ -77,6 +81,8 @@
 			children = (
 				606B379122CA858900929369 /* Main.swift */,
 				60B2E42922CB182600BEAB23 /* Schedule */,
+				60B2E43122CB54C400BEAB23 /* Score */,
+				60B2E43422CB58D500BEAB23 /* Map */,
 				60B2E42B22CB182600BEAB23 /* Settings */,
 			);
 			path = Screens;
@@ -96,6 +102,22 @@
 				60B2E42C22CB182600BEAB23 /* SettingsScreen.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		60B2E43122CB54C400BEAB23 /* Score */ = {
+			isa = PBXGroup;
+			children = (
+				60B2E43222CB54EB00BEAB23 /* ScoreScreen.swift */,
+			);
+			path = Score;
+			sourceTree = "<group>";
+		};
+		60B2E43422CB58D500BEAB23 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				60B2E43522CB58F800BEAB23 /* MapScreen.swift */,
+			);
+			path = Map;
 			sourceTree = "<group>";
 		};
 		8DAA9F1620FCA732B176297F /* Pods */ = {
@@ -212,8 +234,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				60B2E42E22CB182600BEAB23 /* SettingsScreen.swift in Sources */,
+				60B2E43322CB54EB00BEAB23 /* ScoreScreen.swift in Sources */,
 				606B379222CA858900929369 /* Main.swift in Sources */,
 				60B2E42D22CB182600BEAB23 /* ScheduleScreen.swift in Sources */,
+				60B2E43622CB58F800BEAB23 /* MapScreen.swift in Sources */,
 				6068569722C610420010D324 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

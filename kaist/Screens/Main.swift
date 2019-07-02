@@ -15,39 +15,33 @@ class Main: UITabBarController {
         
         self.tabBar.isTranslucent = false
         
-        self.viewControllers = [ getScheduleTab(), getSettingsTab() ]
+        self.viewControllers = [
+            getTab(for: ScheduleScreen(), withTitle: getCurrentDate(), withImageNamed: getCurrentWeekday()),
+            getTab(for: ScoreScreen(), withTitle: "Баллы", withImageNamed: "score"),
+            getTab(for: MapScreen(), withTitle: "Карта", withImageNamed: "map"),
+            getTab(for: SettingsScreen(), withTitle: "Настройки", withImageNamed: "settings")
+        ]
     }
     
-    func getScheduleTab() -> ScheduleScreen {
-        let schedule = ScheduleScreen()
-        let scheduleTabBarItem = UITabBarItem(title: getCurrentDate(), image: getCurrentWeekdayImage(), selectedImage: nil)
+    private func getTab(for screen: UIViewController, withTitle title: String, withImageNamed imageName: String) -> UIViewController {
+        screen.tabBarItem = UITabBarItem(title: title, image: UIImage(named: imageName), selectedImage: nil)
         
-        schedule.tabBarItem = scheduleTabBarItem
-        
-        return schedule
-    }
-    
-    func getSettingsTab() -> SettingsScreen {
-        let settings = SettingsScreen()
-        let settingsTabBarItem = UITabBarItem(title: "Настройки", image: UIImage(named: "settings"), selectedImage: nil)
-        
-        settings.tabBarItem = settingsTabBarItem
-        
-        return settings
+        return screen
     }
     
 }
 
+// Setup functions of the 1st tab bar item
 extension Main {
 
-    func getCurrentWeekdayImage() -> UIImage {
+    private func getCurrentWeekday() -> String {
         let weekday = Calendar(identifier: .gregorian).component(.weekday, from: Date()) - 1  // Array key, so decremented.
-        let weekdayImageNames = [ "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saterday" ]
+        let weekdays = [ "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saterday" ]
         
-        return UIImage(named: weekdayImageNames[weekday])!
+        return weekdays[weekday]
     }
     
-    func getCurrentDate() -> String {
+    private func getCurrentDate() -> String {
         let day = Calendar(identifier: .gregorian).component(.day, from: Date())
         let month = Calendar(identifier: .gregorian).component(.month, from: Date()) - 1  // Array key, so decremented.
         

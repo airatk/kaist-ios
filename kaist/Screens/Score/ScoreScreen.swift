@@ -1,20 +1,18 @@
 //
-//  ScheduleScreen.swift
+//  ScoreScreen.swift
 //  kaist
 //
-//  Created by Airat K on 28/6/19.
+//  Created by Airat K on 2/7/19.
 //  Copyright © 2019 Airat K. All rights reserved.
 //
 
 import UIKit
 
-class ScheduleScreen: UIViewController {
-    
-    var logo: UIImageView!
-    
+class ScoreScreen: UIViewController {
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.view.backgroundColor = .white
     }
 
