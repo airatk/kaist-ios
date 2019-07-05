@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class ScheduleScreen: UIViewController {
     
     var logo: UIImageView!
@@ -15,7 +16,24 @@ class ScheduleScreen: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setUpView()
+        setUpNavigationItem()
+    }
+    
+    private func setUpView() {
         self.view.backgroundColor = .white
+    }
+    
+    private func setUpNavigationItem() {
+        self.navigationItem.titleView = getSegmentedControl(withItems: [ "чётная", "нечётная" ])
+    }
+    
+    private func getSegmentedControl(withItems items: [String]) -> UISegmentedControl {
+        let segmentedControl = UISegmentedControl(items: items)
+        
+        segmentedControl.selectedSegmentIndex = isCurrentWeekEven() ? 0 : 1
+        
+        return segmentedControl
     }
 
 }

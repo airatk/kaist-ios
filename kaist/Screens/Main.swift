@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class Main: UITabBarController {
 
     override func viewDidLoad() {
@@ -24,36 +25,11 @@ class Main: UITabBarController {
     }
     
     private func getTab(for screen: UIViewController, withTitle title: String, withImageNamed imageName: String) -> UIViewController {
-        screen.tabBarItem = UITabBarItem(title: title, image: UIImage(named: imageName), selectedImage: nil)
+        let navigationController = UINavigationController(rootViewController: screen)
         
-        return screen
-    }
-    
-}
-
-// Setup functions of the 1st tab bar item
-extension Main {
-
-    private func getCurrentWeekday() -> String {
-        let weekday = Calendar(identifier: .gregorian).component(.weekday, from: Date()) - 1  // Array key, so decremented.
-        let weekdays = [ "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saterday" ]
+        navigationController.tabBarItem = UITabBarItem(title: title, image: UIImage(named: imageName), selectedImage: nil)
         
-        return weekdays[weekday]
-    }
-    
-    private func getCurrentDate() -> String {
-        let day = Calendar(identifier: .gregorian).component(.day, from: Date())
-        let month = Calendar(identifier: .gregorian).component(.month, from: Date()) - 1  // Array key, so decremented.
-        
-        let months = [
-            "января", "февраля",
-            "марта", "апреля", "мая",
-            "июня", "июля", "августа",
-            "сентября", "октября", "ноября",
-            "декабря"
-        ]
-        
-        return "\(day) \(months[month])"
+        return navigationController
     }
     
 }

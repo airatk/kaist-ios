@@ -8,12 +8,15 @@
 
 import UIKit
 
+
 class MapScreen: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.view.backgroundColor = .white
+        
+        self.navigationItem.title = "Карта"
     }
 
 }
