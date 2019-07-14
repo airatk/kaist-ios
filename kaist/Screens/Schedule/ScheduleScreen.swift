@@ -31,7 +31,7 @@ class ScheduleScreen: UIViewController {
     private func getSegmentedControl(withItems items: [String]) -> UISegmentedControl {
         let segmentedControl = UISegmentedControl(items: items)
         
-        segmentedControl.selectedSegmentIndex = isCurrentWeekEven() ? 0 : 1
+        segmentedControl.selectedSegmentIndex = CurrentDay.isWeekEven ? 0 : 1
         
         return segmentedControl
     }

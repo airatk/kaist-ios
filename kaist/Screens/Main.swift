@@ -17,17 +17,17 @@ class Main: UITabBarController {
         self.tabBar.isTranslucent = false
         
         self.viewControllers = [
-            getTab(for: ScheduleScreen(), withTitle: getCurrentDate(), withImageNamed: getCurrentWeekday()),
-            getTab(for: ScoreScreen(), withTitle: "Баллы", withImageNamed: "score"),
-            getTab(for: MapScreen(), withTitle: "Карта", withImageNamed: "map"),
-            getTab(for: SettingsScreen(), withTitle: "Настройки", withImageNamed: "settings")
+            getTab(for: ScheduleScreen(), withTitle: CurrentDay.date, withImage: CurrentDay.weekday),
+            getTab(for: ScoreScreen(), withTitle: "Баллы", withImage: "score"),
+            getTab(for: MapScreen(), withTitle: "Карта", withImage: "map"),
+            getTab(for: SettingsScreen(), withTitle: "Настройки", withImage: "settings")
         ]
     }
     
-    private func getTab(for screen: UIViewController, withTitle title: String, withImageNamed imageName: String) -> UIViewController {
+    private func getTab(for screen: UIViewController, withTitle title: String, withImage image: String) -> UIViewController {
         let navigationController = UINavigationController(rootViewController: screen)
         
-        navigationController.tabBarItem = UITabBarItem(title: title, image: UIImage(named: imageName), selectedImage: nil)
+        navigationController.tabBarItem = UITabBarItem(title: title, image: UIImage(named: image), selectedImage: nil)
         
         return navigationController
     }

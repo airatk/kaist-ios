@@ -4,6 +4,6 @@ target 'kaist' do
 
     use_frameworks!
 
-    # pods
+    pod 'SwiftSoup'
 
 end

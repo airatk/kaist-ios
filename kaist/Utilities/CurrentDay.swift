@@ -9,49 +9,54 @@
 import Foundation
 
 
-func getCurrentWeekday() -> String {
-    let weekday = Calendar(identifier: .gregorian).component(.weekday, from: Date()) - 1  // Array key, so decremented.
-    
-    let weekdays = [ "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday" ]
+struct CurrentDay {
 
-    return weekdays[weekday]
-}
+    static var weekday: String {
+        let weekday = Calendar(identifier: .gregorian).component(.weekday, from: Date()) - 1  // Array key, so decremented.
+        
+        let weekdays = [ "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday" ]
 
-func getCurrentDate() -> String {
-    let calendar = Calendar(identifier: .gregorian)
-    let date = Date()
-    
-    let day = calendar.component(.day, from: date)
-    let month = calendar.component(.month, from: date) - 1  // Array key, so decremented.
-    
-    let months = [
-        "января", "февраля",
-        "марта", "апреля", "мая",
-        "июня", "июля", "августа",
-        "сентября", "октября", "ноября",
-        "декабря"
-    ]
-    
-    return "\(day) \(months[month])"
-}
+        return weekdays[weekday]
+    }
 
-func isCurrentWeekEven() -> Bool {
-    var calendar = Calendar(identifier: .gregorian)
-    let date = Date()
-    
-    // Setting Monday to be the 1st day of a week
-    calendar.firstWeekday = 2
-    
-    let isCurrentSemesterFirst = calendar.component(.month, from: date) > 8
-    
-    let day = isCurrentSemesterFirst ? 1 : 26
-    let month = isCurrentSemesterFirst ? 9 : 1
-    
-    let currentYear = calendar.component(.year, from: date)
-    let currentWeekOfYear = calendar.component(.weekOfYear, from: date)
-    
-    // Cannot be even semantically as its index == 1
-    let firstWeekOfSemester = calendar.component(.weekOfYear, from: DateComponents(calendar: calendar, year: currentYear, month: month, day: day).date!)
-    
-    return currentWeekOfYear % 2 != firstWeekOfSemester % 2
+    static var date: String {
+        let calendar = Calendar(identifier: .gregorian)
+        let date = Date()
+        
+        let day = calendar.component(.day, from: date)
+        let month = calendar.component(.month, from: date) - 1  // Array key, so decremented.
+        
+        let months = [
+            "января", "февраля",
+            "марта", "апреля", "мая",
+            "июня", "июля", "августа",
+            "сентября", "октября", "ноября",
+            "декабря"
+        ]
+        
+        return "\(day) \(months[month])"
+    }
+
+    static var isWeekEven: Bool {
+        var calendar = Calendar(identifier: .gregorian)
+        let date = Date()
+        
+        // Setting Monday to be the 1st day of a week
+        calendar.firstWeekday = 2
+        
+        let isCurrentSemesterFirst = calendar.component(.month, from: date) > 8
+        
+        let day = isCurrentSemesterFirst ? 1 : 26
+        let month = isCurrentSemesterFirst ? 9 : 1
+        
+        let currentYear = calendar.component(.year, from: date)
+        let currentWeekOfYear = calendar.component(.weekOfYear, from: date)
+        
+        // Cannot be even semantically as its index is equal to 1
+        let firstWeekOfSemester = calendar.component(.weekOfYear,
+          from: DateComponents(calendar: calendar, year: currentYear, month: month, day: day).date!)
+        
+        return currentWeekOfYear % 2 != firstWeekOfSemester % 2
+    }
+
 }
