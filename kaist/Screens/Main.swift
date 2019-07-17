@@ -16,18 +16,20 @@ class Main: UITabBarController {
         
         self.tabBar.isTranslucent = false
         
+        let currentDate = "\(CurrentDay.date.0), \(CurrentDay.date.1)"
+        
         self.viewControllers = [
-            getTab(for: ScheduleScreen(), withTitle: CurrentDay.date, withImage: CurrentDay.weekday),
-            getTab(for: ScoreScreen(), withTitle: "Баллы", withImage: "score"),
-            getTab(for: MapScreen(), withTitle: "Карта", withImage: "map"),
-            getTab(for: SettingsScreen(), withTitle: "Настройки", withImage: "settings")
+            self.getTab(for: ScheduleScreen(), withTitle: currentDate, withImageNamed: CurrentDay.weekday),
+            self.getTab(for: ScoreScreen(), withTitle: "Баллы", withImageNamed: "score"),
+            self.getTab(for: MapScreen(), withTitle: "Карта", withImageNamed: "map"),
+            self.getTab(for: SettingsScreen(), withTitle: "Настройки", withImageNamed: "settings")
         ]
     }
     
-    private func getTab(for screen: UIViewController, withTitle title: String, withImage image: String) -> UIViewController {
+    private func getTab(for screen: UIViewController, withTitle title: String, withImageNamed imageName: String) -> UIViewController {
         let navigationController = UINavigationController(rootViewController: screen)
         
-        navigationController.tabBarItem = UITabBarItem(title: title, image: UIImage(named: image), selectedImage: nil)
+        navigationController.tabBarItem = UITabBarItem(title: title, image: UIImage(named: imageName), selectedImage: nil)
         
         return navigationController
     }

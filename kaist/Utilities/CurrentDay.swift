@@ -19,7 +19,7 @@ struct CurrentDay {
         return weekdays[weekday]
     }
 
-    static var date: String {
+    static var date: (Int, String) {
         let calendar = Calendar(identifier: .gregorian)
         let date = Date()
         
@@ -34,7 +34,7 @@ struct CurrentDay {
             "декабря"
         ]
         
-        return "\(day) \(months[month])"
+        return (day, months[month])
     }
 
     static var isWeekEven: Bool {

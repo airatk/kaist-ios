@@ -52,31 +52,33 @@ class Student {
             return self.groupNumber
         }
         set(groupNumber) {
+            self.groupNumber = groupNumber
+            
             guard let groupNumber = groupNumber else { return }
             
             self.getGroupScheduleID { (scheduleID, error) in
-                guard error == nil else { return }
-                guard let scheduleID = scheduleID else { return }
+                guard error == nil, let scheduleID = scheduleID else { return }
                 
                 self.groupScheduleID = scheduleID
             }
 
             self.getData(ofType: .groups) { (groups, error) in
-                guard error == nil else { return }
-                guard let groups = groups, groups.index(forKey: groupNumber) != nil else { return }
+                guard error == nil, let groups = groups, groups.index(forKey: groupNumber) != nil else { return }
                 
                 self.groupScoreID = groups[groupNumber]
             }
             
-            guard self.groupScheduleID != nil, self.groupScoreID != nil else { return }
-            
-            self.groupNumber = groupNumber
+            #warning("! nil-fying group IDs on errors have to be uncommented.")
+//            if self.groupScheduleID == nil || self.groupScoreID == nil {
+//                self.groupNumber = nil
+//                self.groupScheduleID = nil
+//                self.groupScoreID = nil
+//            }
         }
     }
     
     private var fullName: String?
     private var ID: String?
-    
     private var fellowStudentsNames: [String: String]?
     
     public var name: String? {
@@ -84,15 +86,14 @@ class Student {
             return self.fullName
         }
         set(studentName) {
+            self.fullName = studentName
+            
             guard let studentName = studentName else { return }
             
             self.getData(ofType: .names) { (names, error) in
-                guard error == nil else { return }
-                guard let names = names, names.index(forKey: studentName) != nil else { return }
+                guard error == nil, let names = names, names.index(forKey: studentName) != nil else { return }
                 
-                self.fullName = studentName
                 self.ID = names[studentName]
-                
                 self.fellowStudentsNames = names
             }
         }
@@ -130,25 +131,44 @@ class Student {
             return
         }
         
+        let semaphore = DispatchSemaphore(value: 0)
+        
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let data = data, let response = response as? HTTPURLResponse, error == nil,
               (200...299) ~= response.statusCode else {
                 completion(nil, .noServerResponse)
+                
+                semaphore.signal()
                 return
             }
             
-            guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: [[String: String]]] else {
+            guard var schedule = try? JSONSerialization.jsonObject(with: data) as? [String: [[String: String]]] else {
                 completion(nil, .onResponseParsing)
+                
+                semaphore.signal()
                 return
             }
             
-            guard !json.isEmpty else {
+            guard !schedule.isEmpty else {
                 completion(nil, .badServerResponse)
+                
+                semaphore.signal()
                 return
             }
             
-            completion(json, nil)
+            // Fixing the bad quality data
+            for (day, subjects) in schedule { for subjectIndex in (0..<subjects.count) {
+                for (property, value) in subjects[subjectIndex] {
+                    schedule[day]?[subjectIndex][property] = value.split(separator: " ").joined(separator: " ")
+                }
+            } }
+            
+            completion(schedule, nil)
+            
+            semaphore.signal()
         } .resume()
+        
+        semaphore.wait()
     }
     
     public func getScoretable(forSemester semester: Int,
@@ -172,15 +192,21 @@ class Student {
         request.httpMethod = "POST"
         request.httpBody = parameters.toURLParametersString().data(using: .utf8)
         
+        let semaphore = DispatchSemaphore(value: 0)
+        
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data, let response = response as? HTTPURLResponse, error == nil,
               (200...299) ~= response.statusCode else {
                 completion(nil, .noServerResponse)
+                
+                semaphore.signal()
                 return
             }
             
             guard let page = String(data: data, encoding: .windowsCP1251) else {
                 completion(nil, .badServerResponse)
+                
+                semaphore.signal()
                 return
             }
             
@@ -212,7 +238,11 @@ class Student {
             } catch {
                 completion(nil, .onResponseParsing)
             }
+            
+            semaphore.signal()
         } .resume()
+        
+        semaphore.wait()
     }
     
     public func getData(ofType type: Student.DataType,
@@ -228,15 +258,21 @@ class Student {
             return
         }
         
+        let semaphore = DispatchSemaphore(value: 0)
+        
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let data = data, let response = response as? HTTPURLResponse, error == nil,
               (200...299) ~= response.statusCode else {
                 completion(nil, .noServerResponse)
+                
+                semaphore.signal()
                 return
             }
             
             guard let page = String(data: data, encoding: .windowsCP1251) else {
                 completion(nil, .onResponseParsing)
+                
+                semaphore.signal()
                 return
             }
             
@@ -246,7 +282,9 @@ class Student {
                 let selectors = try document.getElementsByAttributeValue("name", type.rawValue)
                 guard let selector = selectors.first() else { throw Student.DataFetchingError.onResponseParsing }
                 
-                let options = (try selector.getElementsByTag("option"))[1...]
+                var options = Array(try selector.getElementsByTag("option"))
+                guard !options.isEmpty else { throw Student.DataFetchingError.onResponseParsing }
+                options.removeFirst()
                 
                 var studentData: [String: String] = [:]
                 
@@ -265,7 +303,11 @@ class Student {
             } catch {
                 completion(nil, .onResponseParsing)
             }
+            
+            semaphore.signal()
         } .resume()
+        
+        semaphore.wait()
     }
     
     
@@ -282,25 +324,37 @@ class Student {
             return
         }
         
+        let semaphore = DispatchSemaphore(value: 0)
+        
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, let response = response as? HTTPURLResponse, error == nil,
               (200...299) ~= response.statusCode else {
                 completion(nil, .noServerResponse)
+                
+                semaphore.signal()
                 return
             }
             
             guard let json = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
                 completion(nil, .onResponseParsing)
+                
+                semaphore.signal()
                 return
             }
               
             guard let groupScheduleID = json.first?["id"] as? Int else {
                 completion(nil, .badServerResponse)
+                
+                semaphore.signal()
                 return
             }
             
             completion(String(groupScheduleID), nil)
+            
+            semaphore.signal()
         } .resume()
+        
+        semaphore.wait()
     }
     
     
