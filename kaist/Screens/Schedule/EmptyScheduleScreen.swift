@@ -48,7 +48,6 @@ class EmptyScheduleScreen: UIView {
         self.message.font = .systemFont(ofSize: 16)
         self.message.textColor = .gray
         self.message.textAlignment = .center
-        self.message.numberOfLines = 0
         
         self.addSubview(self.message)
         

@@ -53,8 +53,7 @@ struct CurrentDay {
         let currentWeekOfYear = calendar.component(.weekOfYear, from: date)
         
         // Cannot be even semantically as its index is equal to 1
-        let firstWeekOfSemester = calendar.component(.weekOfYear,
-          from: DateComponents(calendar: calendar, year: currentYear, month: month, day: day).date!)
+        let firstWeekOfSemester = calendar.component(.weekOfYear, from: DateComponents(calendar: calendar, year: currentYear, month: month, day: day).date!)
         
         return currentWeekOfYear % 2 != firstWeekOfSemester % 2
     }

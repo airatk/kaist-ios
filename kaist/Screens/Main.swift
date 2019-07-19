@@ -16,7 +16,7 @@ class Main: UITabBarController {
         
         self.tabBar.isTranslucent = false
         
-        let currentDate = "\(CurrentDay.date.0), \(CurrentDay.date.1)"
+        let currentDate = "\(CurrentDay.date.0) \(CurrentDay.date.1)"
         
         self.viewControllers = [
             self.getTab(for: ScheduleScreen(), withTitle: currentDate, withImageNamed: CurrentDay.weekday),

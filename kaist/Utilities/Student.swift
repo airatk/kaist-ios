@@ -117,8 +117,8 @@ class Student {
     private let scoreURLString: String = "http://old.kai.ru/info/students/brs.php"
     
     
-    public func getSchedule(ofType type: Student.ScheduleType,
-      _ completion: @escaping ([String: [[String: String]]]?, Student.DataFetchingError?) -> Void) {
+    public func getSchedule(ofType type: ScheduleType,
+      _ completion: @escaping ([String: [[String: String]]]?, DataFetchingError?) -> Void) {
         let parameters = [
             "p_p_id": "pubStudentSchedule_WAR_publicStudentSchedule10",
             "p_p_lifecycle": "2",
@@ -156,12 +156,56 @@ class Student {
                 return
             }
             
-            // Fixing the bad quality data
-            for (day, subjects) in schedule { for subjectIndex in (0..<subjects.count) {
-                for (property, value) in subjects[subjectIndex] {
-                    schedule[day]?[subjectIndex][property] = value.split(separator: " ").joined(separator: " ")
+            /* Fixing the bad quality data *** */
+            
+            // Removing extra whitespaces
+            for (numberOfDay, subjects) in schedule {
+                for (indexOfSubject, subject) in subjects.enumerated() {
+                    for (property, value) in subject {
+                        schedule[numberOfDay]![indexOfSubject][property] = value.split(separator: " ").joined(separator: " ")
+                    }
                 }
-            } }
+            }
+            
+            // Beautifying the data
+            let calendar = Calendar(identifier: .gregorian)
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "HH:mm"
+            
+            for (numberOfDay, subjects) in schedule {
+                for (indexOfSubject, subject) in subjects.enumerated() {
+                    // Beautifying the type data
+                    switch subject["disciplType"] {
+                        case "лек": schedule[numberOfDay]![indexOfSubject]["disciplType"] = "лекция"
+                        case "пр": schedule[numberOfDay]![indexOfSubject]["disciplType"] = "практика"
+                        case "л.р.": schedule[numberOfDay]![indexOfSubject]["disciplType"] = "лабораторная работа"
+                        
+                        default: ()
+                    }
+                    
+                    // Beautifying the lecturer name data
+                    schedule[numberOfDay]![indexOfSubject]["prepodName"] = subject["prepodName"]!.capitalized
+                    
+                    // Beautifying the time data
+                    let time = subject["dayTime"]!.split(separator: ":").map { Int($0) }
+                    
+                    let beginTime = calendar.date(from: DateComponents(calendar: calendar, hour: time[0], minute: time[1]))!
+                    let endTime = calendar.date(byAdding: DateComponents(hour: 1, minute: 30), to: beginTime)!
+                    
+                    let begin = dateFormatter.string(from: beginTime)
+                    let end = dateFormatter.string(from: endTime)
+                    
+                    schedule[numberOfDay]![indexOfSubject]["dayTime"] = "с " + begin + " до " + end
+                    
+                    // Beautifying the building data
+                    schedule[numberOfDay]![indexOfSubject]["buildNum"] = "в " + subject["buildNum"]!
+                    
+                    if subject["buildNum"]!.rangeOfCharacter(from: .decimalDigits) != nil {
+                        schedule[numberOfDay]![indexOfSubject]["buildNum"]! += "ке"
+                    }
+                }
+            }
             
             completion(schedule, nil)
             
@@ -172,7 +216,7 @@ class Student {
     }
     
     public func getScoretable(forSemester semester: Int,
-      _ completion: @escaping ([[String]]?, Student.DataFetchingError?) -> Void) {
+      _ completion: @escaping ([[String]]?, DataFetchingError?) -> Void) {
         let parameters = [
             "p_sub": "",  // Unknown nonsense thing which is necessary
             "p_fac": self.instituteID ?? "",
@@ -214,7 +258,7 @@ class Student {
                 let document = try SwiftSoup.parse(page)
                 
                 let tables = try document.getElementsByAttributeValue("id", "reyt")
-                guard let table = tables.first() else { throw Student.DataFetchingError.onResponseParsing }
+                guard let table = tables.first() else { throw DataFetchingError.onResponseParsing }
                 
                 var subjects = [[String]]()
                 var subject = [String]()
@@ -230,10 +274,10 @@ class Student {
                 
                 subjects = Array(subjects[2...])
                 
-                guard !subjects.isEmpty else { throw Student.DataFetchingError.badServerResponse }
+                guard !subjects.isEmpty else { throw DataFetchingError.badServerResponse }
                 
                 completion(subjects, nil)
-            } catch Student.DataFetchingError.badServerResponse {
+            } catch DataFetchingError.badServerResponse {
                 completion(nil, .badServerResponse)
             } catch {
                 completion(nil, .onResponseParsing)
@@ -245,8 +289,8 @@ class Student {
         semaphore.wait()
     }
     
-    public func getData(ofType type: Student.DataType,
-      _ completion: @escaping ([String: String]?, Student.DataFetchingError?) -> Void) {
+    public func getData(ofType type: DataType,
+      _ completion: @escaping ([String: String]?, DataFetchingError?) -> Void) {
         let parameters: [String: String] = [
             "p_fac": self.instituteID ?? "",
             "p_kurs": self.year ?? "",
@@ -280,10 +324,10 @@ class Student {
                 let document = try SwiftSoup.parse(page)
                 
                 let selectors = try document.getElementsByAttributeValue("name", type.rawValue)
-                guard let selector = selectors.first() else { throw Student.DataFetchingError.onResponseParsing }
+                guard let selector = selectors.first() else { throw DataFetchingError.onResponseParsing }
                 
                 var options = Array(try selector.getElementsByTag("option"))
-                guard !options.isEmpty else { throw Student.DataFetchingError.onResponseParsing }
+                guard !options.isEmpty else { throw DataFetchingError.onResponseParsing }
                 options.removeFirst()
                 
                 var studentData: [String: String] = [:]
@@ -295,10 +339,10 @@ class Student {
                     studentData[key] = value
                 }
                 
-                guard !studentData.isEmpty else { throw Student.DataFetchingError.badServerResponse }
+                guard !studentData.isEmpty else { throw DataFetchingError.badServerResponse }
                 
                 completion(studentData, nil)
-            } catch Student.DataFetchingError.badServerResponse {
+            } catch DataFetchingError.badServerResponse {
                 completion(nil, .badServerResponse)
             } catch {
                 completion(nil, .onResponseParsing)
@@ -311,7 +355,7 @@ class Student {
     }
     
     
-    private func getGroupScheduleID(_ completion: @escaping (String?, Student.DataFetchingError?) -> Void) {
+    private func getGroupScheduleID(_ completion: @escaping (String?, DataFetchingError?) -> Void) {
         let parameters = [
             "p_p_id": "pubStudentSchedule_WAR_publicStudentSchedule10",
             "p_p_lifecycle": "2",
@@ -355,25 +399,6 @@ class Student {
         } .resume()
         
         semaphore.wait()
-    }
-    
-    
-    public enum ScheduleType: String {
-        case classes = "schedule"
-        case exams = "examSchedule"
-    }
-    
-    public enum DataType: String {
-        case years = "p_kurs"
-        case groups = "p_group"
-        case names = "p_stud"
-    }
-    
-    public enum DataFetchingError: Error {
-        case onURLCreation
-        case noServerResponse
-        case onResponseParsing
-        case badServerResponse
     }
     
 }

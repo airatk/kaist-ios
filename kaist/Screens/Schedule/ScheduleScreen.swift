@@ -11,8 +11,6 @@ import UIKit
 
 class ScheduleScreen: UITableViewController {
     
-    private let subjectCellID = "SubjectCell"
-    
     private var schedule: [String: [[String: String]]]?
     
     
@@ -42,12 +40,11 @@ class ScheduleScreen: UITableViewController {
         
         self.tableView = UITableView(frame: CGRect(origin: .zero, size: CGSize(width: width, height: height)), style: .grouped)
         
-        #warning("Uncomment!")
-        //self.tableView.separatorStyle = .none
+        self.tableView.separatorStyle = .none
         self.tableView.backgroundColor = .white
         self.tableView.backgroundView = EmptyScheduleScreen()
         
-        self.tableView.register(SubjectCell.self, forCellReuseIdentifier: self.subjectCellID)
+        self.tableView.register(SubjectCell.self, forCellReuseIdentifier: SubjectCell.subjectCellID)
         
         self.view.layoutIfNeeded()
     }
@@ -56,7 +53,7 @@ class ScheduleScreen: UITableViewController {
     private func createStudent() {
         let student = Student()
         
-        student.group = "4131"
+        student.group = "4333"
         
         student.getSchedule(ofType: .classes) { (schedule, error)  in
             guard error == nil, let schedule = schedule else { return }
@@ -112,18 +109,19 @@ extension ScheduleScreen {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let subjectCell = self.tableView.dequeueReusableCell(withIdentifier: self.subjectCellID, for: indexPath) as! SubjectCell
+        let subjectCell = self.tableView.dequeueReusableCell(withIdentifier: SubjectCell.subjectCellID, for: indexPath) as! SubjectCell
         
-        guard let schedule = self.schedule, let subjectsOfDay = schedule["\(indexPath.section + 1)"] else { return subjectCell }
+        let day = "\(indexPath.section + 1)"
+        guard let schedule = self.schedule, let subjectsOfDay = schedule[day] else { return subjectCell }
         
         subjectCell.title.text = subjectsOfDay[indexPath.row]["disciplName"]
-        //subjectCell.type.text = subjectsOfSection[indexPath.row]["disciplType"]
-        //subjectCell.lecturerName.text = subjectsOfSection[indexPath.row]["prepodName"]
-        //subjectCell.department.text = subjectsOfSection[indexPath.row]["orgUnitName"]
-        //subjectCell.time.text = subjectsOfSection[indexPath.row]["dayTime"]
-        //subjectCell.place.text = subjectsOfSection[indexPath.row]["buildNum"] + " " + subjectsOfSection[indexPath.row]["audNum"]
+        subjectCell.type.text = subjectsOfDay[indexPath.row]["disciplType"]
+        subjectCell.lecturerName.text = subjectsOfDay[indexPath.row]["prepodName"]
+        subjectCell.department.text = subjectsOfDay[indexPath.row]["orgUnitName"]
+        subjectCell.time.text = subjectsOfDay[indexPath.row]["dayTime"]
+        subjectCell.place.text = subjectsOfDay[indexPath.row]["buildNum"]! + ", " + subjectsOfDay[indexPath.row]["audNum"]!
         
-        //subjectCell.weekType.text = subjectsOfSection[indexPath.row]["dayDate"]
+        //subjectCell.weekType.text = subjectsOfDay[indexPath.row]["dayDate"]
         
         return subjectCell
     }

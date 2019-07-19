@@ -20,6 +20,7 @@
 		60CBD93222D88DE600D387CF /* Student.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CBD93122D88DE600D387CF /* Student.swift */; };
 		60CBD93422DF464700D387CF /* EmptyScheduleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CBD93322DF464700D387CF /* EmptyScheduleScreen.swift */; };
 		60CBD93622DF46A000D387CF /* SubjectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CBD93522DF46A000D387CF /* SubjectCell.swift */; };
+		60CBD93A22E10F5E00D387CF /* DataUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CBD93922E10F5E00D387CF /* DataUtilities.swift */; };
 		E2F6EDE69E807E8BA89ECE65 /* Pods_kaist.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2122653EEB719A9CDBF82F16 /* Pods_kaist.framework */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,7 @@
 		60CBD93122D88DE600D387CF /* Student.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Student.swift; sourceTree = "<group>"; };
 		60CBD93322DF464700D387CF /* EmptyScheduleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyScheduleScreen.swift; sourceTree = "<group>"; };
 		60CBD93522DF46A000D387CF /* SubjectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectCell.swift; sourceTree = "<group>"; };
+		60CBD93922E10F5E00D387CF /* DataUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataUtilities.swift; sourceTree = "<group>"; };
 		82E52C4120839F419F840368 /* Pods-kaist.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kaist.release.xcconfig"; path = "Target Support Files/Pods-kaist/Pods-kaist.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -138,6 +140,7 @@
 			children = (
 				60CBD93122D88DE600D387CF /* Student.swift */,
 				603E1AC722CDDC2200746F5B /* LecturerData.swift */,
+				60CBD93922E10F5E00D387CF /* DataUtilities.swift */,
 				60B2E43A22CCEA6500BEAB23 /* CurrentDay.swift */,
 			);
 			path = Utilities;
@@ -274,6 +277,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60CBD93A22E10F5E00D387CF /* DataUtilities.swift in Sources */,
 				60B2E42E22CB182600BEAB23 /* SettingsScreen.swift in Sources */,
 				60CBD93622DF46A000D387CF /* SubjectCell.swift in Sources */,
 				60B2E43322CB54EB00BEAB23 /* ScoreScreen.swift in Sources */,
