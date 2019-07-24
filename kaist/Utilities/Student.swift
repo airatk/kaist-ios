@@ -44,7 +44,8 @@ class Student {
     public var year: String?
     
     private var groupNumber: String?
-    private var groupScheduleID: String?
+    #warning("Make private")
+    /*private*/public var groupScheduleID: String?
     private var groupScoreID: String?
     
     public var group: String? {
@@ -173,8 +174,18 @@ class Student {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "HH:mm"
             
+            #warning("What if there are no a certain day in received day? 0 rows are set to the respective section")
             for (numberOfDay, subjects) in schedule {
                 for (indexOfSubject, subject) in subjects.enumerated() {
+                    // Checking is a weekday
+                    if subject["disciplName"]!.contains("День консультаций") || subject["disciplName"]!.contains("Военная подготовка") {
+                        schedule[numberOfDay]![indexOfSubject]["disciplName"] = "Выходной"
+                        schedule[numberOfDay]![indexOfSubject]["disciplType"] = ""
+                        schedule[numberOfDay]![indexOfSubject]["dayTime"] = ""
+                        
+                        break
+                    }
+                    
                     // Beautifying the type data
                     switch subject["disciplType"] {
                         case "лек": schedule[numberOfDay]![indexOfSubject]["disciplType"] = "лекция"
@@ -199,11 +210,16 @@ class Student {
                     schedule[numberOfDay]![indexOfSubject]["dayTime"] = "с " + begin + " до " + end
                     
                     // Beautifying the building data
-                    schedule[numberOfDay]![indexOfSubject]["buildNum"] = "в " + subject["buildNum"]!
+                    var building = subject["buildNum"]!
                     
-                    if subject["buildNum"]!.rangeOfCharacter(from: .decimalDigits) != nil {
-                        schedule[numberOfDay]![indexOfSubject]["buildNum"]! += "ке"
+                    switch building {
+                        case _ where building.rangeOfCharacter(from: .decimalDigits) != nil: building += "ке"
+                        case _ where building == "КАИ ОЛИМП": building = "СК «Олимп»"
+                        
+                        default: ()
                     }
+                    
+                    schedule[numberOfDay]![indexOfSubject]["buildNum"] = "в " + building
                 }
             }
             
@@ -277,6 +293,70 @@ class Student {
                 guard !subjects.isEmpty else { throw DataFetchingError.badServerResponse }
                 
                 completion(subjects, nil)
+            } catch DataFetchingError.badServerResponse {
+                completion(nil, .badServerResponse)
+            } catch {
+                completion(nil, .onResponseParsing)
+            }
+            
+            semaphore.signal()
+        } .resume()
+        
+        semaphore.wait()
+    }
+    
+    public func getLastAvailableSemester(_ completion: @escaping (Int?, DataFetchingError?) -> Void) {
+        let parameters = [
+            "p_sub": "",  // Unknown nonsense thing which is necessary
+            "p_fac": self.instituteID ?? "",
+            "p_kurs": self.year ?? "",
+            "p_group": self.groupScoreID ?? "",
+            "p_stud": self.ID ?? "",
+            "p_zach": self.card ?? ""
+        ]
+        
+        guard let url = URL(string: self.scoreURLString) else {
+            completion(nil, .onURLCreation)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = parameters.toURLParametersString().data(using: .utf8)
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data, let response = response as? HTTPURLResponse, error == nil,
+              (200...299) ~= response.statusCode else {
+                completion(nil, .noServerResponse)
+                
+                semaphore.signal()
+                return
+            }
+            
+            guard let page = String(data: data, encoding: .windowsCP1251) else {
+                completion(nil, .badServerResponse)
+                
+                semaphore.signal()
+                return
+            }
+            
+            do {
+                let document = try SwiftSoup.parse(page)
+                
+                let selectors = try document.getElementsByAttributeValue("name", "semestr")
+                guard let selector = selectors.first() else { throw DataFetchingError.onResponseParsing }
+                
+                let options = Array(try selector.getElementsByTag("option"))
+                guard !options.isEmpty else { throw DataFetchingError.onResponseParsing }
+                
+                let semesters = try options.map { try $0.attr("value") }
+                guard !semesters.isEmpty else { throw DataFetchingError.badServerResponse }
+                
+                guard let lastSemester = semesters.max() else { throw DataFetchingError.badServerResponse }
+                
+                completion(Int(lastSemester), nil)
             } catch DataFetchingError.badServerResponse {
                 completion(nil, .badServerResponse)
             } catch {

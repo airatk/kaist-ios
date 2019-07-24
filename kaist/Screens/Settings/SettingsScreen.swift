@@ -14,8 +14,11 @@ class SettingsScreen: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = .white
-        
+        self.setUpNavigationBar()
+    }
+    
+    
+    private func setUpNavigationBar() {
         self.navigationItem.title = "Настройки"
     }
 
