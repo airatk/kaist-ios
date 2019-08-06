@@ -37,37 +37,25 @@ class LecturerData {
             return
         }
         
-        let semaphore = DispatchSemaphore(value: 0)
-        
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let data = data, let response = response as? HTTPURLResponse, error == nil,
               (200...299) ~= response.statusCode else {
                 completion(nil, .noServerResponse)
-                
-                semaphore.signal()
                 return
             }
             
             guard let json = try? JSONSerialization.jsonObject(with: data) as? [[String: String]] else {
                 completion(nil, .onResponseParsing)
-
-                semaphore.signal()
                 return
             }
             
             guard !json.isEmpty else {
                 completion(nil, .badServerResponse)
-                
-                semaphore.signal()
                 return
             }
             
             completion(json, nil)
-            
-            semaphore.signal()
         } .resume()
-        
-        semaphore.wait()
     }
     
     public static func getSchedule(ofLecturerWithID lecturerID: String, ofType type: ScheduleType,
@@ -84,28 +72,20 @@ class LecturerData {
             return
         }
         
-        let semaphore = DispatchSemaphore(value: 0)
-        
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let data = data, let response = response as? HTTPURLResponse, error == nil,
               (200...299) ~= response.statusCode else {
                 completion(nil, .noServerResponse)
-                
-                semaphore.signal()
                 return
             }
             
             guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: [[String: Any]]] else {
                 completion(nil, .onResponseParsing)
-                
-                semaphore.signal()
                 return
             }
             
             guard !json.isEmpty else {
                 completion(nil, .badServerResponse)
-                
-                semaphore.signal()
                 return
             }
             
@@ -127,7 +107,7 @@ class LecturerData {
                             case let anyValue where anyValue as? String != nil: stringValue = value as! String
                             case let anyValue where anyValue as? Int != nil: stringValue = String(value as! Int)  // Losing prefix 0s?
                             
-                            default: ()
+                            default: break
                         }
                         
                         schedule[numberOfDay]![indexOfSubject][property] = stringValue.split(separator: " ").joined(separator: " ")
@@ -149,7 +129,7 @@ class LecturerData {
                         case "пр": schedule[numberOfDay]![indexOfSubject]["disciplType"] = "практика"
                         case "л.р.": schedule[numberOfDay]![indexOfSubject]["disciplType"] = "лабораторная работа"
 
-                        default: ()
+                        default: break
                     }
 
                     // Beautifying the time data
@@ -173,11 +153,7 @@ class LecturerData {
             }
             
             completion(schedule, nil)
-            
-            semaphore.signal()
         } .resume()
-        
-        semaphore.wait()
     }
 
 }

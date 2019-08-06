@@ -9,11 +9,11 @@
 import Foundation
 
 
-enum DataFetchingError: Error {
-    case onURLCreation
-    case noServerResponse
-    case onResponseParsing
-    case badServerResponse
+enum DataFetchingError: String, Error {
+    case onURLCreation = "Не удалось отправить запрос на сервера kai.ru"
+    case noServerResponse = "Сайт kai.ru не отвечает"
+    case onResponseParsing = "Не удалось загрузить расписание"
+    case badServerResponse = "Нет данных"
 }
 
 enum ScheduleType: String {

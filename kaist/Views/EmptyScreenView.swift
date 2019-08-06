@@ -12,6 +12,9 @@ import UIKit
 class EmptyScreenView: UIView {
 
     private var emoji = UILabel()
+    private var emojiSize: CGFloat = 64
+    private var isEmojiCentered = false
+    
     private var message = UILabel()
     
     
@@ -19,8 +22,11 @@ class EmptyScreenView: UIView {
         super.init(coder: aDecoder)
     }
     
-    init(emoji: String, message: String) {
+    init(emoji: String, emojiSize: CGFloat = 64, isEmojiCentered: Bool = false, message: String = "") {
         super.init(frame: .zero)
+        
+        self.emojiSize = emojiSize
+        self.isEmojiCentered = isEmojiCentered
         
         self.setUpEmojiView(using: emoji)
         self.setUpMessageView(using: message)
@@ -29,15 +35,15 @@ class EmptyScreenView: UIView {
     
     private func setUpEmojiView(using emoji: String) {
         self.emoji.text = emoji
-        self.emoji.font = .systemFont(ofSize: 64)
+        self.emoji.font = .systemFont(ofSize: self.emojiSize)
         self.emoji.textAlignment = .center
         
         self.addSubview(self.emoji)
         
         self.emoji.translatesAutoresizingMaskIntoConstraints = false
-        self.addConstraints([
+        NSLayoutConstraint.activate([
             self.emoji.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            self.emoji.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+            self.emoji.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: self.isEmojiCentered ? 0 : -10)
         ])
     }
     
@@ -46,13 +52,15 @@ class EmptyScreenView: UIView {
         self.message.font = .systemFont(ofSize: 16)
         self.message.textColor = .gray
         self.message.textAlignment = .center
+        self.message.numberOfLines = 0
         
         self.addSubview(self.message)
         
         self.message.translatesAutoresizingMaskIntoConstraints = false
-        self.addConstraints([
+        NSLayoutConstraint.activate([
+            self.message.topAnchor.constraint(equalTo: self.emoji.bottomAnchor, constant: 10),
             self.message.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            self.message.topAnchor.constraint(equalTo: self.emoji.bottomAnchor, constant: 10)
+            self.message.widthAnchor.constraint(equalToConstant: 200)
         ])
     }
 

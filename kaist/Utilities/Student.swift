@@ -10,15 +10,6 @@ import Foundation
 import SwiftSoup
 
 
-extension Dictionary {
-
-    func toURLParametersString() -> String {
-        return self.map { "\($0)=\($1)" } .joined(separator: "&")
-    }
-    
-}
-
-
 class Student {
     
     private var instituteName: String?
@@ -54,20 +45,35 @@ class Student {
         }
         set(groupNumber) {
             self.groupNumber = groupNumber
-            
             guard let groupNumber = groupNumber else { return }
             
+            let dispatchGroup = DispatchGroup()
+            
+            dispatchGroup.enter()
             self.getGroupScheduleID { (scheduleID, error) in
-                guard error == nil, let scheduleID = scheduleID else { return }
+                guard error == nil, let scheduleID = scheduleID else {
+                    dispatchGroup.leave()
+                    return
+                }
                 
                 self.groupScheduleID = scheduleID
+                
+                dispatchGroup.leave()
             }
-
+            
+            dispatchGroup.enter()
             self.getData(ofType: .groups) { (groups, error) in
-                guard error == nil, let groups = groups, groups.index(forKey: groupNumber) != nil else { return }
+                guard error == nil, let groups = groups, groups.index(forKey: groupNumber) != nil else {
+                    dispatchGroup.leave()
+                    return
+                }
                 
                 self.groupScoreID = groups[groupNumber]
+                
+                dispatchGroup.leave()
             }
+            
+            dispatchGroup.wait()
             
             #warning("! nil-fying group IDs on errors have to be uncommented.")
 //            if self.groupScheduleID == nil || self.groupScoreID == nil {
@@ -124,6 +130,7 @@ class Student {
             "p_p_id": "pubStudentSchedule_WAR_publicStudentSchedule10",
             "p_p_lifecycle": "2",
             "p_p_resource_id": type.rawValue,
+            "p_p_col_count": "1",
             "groupId": self.groupScheduleID ?? ""
         ]
         
@@ -132,28 +139,20 @@ class Student {
             return
         }
         
-        let semaphore = DispatchSemaphore(value: 0)
-        
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let data = data, let response = response as? HTTPURLResponse, error == nil,
               (200...299) ~= response.statusCode else {
-                completion(nil, .noServerResponse)
-                
-                semaphore.signal()
+                DispatchQueue.main.async { completion(nil, .noServerResponse) }
                 return
             }
             
             guard var schedule = try? JSONSerialization.jsonObject(with: data) as? [String: [[String: String]]] else {
-                completion(nil, .onResponseParsing)
-                
-                semaphore.signal()
+                DispatchQueue.main.async { completion(nil, .onResponseParsing) }
                 return
             }
             
             guard !schedule.isEmpty else {
-                completion(nil, .badServerResponse)
-                
-                semaphore.signal()
+                DispatchQueue.main.async { completion(nil, .badServerResponse) }
                 return
             }
             
@@ -174,15 +173,11 @@ class Student {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "HH:mm"
             
-            #warning("What if there are no a certain day in received day? 0 rows are set to the respective section")
             for (numberOfDay, subjects) in schedule {
                 for (indexOfSubject, subject) in subjects.enumerated() {
                     // Checking is a weekday
                     if subject["disciplName"]!.contains("День консультаций") || subject["disciplName"]!.contains("Военная подготовка") {
-                        schedule[numberOfDay]![indexOfSubject]["disciplName"] = "Выходной"
-                        schedule[numberOfDay]![indexOfSubject]["disciplType"] = ""
-                        schedule[numberOfDay]![indexOfSubject]["dayTime"] = ""
-                        
+                        schedule[numberOfDay] = [ ["disciplName": "Выходной"] ]
                         break
                     }
                     
@@ -191,8 +186,9 @@ class Student {
                         case "лек": schedule[numberOfDay]![indexOfSubject]["disciplType"] = "лекция"
                         case "пр": schedule[numberOfDay]![indexOfSubject]["disciplType"] = "практика"
                         case "л.р.": schedule[numberOfDay]![indexOfSubject]["disciplType"] = "лабораторная работа"
+                        case "конс": schedule[numberOfDay]![indexOfSubject]["disciplType"] = "консультация"
                         
-                        default: ()
+                        default: break
                     }
                     
                     // Beautifying the lecturer name data
@@ -211,24 +207,27 @@ class Student {
                     
                     // Beautifying the building data
                     var building = subject["buildNum"]!
-                    
+
                     switch building {
                         case _ where building.rangeOfCharacter(from: .decimalDigits) != nil: building += "ке"
                         case _ where building == "КАИ ОЛИМП": building = "СК «Олимп»"
                         
-                        default: ()
+                        default: break
                     }
                     
                     schedule[numberOfDay]![indexOfSubject]["buildNum"] = "в " + building
                 }
             }
             
-            completion(schedule, nil)
+            // Making all of 6 official educational days available for access
+            for numberOfDay in [ "1", "2", "3", "4", "5", "6" ] {
+                if schedule[numberOfDay] == nil {
+                    schedule[numberOfDay] = [ ["disciplName": "Выходной"] ]
+                }
+            }
             
-            semaphore.signal()
+            DispatchQueue.main.async { completion(schedule, nil) }
         } .resume()
-        
-        semaphore.wait()
     }
     
     public func getScoretable(forSemester semester: Int,
@@ -252,21 +251,15 @@ class Student {
         request.httpMethod = "POST"
         request.httpBody = parameters.toURLParametersString().data(using: .utf8)
         
-        let semaphore = DispatchSemaphore(value: 0)
-        
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data, let response = response as? HTTPURLResponse, error == nil,
               (200...299) ~= response.statusCode else {
-                completion(nil, .noServerResponse)
-                
-                semaphore.signal()
+                DispatchQueue.main.async { completion(nil, .noServerResponse) }
                 return
             }
             
             guard let page = String(data: data, encoding: .windowsCP1251) else {
-                completion(nil, .badServerResponse)
-                
-                semaphore.signal()
+                DispatchQueue.main.async { completion(nil, .badServerResponse) }
                 return
             }
             
@@ -292,17 +285,13 @@ class Student {
                 
                 guard !subjects.isEmpty else { throw DataFetchingError.badServerResponse }
                 
-                completion(subjects, nil)
+                DispatchQueue.main.async { completion(subjects, nil) }
             } catch DataFetchingError.badServerResponse {
-                completion(nil, .badServerResponse)
+                DispatchQueue.main.async { completion(nil, .badServerResponse) }
             } catch {
-                completion(nil, .onResponseParsing)
+                DispatchQueue.main.async { completion(nil, .onResponseParsing) }
             }
-            
-            semaphore.signal()
         } .resume()
-        
-        semaphore.wait()
     }
     
     public func getLastAvailableSemester(_ completion: @escaping (Int?, DataFetchingError?) -> Void) {
@@ -324,21 +313,15 @@ class Student {
         request.httpMethod = "POST"
         request.httpBody = parameters.toURLParametersString().data(using: .utf8)
         
-        let semaphore = DispatchSemaphore(value: 0)
-        
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data, let response = response as? HTTPURLResponse, error == nil,
               (200...299) ~= response.statusCode else {
-                completion(nil, .noServerResponse)
-                
-                semaphore.signal()
+                DispatchQueue.main.async { completion(nil, .noServerResponse) }
                 return
             }
             
             guard let page = String(data: data, encoding: .windowsCP1251) else {
-                completion(nil, .badServerResponse)
-                
-                semaphore.signal()
+                DispatchQueue.main.async { completion(nil, .badServerResponse) }
                 return
             }
             
@@ -356,17 +339,13 @@ class Student {
                 
                 guard let lastSemester = semesters.max() else { throw DataFetchingError.badServerResponse }
                 
-                completion(Int(lastSemester), nil)
+                DispatchQueue.main.async { completion(Int(lastSemester), nil) }
             } catch DataFetchingError.badServerResponse {
-                completion(nil, .badServerResponse)
+                DispatchQueue.main.async { completion(nil, .badServerResponse) }
             } catch {
-                completion(nil, .onResponseParsing)
+                DispatchQueue.main.async { completion(nil, .onResponseParsing) }
             }
-            
-            semaphore.signal()
         } .resume()
-        
-        semaphore.wait()
     }
     
     public func getData(ofType type: DataType,
@@ -382,21 +361,15 @@ class Student {
             return
         }
         
-        let semaphore = DispatchSemaphore(value: 0)
-        
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let data = data, let response = response as? HTTPURLResponse, error == nil,
               (200...299) ~= response.statusCode else {
                 completion(nil, .noServerResponse)
-                
-                semaphore.signal()
                 return
             }
             
             guard let page = String(data: data, encoding: .windowsCP1251) else {
                 completion(nil, .onResponseParsing)
-                
-                semaphore.signal()
                 return
             }
             
@@ -427,11 +400,7 @@ class Student {
             } catch {
                 completion(nil, .onResponseParsing)
             }
-            
-            semaphore.signal()
         } .resume()
-        
-        semaphore.wait()
     }
     
     
@@ -448,37 +417,34 @@ class Student {
             return
         }
         
-        let semaphore = DispatchSemaphore(value: 0)
-        
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, let response = response as? HTTPURLResponse, error == nil,
               (200...299) ~= response.statusCode else {
                 completion(nil, .noServerResponse)
-                
-                semaphore.signal()
                 return
             }
             
             guard let json = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
                 completion(nil, .onResponseParsing)
-                
-                semaphore.signal()
                 return
             }
-              
+            
             guard let groupScheduleID = json.first?["id"] as? Int else {
                 completion(nil, .badServerResponse)
-                
-                semaphore.signal()
                 return
             }
             
             completion(String(groupScheduleID), nil)
-            
-            semaphore.signal()
         } .resume()
-        
-        semaphore.wait()
+    }
+    
+}
+
+
+extension Dictionary {
+
+    func toURLParametersString() -> String {
+        return self.map { "\($0)=\($1)" } .joined(separator: "&")
     }
     
 }

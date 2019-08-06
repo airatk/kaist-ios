@@ -22,8 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Status bar
         let statusBarWindow = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
-        let statusBarView = statusBarWindow.subviews.first! as UIView
-        statusBarView.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.825)
+        let statusBarView = statusBarWindow.subviews.first!
+        statusBarView.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.85)
         
         return true
     }

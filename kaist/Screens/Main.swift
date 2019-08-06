@@ -14,10 +14,11 @@ class Main: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let currentDate = "\(CurrentDay.date.0) \(CurrentDay.date.1)"
+        let currentDate = CurrentDay.date()
+        let dateTitle = "\(currentDate.0) \(currentDate.1)"
         
         self.viewControllers = [
-            self.getTab(for: StudentScheduleScreen(), withTitle: currentDate, withImageNamed: CurrentDay.weekday),
+            self.getTab(for: StudentScheduleScreen(), withTitle: dateTitle, withImageNamed: CurrentDay.imageNameWeekday),
             self.getTab(for: ScoreScreen(), withTitle: "Баллы", withImageNamed: "score"),
             self.getTab(for: MapScreen(), withTitle: "Карта", withImageNamed: "map"),
             self.getTab(for: SettingsScreen(), withTitle: "Настройки", withImageNamed: "settings")
@@ -25,6 +26,7 @@ class Main: UITabBarController {
         
         self.tabBar.isTranslucent = false
     }
+    
     
     private func getTab(for screen: UIViewController, withTitle title: String, withImageNamed imageName: String) -> UIViewController {
         let navigationController = UINavigationController(rootViewController: screen)

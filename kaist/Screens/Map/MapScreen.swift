@@ -7,19 +7,18 @@
 //
 
 import UIKit
+import MapKit
 
 
 class MapScreen: UIViewController {
-
+    
+    private var mapView: MKMapView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.setUpNavigationBar()
-    }
-    
-    
-    private func setUpNavigationBar() {
         self.navigationItem.title = "Карта"
     }
-
+    
 }

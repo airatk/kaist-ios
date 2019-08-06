@@ -10,16 +10,11 @@ import UIKit
 
 
 class SettingsScreen: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.setUpNavigationBar()
-    }
-    
-    
-    private func setUpNavigationBar() {
         self.navigationItem.title = "Настройки"
     }
-
+    
 }
