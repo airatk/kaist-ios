@@ -19,46 +19,36 @@ class MapScreen: AKMapViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tabBarController?.delegate = self
-        
         self.navigationItem.title = "Здания КАИ"
         
         if CLLocationManager.locationServicesEnabled() {
-            self.setUpLocationManager()
+            switch CLLocationManager.authorizationStatus() {
+                case .authorizedAlways, .authorizedWhenInUse:
+                    self.mapView.showsUserLocation = true
+                case .denied:
+                    // TODO: -
+                    break
+                case .notDetermined:
+                    self.locationManager.requestWhenInUseAuthorization()
+                case .restricted:
+                    // TODO: -
+                    break
+                
+                @unknown default: break
+            }
         } else {
             // TODO: - Show an alert.
         }
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
         
-        self.mapView.frame = UIScreen.main.bounds
+        self.centerToMainLocation(animated: false)
         
-        self.centerToMainLocation()
+        self.tabBarController?.delegate = self
     }
     
     
-    private func setUpLocationManager() {
-        switch CLLocationManager.authorizationStatus() {
-            case .authorizedAlways, .authorizedWhenInUse:
-                self.mapView.showsUserLocation = true
-            case .denied:
-                // TODO: -
-                break
-            case .notDetermined:
-                self.locationManager.requestWhenInUseAuthorization()
-            case .restricted:
-                // TODO: -
-                break
-            
-            @unknown default: break
-        }
-    }
-    
-    private func centerToMainLocation() {
+    private func centerToMainLocation(animated: Bool) {
         let region = MKCoordinateRegion(center: self.mainBuildingOfIKTZI, latitudinalMeters: 10_000, longitudinalMeters: 10_000)
-        self.mapView.setRegion(region, animated: true)
+        self.mapView.setRegion(region, animated: animated)
     }
     
 }
@@ -66,11 +56,11 @@ class MapScreen: AKMapViewController {
 extension MapScreen {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
+        // TODO: -
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        
+        // TODO: -
     }
     
 }
@@ -78,7 +68,7 @@ extension MapScreen {
 extension MapScreen: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        self.centerToMainLocation()
+        self.centerToMainLocation(animated: true)
     }
     
 }

@@ -26,7 +26,6 @@ class StudentScheduleScreen: UITableViewController {
             tableView.backgroundColor = .white
             tableView.backgroundView = EmptyScreenView(emoji: "✈️", emojiSize: 50, isEmojiCentered: true)
             
-            tableView.contentInset.top = self.navigationController!.navigationBar.frame.height
             tableView.showsVerticalScrollIndicator = false
             tableView.separatorStyle = .none
             
@@ -60,8 +59,6 @@ class StudentScheduleScreen: UITableViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        
-        self.tableView.frame = UIScreen.main.bounds
         
         self.refreshControl?.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -127,6 +124,7 @@ class StudentScheduleScreen: UITableViewController {
     
     @objc private func selectWeektype(_ sender: UISegmentedControl) {
         self.isNextWeekSelected = sender.selectedSegmentIndex == 1
+        
         self.setScheduleUsingInitialSchedule()
         self.tableView.reloadData()
     }
@@ -157,12 +155,23 @@ extension StudentScheduleScreen {
         let weekdayKey = self.schedule!.keys.sorted()[section]
         let weekday = weekdays[weekdayKey]!
         
-        let currentWeekday = Calendar(identifier: .gregorian).component(.weekday, from: Date()) - 1
+        let currentWeekday = CurrentDay.weekday
         let askedDayWeekday = Int(weekdayKey)!
         
         let date = CurrentDay.date(shiftedToDays: askedDayWeekday - currentWeekday + (self.isNextWeekSelected ? 7 : 0))
         
         return "\(weekday), \(date.0) \(date.1)"
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let headerView = view as? UITableViewHeaderFooterView else { return }
+        
+        if (section + 1) == CurrentDay.weekday && !self.isNextWeekSelected {
+            headerView.textLabel?.textColor = headerView.tintColor
+        }
+        
+        headerView.textLabel?.font = .boldSystemFont(ofSize: 12)
+        headerView.textLabel?.textColor = headerView.textLabel?.textColor.withAlphaComponent(0.8)
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -207,28 +216,28 @@ extension StudentScheduleScreen {
 
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard self.schedule != nil else { return }
-        
+
         self.changeBarsVisibility(isHidden: scrollView.panGestureRecognizer.translation(in: scrollView).y <= 0)
     }
-    
+
     override func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         self.changeBarsVisibility(isHidden: false)
-        
+
         return true
     }
-    
-    
+
+
     private func changeBarsVisibility(isHidden: Bool) {
         guard self.navigationController?.navigationBar.isHidden != isHidden else { return }
-        
+
         guard let navigationBar = self.navigationController?.navigationBar else { return }
         guard let tabBar = self.tabBarController?.tabBar else { return }
-        
+
         let topBarHeight = UIApplication.shared.statusBarFrame.height + navigationBar.frame.height
-        
+
         navigationBar.isHidden = false
         tabBar.isHidden = false
-        
+
         UIView.animate(withDuration: 0.25, animations: {
             navigationBar.frame = navigationBar.frame.offsetBy(dx: 0, dy: isHidden ? -topBarHeight : topBarHeight)
             tabBar.frame = tabBar.frame.offsetBy(dx: 0, dy: isHidden ? tabBar.frame.height : -tabBar.frame.height)
@@ -237,5 +246,5 @@ extension StudentScheduleScreen {
             tabBar.isHidden = isHidden
         })
     }
-    
+
 }
