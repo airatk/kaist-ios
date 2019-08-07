@@ -9,8 +9,7 @@
 import UIKit
 
 
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+@UIApplicationMain class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
@@ -21,8 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.makeKeyAndVisible()
         
         // Status bar
-        let statusBarWindow = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
-        let statusBarView = statusBarWindow.subviews.first!
+        let statusBarView = UIApplication.shared.value(forKey: "statusBar") as! UIView
         statusBarView.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.85)
         
         return true

@@ -152,8 +152,8 @@ extension StudentSubjectCell {
             self.dates.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor)
         ])
         
-        self.bottomToDatesConstraint = self.contentView.bottomAnchor.constraint(equalTo: self.dates.bottomAnchor, constant: 10)
-        self.bottomToTimeConstraint = self.contentView.bottomAnchor.constraint(equalTo: self.time.bottomAnchor, constant: 10)
+        self.bottomToDatesConstraint = self.contentView.bottomAnchor.constraint(equalTo: self.dates.bottomAnchor, constant: 12)
+        self.bottomToTimeConstraint = self.contentView.bottomAnchor.constraint(equalTo: self.time.bottomAnchor, constant: 12)
         self.bottomToTitleConstraint = self.contentView.heightAnchor.constraint(equalToConstant: 44)
         NSLayoutConstraint.activate([
             self.bottomToDatesConstraint

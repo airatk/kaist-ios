@@ -13,6 +13,7 @@
 		6068569E22C610430010D324 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6068569D22C610430010D324 /* Assets.xcassets */; };
 		606B379222CA858900929369 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 606B379122CA858900929369 /* Main.swift */; };
 		606B379422CAA07F00929369 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 606B379322CAA07F00929369 /* LaunchScreen.storyboard */; };
+		609F7D1B22FACCE6003F8965 /* AKMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609F7D1A22FACCE6003F8965 /* AKMapViewController.swift */; };
 		60B2E42D22CB182600BEAB23 /* StudentScheduleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E42A22CB182600BEAB23 /* StudentScheduleScreen.swift */; };
 		60B2E42E22CB182600BEAB23 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E42C22CB182600BEAB23 /* SettingsScreen.swift */; };
 		60B2E43322CB54EB00BEAB23 /* ScoreScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E43222CB54EB00BEAB23 /* ScoreScreen.swift */; };
@@ -35,6 +36,7 @@
 		606856A222C610430010D324 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		606B379122CA858900929369 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		606B379322CAA07F00929369 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		609F7D1A22FACCE6003F8965 /* AKMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AKMapViewController.swift; sourceTree = "<group>"; };
 		60B2E42A22CB182600BEAB23 /* StudentScheduleScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentScheduleScreen.swift; sourceTree = "<group>"; };
 		60B2E42C22CB182600BEAB23 /* SettingsScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
 		60B2E43222CB54EB00BEAB23 /* ScoreScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreScreen.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 		60B2E43422CB58D500BEAB23 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				609F7D1A22FACCE6003F8965 /* AKMapViewController.swift */,
 				60B2E43522CB58F800BEAB23 /* MapScreen.swift */,
 			);
 			path = Map;
@@ -287,6 +290,7 @@
 			files = (
 				60CBD93A22E10F5E00D387CF /* DataUtilities.swift in Sources */,
 				60B2E42E22CB182600BEAB23 /* SettingsScreen.swift in Sources */,
+				609F7D1B22FACCE6003F8965 /* AKMapViewController.swift in Sources */,
 				60CBD93622DF46A000D387CF /* StudentSubjectCell.swift in Sources */,
 				60B2E43322CB54EB00BEAB23 /* ScoreScreen.swift in Sources */,
 				605BCC4122E3852F0099DFCF /* EmptyScreenView.swift in Sources */,

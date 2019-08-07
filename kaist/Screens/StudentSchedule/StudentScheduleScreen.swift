@@ -50,11 +50,11 @@ class StudentScheduleScreen: UITableViewController {
         }()
         
         self.refreshControl = {
-           let refreshControl = UIRefreshControl()
-           
-           refreshControl.addTarget(self, action: #selector(self.refreshSchedule), for: .valueChanged)
-           
-           return refreshControl
+            let refreshControl = UIRefreshControl()
+            
+            refreshControl.addTarget(self, action: #selector(self.refreshSchedule), for: .valueChanged)
+            
+            return refreshControl
         }()
     }
     
@@ -99,7 +99,9 @@ class StudentScheduleScreen: UITableViewController {
             }
             indexOfSubject = 0
             
-            if self.schedule![numberOfDay]!.isEmpty { self.schedule![numberOfDay] = [ ["disciplName": "Выходной"] ] }
+            if self.schedule![numberOfDay]!.isEmpty {
+                self.schedule![numberOfDay] = [ ["disciplName": "Выходной"] ]
+            }
         }
     }
     
@@ -152,27 +154,24 @@ extension StudentScheduleScreen {
             "5": "Пятница",
             "6": "Суббота"
         ]
-        let weekdayIndex = self.schedule!.keys.sorted()[section]
-        let weekday = weekdays[weekdayIndex]!
+        let weekdayKey = self.schedule!.keys.sorted()[section]
+        let weekday = weekdays[weekdayKey]!
         
         let currentWeekday = Calendar(identifier: .gregorian).component(.weekday, from: Date()) - 1
-        let askedDayWeekday = Int(weekdayIndex)!
+        let askedDayWeekday = Int(weekdayKey)!
         
         let date = CurrentDay.date(shiftedToDays: askedDayWeekday - currentWeekday + (self.isNextWeekSelected ? 7 : 0))
         
         return "\(weekday), \(date.0) \(date.1)"
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let subjectCell = tableView.dequeueReusableCell(withIdentifier: StudentSubjectCell.ID, for: indexPath) as! StudentSubjectCell
-        
         let subject = self.schedule!["\(indexPath.section + 1)"]![indexPath.row]
         
         subjectCell.title.text = subject["disciplName"]
-        
-        guard subject["disciplName"] != "Выходной" else {
+        guard subjectCell.title.text != "Выходной" else {
             subjectCell.hide(.allButTitle)
-            
             return subjectCell
         }
         
@@ -183,12 +182,10 @@ extension StudentScheduleScreen {
         } else {
             subjectCell.lecturer.text = subject["prepodName"]
         }
-        
         subjectCell.department.text = subject["orgUnitName"]
-        subjectCell.time.text = subject["dayTime"]
         
-        let place = subject["audNum"]!.isEmpty ? subject["buildNum"]! : "\(subject["buildNum"]!), \(subject["audNum"]!)"
-        subjectCell.place.text = place
+        subjectCell.time.text = subject["dayTime"]
+        subjectCell.place.text = subject["audNum"]!.isEmpty ? subject["buildNum"]! : "\(subject["buildNum"]!), \(subject["audNum"]!)"
         
         let dates = (subject["dayDate"] == "чет" || subject["dayDate"] == "неч") ? "" : subject["dayDate"]!
         if dates.isEmpty {
@@ -210,28 +207,28 @@ extension StudentScheduleScreen {
 
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard self.schedule != nil else { return }
-
+        
         self.changeBarsVisibility(isHidden: scrollView.panGestureRecognizer.translation(in: scrollView).y <= 0)
     }
-
+    
     override func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         self.changeBarsVisibility(isHidden: false)
-
+        
         return true
     }
-
-
+    
+    
     private func changeBarsVisibility(isHidden: Bool) {
+        guard self.navigationController?.navigationBar.isHidden != isHidden else { return }
+        
         guard let navigationBar = self.navigationController?.navigationBar else { return }
         guard let tabBar = self.tabBarController?.tabBar else { return }
-
-        guard navigationBar.isHidden != isHidden else { return }
-
+        
         let topBarHeight = UIApplication.shared.statusBarFrame.height + navigationBar.frame.height
-
+        
         navigationBar.isHidden = false
         tabBar.isHidden = false
-
+        
         UIView.animate(withDuration: 0.25, animations: {
             navigationBar.frame = navigationBar.frame.offsetBy(dx: 0, dy: isHidden ? -topBarHeight : topBarHeight)
             tabBar.frame = tabBar.frame.offsetBy(dx: 0, dy: isHidden ? tabBar.frame.height : -tabBar.frame.height)
@@ -240,5 +237,5 @@ extension StudentScheduleScreen {
             tabBar.isHidden = isHidden
         })
     }
-
+    
 }
