@@ -14,6 +14,7 @@
 		606B379222CA858900929369 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 606B379122CA858900929369 /* Main.swift */; };
 		606B379422CAA07F00929369 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 606B379322CAA07F00929369 /* LaunchScreen.storyboard */; };
 		609F7D1B22FACCE6003F8965 /* AKMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609F7D1A22FACCE6003F8965 /* AKMapViewController.swift */; };
+		60AD001A22FDB6F900A5DE32 /* UniversityBuildingAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD001922FDB6F900A5DE32 /* UniversityBuildingAnnotation.swift */; };
 		60B2E42D22CB182600BEAB23 /* StudentScheduleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E42A22CB182600BEAB23 /* StudentScheduleScreen.swift */; };
 		60B2E42E22CB182600BEAB23 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E42C22CB182600BEAB23 /* SettingsScreen.swift */; };
 		60B2E43322CB54EB00BEAB23 /* ScoreScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E43222CB54EB00BEAB23 /* ScoreScreen.swift */; };
@@ -37,6 +38,7 @@
 		606B379122CA858900929369 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		606B379322CAA07F00929369 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		609F7D1A22FACCE6003F8965 /* AKMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AKMapViewController.swift; sourceTree = "<group>"; };
+		60AD001922FDB6F900A5DE32 /* UniversityBuildingAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversityBuildingAnnotation.swift; sourceTree = "<group>"; };
 		60B2E42A22CB182600BEAB23 /* StudentScheduleScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentScheduleScreen.swift; sourceTree = "<group>"; };
 		60B2E42C22CB182600BEAB23 /* SettingsScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
 		60B2E43222CB54EB00BEAB23 /* ScoreScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreScreen.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 			children = (
 				609F7D1A22FACCE6003F8965 /* AKMapViewController.swift */,
 				60B2E43522CB58F800BEAB23 /* MapScreen.swift */,
+				60AD001922FDB6F900A5DE32 /* UniversityBuildingAnnotation.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 				60CBD93622DF46A000D387CF /* StudentSubjectCell.swift in Sources */,
 				60B2E43322CB54EB00BEAB23 /* ScoreScreen.swift in Sources */,
 				605BCC4122E3852F0099DFCF /* EmptyScreenView.swift in Sources */,
+				60AD001A22FDB6F900A5DE32 /* UniversityBuildingAnnotation.swift in Sources */,
 				60B2E43B22CCEA6500BEAB23 /* CurrentDay.swift in Sources */,
 				60CBD93222D88DE600D387CF /* Student.swift in Sources */,
 				606B379222CA858900929369 /* Main.swift in Sources */,

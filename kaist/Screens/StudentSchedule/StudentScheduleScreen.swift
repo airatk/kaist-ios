@@ -213,7 +213,7 @@ extension StudentScheduleScreen {
 }
 
 extension StudentScheduleScreen {
-
+    
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard self.schedule != nil else { return }
 
@@ -230,19 +230,17 @@ extension StudentScheduleScreen {
     private func changeBarsVisibility(isHidden: Bool) {
         guard self.navigationController?.navigationBar.isHidden != isHidden else { return }
 
-        guard let navigationBar = self.navigationController?.navigationBar else { return }
+        guard let navBar = self.navigationController?.navigationBar else { return }
         guard let tabBar = self.tabBarController?.tabBar else { return }
 
-        let topBarHeight = UIApplication.shared.statusBarFrame.height + navigationBar.frame.height
-
-        navigationBar.isHidden = false
+        navBar.isHidden = false
         tabBar.isHidden = false
 
         UIView.animate(withDuration: 0.25, animations: {
-            navigationBar.frame = navigationBar.frame.offsetBy(dx: 0, dy: isHidden ? -topBarHeight : topBarHeight)
+            navBar.frame = navBar.frame.offsetBy(dx: 0, dy: isHidden ? -navBar.frame.height : navBar.frame.height)
             tabBar.frame = tabBar.frame.offsetBy(dx: 0, dy: isHidden ? tabBar.frame.height : -tabBar.frame.height)
         }, completion: { _ in
-            navigationBar.isHidden = isHidden
+            navBar.isHidden = isHidden
             tabBar.isHidden = isHidden
         })
     }

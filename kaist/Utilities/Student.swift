@@ -47,40 +47,23 @@ class Student {
             self.groupNumber = groupNumber
             guard let groupNumber = groupNumber else { return }
             
-            let dispatchGroup = DispatchGroup()
-            
-            dispatchGroup.enter()
             self.getGroupScheduleID { (scheduleID, error) in
-                guard error == nil, let scheduleID = scheduleID else {
-                    dispatchGroup.leave()
-                    return
-                }
+                guard error == nil, let scheduleID = scheduleID else { return }
                 
                 self.groupScheduleID = scheduleID
-                
-                dispatchGroup.leave()
             }
             
-            dispatchGroup.enter()
             self.getData(ofType: .groups) { (groups, error) in
-                guard error == nil, let groups = groups, groups.index(forKey: groupNumber) != nil else {
-                    dispatchGroup.leave()
-                    return
-                }
-                
+                guard error == nil, let groups = groups, groups.index(forKey: groupNumber) != nil else { return }
+
                 self.groupScoreID = groups[groupNumber]
-                
-                dispatchGroup.leave()
             }
             
-            dispatchGroup.wait()
-            
-            #warning("! nil-fying group IDs on errors have to be uncommented.")
-//            if self.groupScheduleID == nil || self.groupScoreID == nil {
-//                self.groupNumber = nil
-//                self.groupScheduleID = nil
-//                self.groupScoreID = nil
-//            }
+            if self.groupScheduleID == nil || self.groupScoreID == nil {
+                self.groupNumber = nil
+                self.groupScheduleID = nil
+                self.groupScoreID = nil
+            }
         }
     }
     
@@ -169,8 +152,8 @@ class Student {
             
             // Beautifying the data
             let calendar = Calendar(identifier: .gregorian)
-            
             let dateFormatter = DateFormatter()
+            
             dateFormatter.dateFormat = "HH:mm"
             
             for (numberOfDay, subjects) in schedule {
@@ -254,12 +237,12 @@ class Student {
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data, let response = response as? HTTPURLResponse, error == nil,
               (200...299) ~= response.statusCode else {
-                DispatchQueue.main.async { completion(nil, .noServerResponse) }
+                completion(nil, .noServerResponse)
                 return
             }
             
             guard let page = String(data: data, encoding: .windowsCP1251) else {
-                DispatchQueue.main.async { completion(nil, .badServerResponse) }
+                completion(nil, .badServerResponse)
                 return
             }
             
@@ -285,11 +268,11 @@ class Student {
                 
                 guard !subjects.isEmpty else { throw DataFetchingError.badServerResponse }
                 
-                DispatchQueue.main.async { completion(subjects, nil) }
+                completion(subjects, nil)
             } catch DataFetchingError.badServerResponse {
-                DispatchQueue.main.async { completion(nil, .badServerResponse) }
+                completion(nil, .badServerResponse)
             } catch {
-                DispatchQueue.main.async { completion(nil, .onResponseParsing) }
+                completion(nil, .onResponseParsing)
             }
         } .resume()
     }
@@ -316,12 +299,12 @@ class Student {
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data, let response = response as? HTTPURLResponse, error == nil,
               (200...299) ~= response.statusCode else {
-                DispatchQueue.main.async { completion(nil, .noServerResponse) }
+                completion(nil, .noServerResponse)
                 return
             }
             
             guard let page = String(data: data, encoding: .windowsCP1251) else {
-                DispatchQueue.main.async { completion(nil, .badServerResponse) }
+                completion(nil, .badServerResponse)
                 return
             }
             
@@ -339,11 +322,11 @@ class Student {
                 
                 guard let lastSemester = semesters.max() else { throw DataFetchingError.badServerResponse }
                 
-                DispatchQueue.main.async { completion(Int(lastSemester), nil) }
+                completion(Int(lastSemester), nil)
             } catch DataFetchingError.badServerResponse {
-                DispatchQueue.main.async { completion(nil, .badServerResponse) }
+                completion(nil, .badServerResponse)
             } catch {
-                DispatchQueue.main.async { completion(nil, .onResponseParsing) }
+                completion(nil, .onResponseParsing)
             }
         } .resume()
     }

@@ -11,7 +11,7 @@ import UIKit
 
 class StudentSubjectCell: UITableViewCell {
     
-    static let ID = "SubjectCell"
+    public static let ID = "SubjectCell"
     
     private let iconSize: CGFloat = 14
     private let iconRightMagrin: CGFloat = 8

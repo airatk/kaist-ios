@@ -22,10 +22,37 @@ class AKMapViewController: UIViewController, CLLocationManagerDelegate {
         
         self.view = MKMapView()
         self.mapView = self.view as? MKMapView
+        self.mapView.delegate = self
         
         self.locationManager = CLLocationManager()
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+    }
+    
+    
+    func checkLocationAuthorization() {
+        switch CLLocationManager.authorizationStatus() {
+            case .authorizedAlways, .authorizedWhenInUse:
+                self.mapView.showsUserLocation = true
+            case .notDetermined:
+                self.locationManager.requestWhenInUseAuthorization()
+            case .denied, .restricted:
+                break
+        
+            @unknown default: break
+        }
+    }
+    
+}
+
+extension AKMapViewController: MKMapViewDelegate {
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        let renderer = MKPolylineRenderer(overlay: overlay)
+        
+        renderer.strokeColor = self.tabBarController?.tabBar.tintColor
+        
+        return renderer
     }
     
 }
