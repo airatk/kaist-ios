@@ -134,7 +134,7 @@ class StudentScheduleScreen: UITableViewController {
 extension StudentScheduleScreen {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        self.tableView.backgroundView?.isHidden = self.schedule != nil
+        tableView.backgroundView?.isHidden = self.schedule != nil
         
         return self.schedule?.count ?? 0
     }

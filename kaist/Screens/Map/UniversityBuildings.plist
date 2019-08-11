@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>type</key>
+		<string>educational</string>
+		<key>title</key>
+		<string>Первое учебное здание</string>
+		<key>address</key>
+		<string>Карла Маркса, 10</string>
+		<key>latitude</key>
+		<real>55.7971077</real>
+		<key>longitude</key>
+		<real>49.1129913</real>
+	</dict>
+	<dict>
+		<key>type</key>
+		<string>educational</string>
+		<key>title</key>
+		<string>Второе учебное здание</string>
+		<key>address</key>
+		<string>Четаева, 18</string>
+		<key>latitude</key>
+		<real>55.822686</real>
+		<key>longitude</key>
+		<real>49.136061</real>
+	</dict>
+	<dict>
+		<key>type</key>
+		<string>educational</string>
+		<key>title</key>
+		<string>Третье учебное здание</string>
+		<key>address</key>
+		<string>Толстого, 15</string>
+		<key>latitude</key>
+		<real>55.79182</real>
+		<key>longitude</key>
+		<real>49.137414</real>
+	</dict>
+	<dict>
+		<key>type</key>
+		<string>educational</string>
+		<key>title</key>
+		<string>Четвёртое учебное здание</string>
+		<key>address</key>
+		<string>Горького, 28/17</string>
+		<key>latitude</key>
+		<real>55.7931629</real>
+		<key>longitude</key>
+		<real>49.1374294</real>
+	</dict>
+	<dict>
+		<key>type</key>
+		<string>educational</string>
+		<key>title</key>
+		<string>Пятое учебное здание</string>
+		<key>address</key>
+		<string>Карла Маркса, 31/7</string>
+		<key>latitude</key>
+		<real>55.796911</real>
+		<key>longitude</key>
+		<real>49.1237459</real>
+	</dict>
+	<dict>
+		<key>type</key>
+		<string>educational</string>
+		<key>title</key>
+		<string>Шестое учебное здание</string>
+		<key>address</key>
+		<string>Дементьева, 2а</string>
+		<key>latitude</key>
+		<real>55.854253</real>
+		<key>longitude</key>
+		<real>49.098044</real>
+	</dict>
+	<dict>
+		<key>type</key>
+		<string>educational</string>
+		<key>title</key>
+		<string>Седьмое учебное здание</string>
+		<key>address</key>
+		<string>Большая Красная, 55</string>
+		<key>latitude</key>
+		<real>55.797141</real>
+		<key>longitude</key>
+		<real>49.1345289</real>
+	</dict>
+	<dict>
+		<key>type</key>
+		<string>educational</string>
+		<key>title</key>
+		<string>Восьмое учебное здание</string>
+		<key>address</key>
+		<string>Четаева, 18а</string>
+		<key>latitude</key>
+		<real>55.8208035</real>
+		<key>longitude</key>
+		<real>49.1363205</real>
+	</dict>
+	<dict>
+		<key>type</key>
+		<string>sportscomplex</string>
+		<key>title</key>
+		<string>СК «Олимп»</string>
+		<key>address</key>
+		<string>Чистопольская, 65</string>
+		<key>latitude</key>
+		<real>55.8201111</real>
+		<key>longitude</key>
+		<real>49.1398743</real>
+	</dict>
+	<dict>
+		<key>type</key>
+		<string>sportscomplex</string>
+		<key>title</key>
+		<string>Бассейн «Олимп»</string>
+		<key>address</key>
+		<string>Чистопольская, 65</string>
+		<key>latitude</key>
+		<real>55.821139</real>
+		<key>longitude</key>
+		<real>49.1402243</real>
+	</dict>
+	<dict>
+		<key>type</key>
+		<string>sportscomplex</string>
+		<key>title</key>
+		<string>Стадион «Олимп»</string>
+		<key>address</key>
+		<string>Чистопольская, 65</string>
+		<key>latitude</key>
+		<real>55.821703</real>
+		<key>longitude</key>
+		<real>49.140717</real>
+	</dict>
+	<dict>
+		<key>type</key>
+		<string>dormitory</string>
+		<key>title</key>
+		<string>Общежитие №1</string>
+		<key>address</key>
+		<string>Большая Красная, 7/9</string>
+		<key>latitude</key>
+		<real>55.7984276</real>
+		<key>longitude</key>
+		<real>49.115443</real>
+	</dict>
+	<dict>
+		<key>type</key>
+		<string>dormitory</string>
+		<key>title</key>
+		<string>Общежитие №2</string>
+		<key>address</key>
+		<string>Большая Красная, 18</string>
+		<key>latitude</key>
+		<real>55.7978831</real>
+		<key>longitude</key>
+		<real>49.114794</real>
+	</dict>
+	<dict>
+		<key>type</key>
+		<string>dormitory</string>
+		<key>title</key>
+		<string>Общежитие №3</string>
+		<key>address</key>
+		<string>Кирпичникова, 11</string>
+		<key>latitude</key>
+		<real>55.8095929</real>
+		<key>longitude</key>
+		<real>49.1998827</real>
+	</dict>
+	<dict>
+		<key>type</key>
+		<string>dormitory</string>
+		<key>title</key>
+		<string>Общежитие №4</string>
+		<key>address</key>
+		<string>Короленко, 85</string>
+		<key>latitude</key>
+		<real>55.837959</real>
+		<key>longitude</key>
+		<real>49.100915</real>
+	</dict>
+	<dict>
+		<key>type</key>
+		<string>dormitory</string>
+		<key>title</key>
+		<string>Общежитие №5</string>
+		<key>address</key>
+		<string>Ершова, 30</string>
+		<key>latitude</key>
+		<real>55.7927011</real>
+		<key>longitude</key>
+		<real>49.164421</real>
+	</dict>
+	<dict>
+		<key>type</key>
+		<string>dormitory</string>
+		<key>title</key>
+		<string>Общежитие №6</string>
+		<key>address</key>
+		<string>Товарищеская, 30</string>
+		<key>latitude</key>
+		<real>55.7851918</real>
+		<key>longitude</key>
+		<real>49.1559488</real>
+	</dict>
+	<dict>
+		<key>type</key>
+		<string>dormitory</string>
+		<key>title</key>
+		<string>Общежитие №7</string>
+		<key>address</key>
+		<string>Товарищеская, 30а</string>
+		<key>latitude</key>
+		<real>55.785309</real>
+		<key>longitude</key>
+		<real>49.154972</real>
+	</dict>
+</array>
+</plist>

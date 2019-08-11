@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		603E1AC822CDDC2200746F5B /* LecturerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603E1AC722CDDC2200746F5B /* LecturerData.swift */; };
+		60574CCE230054DB000723E3 /* UniversityBuildings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 60574CCD230054DB000723E3 /* UniversityBuildings.plist */; };
 		605BCC4122E3852F0099DFCF /* EmptyScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605BCC4022E3852F0099DFCF /* EmptyScreenView.swift */; };
 		6068569722C610420010D324 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6068569622C610420010D324 /* AppDelegate.swift */; };
 		6068569E22C610430010D324 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6068569D22C610430010D324 /* Assets.xcassets */; };
@@ -30,6 +31,7 @@
 		2122653EEB719A9CDBF82F16 /* Pods_kaist.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kaist.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FDD590DF6B6A87C3237CF1B /* Pods-kaist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kaist.debug.xcconfig"; path = "Target Support Files/Pods-kaist/Pods-kaist.debug.xcconfig"; sourceTree = "<group>"; };
 		603E1AC722CDDC2200746F5B /* LecturerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LecturerData.swift; sourceTree = "<group>"; };
+		60574CCD230054DB000723E3 /* UniversityBuildings.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = UniversityBuildings.plist; sourceTree = "<group>"; };
 		605BCC4022E3852F0099DFCF /* EmptyScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyScreenView.swift; sourceTree = "<group>"; };
 		6068569322C610420010D324 /* kaist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kaist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6068569622C610420010D324 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 				609F7D1A22FACCE6003F8965 /* AKMapViewController.swift */,
 				60B2E43522CB58F800BEAB23 /* MapScreen.swift */,
 				60AD001922FDB6F900A5DE32 /* UniversityBuildingAnnotation.swift */,
+				60574CCD230054DB000723E3 /* UniversityBuildings.plist */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -237,6 +240,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60574CCE230054DB000723E3 /* UniversityBuildings.plist in Resources */,
 				6068569E22C610430010D324 /* Assets.xcassets in Resources */,
 				606B379422CAA07F00929369 /* LaunchScreen.storyboard in Resources */,
 			);

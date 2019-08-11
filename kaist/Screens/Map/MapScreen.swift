@@ -13,88 +13,8 @@ import CoreLocation
 
 class MapScreen: AKMapViewController {
     
-    private let universityBuildingsAnnotations = [
-        // Educational buildings
-        UniversityBuildingAnnotation(
-            title: "Первое учебное здание", subtitle: "Карла Маркса, 10",
-            coordinate: CLLocationCoordinate2D(latitude: 55.7971077, longitude: 49.1129913)
-        ),
-        UniversityBuildingAnnotation(
-            title: "Второе учебное здание", subtitle: "Четаева, 18",
-            coordinate: CLLocationCoordinate2D(latitude: 55.8226860, longitude: 49.1360610)
-        ),
-        UniversityBuildingAnnotation(
-            title: "Третье учебное здание", subtitle: "Толстого, 15",
-            coordinate: CLLocationCoordinate2D(latitude: 55.7918200, longitude: 49.1374140)
-        ),
-        UniversityBuildingAnnotation(
-            title: "Четвёртое учебное здание", subtitle: "Горького, 28/17",
-            coordinate: CLLocationCoordinate2D(latitude: 55.7931629, longitude: 49.1374294)
-        ),
-        UniversityBuildingAnnotation(
-            title: "Пятое учебное здание", subtitle: "Карла Маркса, 31/7",
-            coordinate: CLLocationCoordinate2D(latitude: 55.7969110, longitude: 49.1237459)
-        ),
-        UniversityBuildingAnnotation(
-            title: "Шестое учебное здание", subtitle: "Дементьева, 2а",
-            coordinate: CLLocationCoordinate2D(latitude: 55.8542530, longitude: 49.0980440)
-        ),
-        UniversityBuildingAnnotation(
-            title: "Седьмое учебное здание", subtitle: "Большая Красная, 55",
-            coordinate: CLLocationCoordinate2D(latitude: 55.7971410, longitude: 49.1345289)
-        ),
-        UniversityBuildingAnnotation(
-            title: "Восьмое учебное здание", subtitle: "Четаева, 18а",
-            coordinate: CLLocationCoordinate2D(latitude: 55.8208035, longitude: 49.1363205)
-        ),
-        
-        // Sports Complex
-        UniversityBuildingAnnotation(
-            title: "СК «Олимп»", subtitle: "Чистопольская, 65",
-            coordinate: CLLocationCoordinate2D(latitude: 55.8201111, longitude: 49.1398743)
-        ),
-        UniversityBuildingAnnotation(
-            title: "Бассейн «Олимп»", subtitle: "Чистопольская, 65",
-            coordinate: CLLocationCoordinate2D(latitude: 55.821139, longitude: 49.1402243)
-        ),
-        UniversityBuildingAnnotation(
-            title: "Стадион «Олимп»", subtitle: "Чистопольская, 65",
-            coordinate: CLLocationCoordinate2D(latitude: 55.821703, longitude: 49.140717)
-        ),
-        
-        // Dormitories
-        UniversityBuildingAnnotation(
-            title: "Общежитие №1", subtitle: "Большая Красная, 7/9",
-            coordinate: CLLocationCoordinate2D(latitude: 55.7984276, longitude: 49.1154430)
-        ),
-        UniversityBuildingAnnotation(
-            title: "Общежитие №2", subtitle: "Большая Красная, 18",
-            coordinate: CLLocationCoordinate2D(latitude: 55.7978831, longitude: 49.1147940)
-        ),
-        UniversityBuildingAnnotation(
-            title: "Общежитие №3", subtitle: "Кирпичникова, 11",
-            coordinate: CLLocationCoordinate2D(latitude: 55.8095929, longitude: 49.1998827)
-        ),
-        UniversityBuildingAnnotation(
-            title: "Общежитие №4", subtitle: "Короленко, 85",
-            coordinate: CLLocationCoordinate2D(latitude: 55.8379590, longitude: 49.1009150)
-        ),
-        UniversityBuildingAnnotation(
-            title: "Общежитие №5", subtitle: "Ершова, 30",
-            coordinate: CLLocationCoordinate2D(latitude: 55.7927011, longitude: 49.1644210)
-        ),
-        UniversityBuildingAnnotation(
-            title: "Общежитие №6", subtitle: "Товарищеская, 30",
-            coordinate: CLLocationCoordinate2D(latitude: 55.7851918, longitude: 49.1559488)
-        ),
-        UniversityBuildingAnnotation(
-            title: "Общежитие №7", subtitle: "Товарищеская, 30а",
-            coordinate: CLLocationCoordinate2D(latitude: 55.7853090, longitude: 49.1549720)
-        )
-    ]
-    
     private let expectedTravelTimeView = UILabel()
-    private var expectedTravelTimeViewTopConstraint = NSLayoutConstraint()
+    private var expectedTravelTimeViewTopVariableConstraint = NSLayoutConstraint()
     
     
     override func viewDidLoad() {
@@ -109,10 +29,26 @@ class MapScreen: AKMapViewController {
             self.checkLocationAuthorization()
         }
         
-        self.centerMapViewToMainLocation(animated: false)
+        self.centerMapViewToMainLocation()
         
-        self.mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: UniversityBuildingAnnotation.ID)
+        let universityBuildingsAnnotations = self.getUniversityBuildings().map {
+            UniversityBuildingAnnotation(
+                title: $0["title"] as? String, subtitle: $0["address"] as? String,
+                coordinate: CLLocationCoordinate2D(latitude: $0["latitude"] as! Double, longitude: $0["longitude"] as! Double)
+            )
+        }
         self.mapView.addAnnotations(universityBuildingsAnnotations)
+        self.mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: UniversityBuildingAnnotation.ID)
+    }
+    
+    
+    private func getUniversityBuildings() -> [[String: Any]] {
+        var format = PropertyListSerialization.PropertyListFormat.xml
+        
+        let pathToUniversityBuildingsData = Bundle.main.path(forResource: "UniversityBuildings", ofType: "plist")!
+        let universityBuildingsData = FileManager.default.contents(atPath: pathToUniversityBuildingsData)!
+        
+        return try! PropertyListSerialization.propertyList(from: universityBuildingsData, options: .mutableContainersAndLeaves, format: &format) as! [[String: Any]]
     }
     
     
@@ -121,9 +57,9 @@ class MapScreen: AKMapViewController {
         self.expectedTravelTimeView.textAlignment = .center
         self.expectedTravelTimeView.textColor = self.tabBarController?.tabBar.tintColor
         
-        self.expectedTravelTimeView.backgroundColor = UIColor.white.withAlphaComponent(0.95)
+        self.expectedTravelTimeView.backgroundColor = UIColor.white.withAlphaComponent(0.96)
         
-        self.expectedTravelTimeView.layer.borderWidth = 0.4
+        self.expectedTravelTimeView.layer.borderWidth = 0.5
         self.expectedTravelTimeView.layer.borderColor = UIColor.gray.cgColor
         self.expectedTravelTimeView.layer.cornerRadius = 8
         self.expectedTravelTimeView.clipsToBounds = true
@@ -132,22 +68,23 @@ class MapScreen: AKMapViewController {
         
         self.expectedTravelTimeView.translatesAutoresizingMaskIntoConstraints = false
         
-        self.expectedTravelTimeViewTopConstraint = self.expectedTravelTimeView.topAnchor.constraint(equalTo: self.mapView.safeAreaLayoutGuide.topAnchor, constant: -75)
+        self.expectedTravelTimeViewTopVariableConstraint = self.expectedTravelTimeView.topAnchor.constraint(equalTo: self.mapView.safeAreaLayoutGuide.topAnchor, constant: -75)
         
         NSLayoutConstraint.activate([
-            self.expectedTravelTimeViewTopConstraint,
+            self.expectedTravelTimeViewTopVariableConstraint,
             self.expectedTravelTimeView.centerXAnchor.constraint(equalTo: self.mapView.centerXAnchor),
             self.expectedTravelTimeView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30),
             self.expectedTravelTimeView.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
+    
     private func showExpectedTravelTimeView(seconds: TimeInterval, transportType: MKDirectionsTransportType) {
-        let hoursNumber = Int(seconds/3600)
-        let minutesNumber = Int(seconds.truncatingRemainder(dividingBy: 3600)/60)
+        let hours = Int(seconds/3600)
+        let minutes = Int(seconds.truncatingRemainder(dividingBy: 3600)/60)
         
         var hoursWord: String {
-            switch hoursNumber % 10 {
+            switch hours % 10 {
                 case 1: return "час"
                 case 2, 3, 4: return "часа"
                 
@@ -155,7 +92,7 @@ class MapScreen: AKMapViewController {
             }
         }
         var minutesWord: String{
-            switch minutesNumber % 10 {
+            switch minutes % 10 {
                 case 1: return "минута"
                 case 2, 3, 4: return "минуты"
                 
@@ -163,10 +100,9 @@ class MapScreen: AKMapViewController {
             }
         }
         
-        var time: String {
-            if hoursNumber < 24 {
-                return (hoursNumber == 0 ? "" : "\(hoursNumber) \(hoursWord) ") +
-                    (minutesNumber == 0 ? "" : "\(minutesNumber) \(minutesWord) ")
+        var duration: String {
+            if hours < 24 {
+                return (hours == 0 ? "" : "\(hours) \(hoursWord) ") + (minutes == 0 ? "" : "\(minutes) \(minutesWord) ")
             } else {
                 return "Больше суток "
             }
@@ -181,7 +117,7 @@ class MapScreen: AKMapViewController {
             }
         }
         
-        self.expectedTravelTimeView.text = time + transport
+        self.expectedTravelTimeView.text = duration + transport
         self.animateExpectedTravelTimeView(toHide: false)
     }
     
@@ -191,23 +127,17 @@ class MapScreen: AKMapViewController {
     }
     
     private func animateExpectedTravelTimeView(toHide: Bool) {
-        if toHide {
-            self.expectedTravelTimeViewTopConstraint.constant = -75
-        } else {
-            self.expectedTravelTimeViewTopConstraint.constant = 15
-        }
+        self.expectedTravelTimeViewTopVariableConstraint.constant = toHide ? -75 : 15
         
-        UIView.animate(withDuration: 0.4, delay: 0, options: .curveEaseInOut, animations: {
-            self.mapView.layoutIfNeeded()
-        })
+        UIView.animate(withDuration: 0.3) { self.mapView.layoutIfNeeded() }
     }
     
     
-    private func centerMapViewToMainLocation(animated: Bool) {
+    private func centerMapViewToMainLocation() {
         let embankmentOfKazanCity = CLLocationCoordinate2D(latitude: 55.8031624, longitude: 49.1152275)
         let region = MKCoordinateRegion(center: embankmentOfKazanCity, latitudinalMeters: 12_000, longitudinalMeters: 12_000)
         
-        self.mapView.setRegion(region, animated: animated)
+        self.mapView.setRegion(region, animated: true)
     }
     
 }
@@ -247,23 +177,22 @@ extension MapScreen {
         
         let request = MKDirections.Request()
         
-        request.transportType = .walking
         request.source = MKMapItem(placemark: MKPlacemark(coordinate: mapView.userLocation.coordinate))
         request.destination = MKMapItem(placemark: MKPlacemark(coordinate: view.annotation!.coordinate))
         
-        let directions = MKDirections(request: request)
+        request.transportType = .walking
         
-        directions.calculate { (response, error) in
+        MKDirections(request: request).calculate { (response, error) in
             guard let route = response?.routes.first, error == nil else { return }
             
             self.showExpectedTravelTimeView(seconds: route.expectedTravelTime, transportType: route.transportType)
-            self.mapView.addOverlay(route.polyline)
+            mapView.addOverlay(route.polyline)
         }
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
         self.hideExpectedTravelTimeView()
-        self.mapView.removeOverlays(self.mapView.overlays)
+        mapView.removeOverlays(mapView.overlays)
     }
     
 }
@@ -272,11 +201,9 @@ extension MapScreen: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         self.hideExpectedTravelTimeView()
-        
         self.mapView.removeOverlays(self.mapView.overlays)
         self.mapView.deselectAnnotation(self.mapView.selectedAnnotations.first, animated: true)
-        
-        self.centerMapViewToMainLocation(animated: true)
+        self.centerMapViewToMainLocation()
     }
     
 }
