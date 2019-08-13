@@ -11,6 +11,8 @@ import UIKit
 
 class StudentScheduleScreen: UITableViewController {
     
+    private let student = Student()
+    
     private var initialSchedule: [String: [[String: String]]]?
     private var schedule: [String: [[String: String]]]?
     
@@ -55,6 +57,8 @@ class StudentScheduleScreen: UITableViewController {
             
             return refreshControl
         }()
+        
+        self.student.setUserDefaults()
     }
     
     override func viewWillLayoutSubviews() {
@@ -67,8 +71,8 @@ class StudentScheduleScreen: UITableViewController {
         ])
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
         if self.initialSchedule == nil {
             self.refreshControl?.beginRefreshing()
@@ -102,14 +106,9 @@ class StudentScheduleScreen: UITableViewController {
         }
     }
     
+    
     @objc private func refreshSchedule() {
-        #warning("Student gotta be created & saved on LoginScreen")
-        let student = Student()
-        student.groupScheduleID = "17896"
-//        student.group = "4333"
-//        student.group = "4101"
-        
-        student.getSchedule(ofType: .classes) { (schedule, error) in
+        self.student.getSchedule(ofType: .classes) { (schedule, error) in
             if let error = error {
                 self.tableView.backgroundView = EmptyScreenView(emoji: "🤷🏼‍♀️", message: error.rawValue)
             } else {
@@ -140,7 +139,7 @@ extension StudentScheduleScreen {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.schedule?["\(section + 1)"]?.count ?? 0
+        return self.schedule!["\(section + 1)"]!.count
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -160,14 +159,14 @@ extension StudentScheduleScreen {
         
         let date = CurrentDay.date(shiftedToDays: askedDayWeekday - currentWeekday + (self.isNextWeekSelected ? 7 : 0))
         
-        return "\(weekday), \(date.0) \(date.1)"
+        return "\(weekday), \(date.day) \(date.month)"
     }
     
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         guard let headerView = view as? UITableViewHeaderFooterView else { return }
         
         if (section + 1) == CurrentDay.weekday && !self.isNextWeekSelected {
-            headerView.textLabel?.textColor = headerView.tintColor
+            headerView.textLabel?.textColor = .lightBlue
         }
         
         headerView.textLabel?.font = .boldSystemFont(ofSize: 12)
@@ -237,6 +236,8 @@ extension StudentScheduleScreen {
         tabBar.isHidden = false
 
         UIView.animate(withDuration: 0.25, animations: {
+            (UIApplication.shared.value(forKey: "statusBar") as! UIView).backgroundColor = isHidden ? .white : .clear
+            
             navBar.frame = navBar.frame.offsetBy(dx: 0, dy: isHidden ? -navBar.frame.height : navBar.frame.height)
             tabBar.frame = tabBar.frame.offsetBy(dx: 0, dy: isHidden ? tabBar.frame.height : -tabBar.frame.height)
         }, completion: { _ in
@@ -244,5 +245,5 @@ extension StudentScheduleScreen {
             tabBar.isHidden = isHidden
         })
     }
-
+    
 }

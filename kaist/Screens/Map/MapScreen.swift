@@ -14,7 +14,7 @@ import CoreLocation
 class MapScreen: AKMapViewController {
     
     private let expectedTravelTimeView = UILabel()
-    private var expectedTravelTimeViewTopVariableConstraint = NSLayoutConstraint()
+    private var expectedTravelTimeViewBottomConstraint = NSLayoutConstraint()
     
     
     override func viewDidLoad() {
@@ -22,23 +22,30 @@ class MapScreen: AKMapViewController {
         
         self.tabBarController?.delegate = self
         
-        self.navigationController?.navigationBar.isHidden = true
+        self.navigationItem.titleView = {
+            let searchBar = UISearchBar()
+            
+            searchBar.searchBarStyle = .minimal
+            searchBar.showsCancelButton = true
+            
+            searchBar.placeholder = "Найти здание"
+            
+            return searchBar
+        }()
+        
         self.setUpExpectedTimeView()
+        
+        self.centerMapViewToMainLocation()
+        
+        self.mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: UniversityBuildingAnnotation.ID)
+        self.mapView.addAnnotations(self.getUniversityBuildings().map { UniversityBuildingAnnotation(
+            title: $0["title"] as? String, subtitle: $0["address"] as? String,
+            coordinate: CLLocationCoordinate2D(latitude: $0["latitude"] as! Double, longitude: $0["longitude"] as! Double)
+        )})
         
         if CLLocationManager.locationServicesEnabled() {
             self.checkLocationAuthorization()
         }
-        
-        self.centerMapViewToMainLocation()
-        
-        let universityBuildingsAnnotations = self.getUniversityBuildings().map {
-            UniversityBuildingAnnotation(
-                title: $0["title"] as? String, subtitle: $0["address"] as? String,
-                coordinate: CLLocationCoordinate2D(latitude: $0["latitude"] as! Double, longitude: $0["longitude"] as! Double)
-            )
-        }
-        self.mapView.addAnnotations(universityBuildingsAnnotations)
-        self.mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: UniversityBuildingAnnotation.ID)
     }
     
     
@@ -55,23 +62,23 @@ class MapScreen: AKMapViewController {
     private func setUpExpectedTimeView() {
         self.expectedTravelTimeView.font = .boldSystemFont(ofSize: 16)
         self.expectedTravelTimeView.textAlignment = .center
-        self.expectedTravelTimeView.textColor = self.tabBarController?.tabBar.tintColor
+        self.expectedTravelTimeView.textColor = .lightBlue
         
-        self.expectedTravelTimeView.backgroundColor = UIColor.white.withAlphaComponent(0.96)
+        self.expectedTravelTimeView.backgroundColor = UIColor.white.withAlphaComponent(0.95)
         
         self.expectedTravelTimeView.layer.borderWidth = 0.5
         self.expectedTravelTimeView.layer.borderColor = UIColor.gray.cgColor
-        self.expectedTravelTimeView.layer.cornerRadius = 8
+        self.expectedTravelTimeView.layer.cornerRadius = 10
         self.expectedTravelTimeView.clipsToBounds = true
         
         self.mapView.addSubview(self.expectedTravelTimeView)
         
         self.expectedTravelTimeView.translatesAutoresizingMaskIntoConstraints = false
         
-        self.expectedTravelTimeViewTopVariableConstraint = self.expectedTravelTimeView.topAnchor.constraint(equalTo: self.mapView.safeAreaLayoutGuide.topAnchor, constant: -75)
+        self.expectedTravelTimeViewBottomConstraint = self.expectedTravelTimeView.bottomAnchor.constraint(equalTo: self.mapView.safeAreaLayoutGuide.bottomAnchor, constant: 75)
         
         NSLayoutConstraint.activate([
-            self.expectedTravelTimeViewTopVariableConstraint,
+            self.expectedTravelTimeViewBottomConstraint,
             self.expectedTravelTimeView.centerXAnchor.constraint(equalTo: self.mapView.centerXAnchor),
             self.expectedTravelTimeView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30),
             self.expectedTravelTimeView.heightAnchor.constraint(equalToConstant: 60)
@@ -127,9 +134,11 @@ class MapScreen: AKMapViewController {
     }
     
     private func animateExpectedTravelTimeView(toHide: Bool) {
-        self.expectedTravelTimeViewTopVariableConstraint.constant = toHide ? -75 : 15
+        self.expectedTravelTimeViewBottomConstraint.constant = toHide ? 75 : -15
         
-        UIView.animate(withDuration: 0.3) { self.mapView.layoutIfNeeded() }
+        UIView.animate(withDuration: 0.3) {
+            self.mapView.layoutIfNeeded()
+        }
     }
     
     

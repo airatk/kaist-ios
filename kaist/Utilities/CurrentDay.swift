@@ -31,27 +31,21 @@ struct CurrentDay {
     }
     
     public static var weekday: Int {
-        return self.calendar.component(.weekday, from: Date()) - 1  // Sunday is the 1st one
+        // Sunday is the 1st weekday by default, and Sunday is official day-off.
+        // Its value is equal to -1 after decrementing which allows to show the next week schedule as a current one on Sunday
+        return self.calendar.component(.weekday, from: self.today) - 1
     }
     
     public static var imageNameWeekday: String {
         return [ "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday" ][self.weekday]
     }
 
-    public static func date(shiftedToDays days: Int = 0) -> (Int, String) {
+    public static func date(shiftedToDays days: Int = 0) -> (day: Int, month: String) {
         let date = self.calendar.date(byAdding: .day, value: days, to: self.today)!
         let day = self.calendar.component(.day, from: date)
         let month = self.calendar.component(.month, from: date) - 1  // Array key, so decremented
         
-        return (
-            day, [
-                "января", "февраля",
-                "марта", "апреля", "мая",
-                "июня", "июля", "августа",
-                "сентября", "октября", "ноября",
-                "декабря"
-            ][month]
-        )
+        return (day: day, month: [ "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря" ][month])
     }
 
 }

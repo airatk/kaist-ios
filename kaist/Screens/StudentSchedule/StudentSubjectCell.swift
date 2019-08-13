@@ -69,9 +69,9 @@ extension StudentSubjectCell {
         self.department.font = middleFont
         self.department.numberOfLines = 0
         
-        self.coordinatesIcon.set(tintColor: self.tintColor)
+        self.coordinatesIcon.set(tintColor: .lightBlue)
         self.time.font = smallFont
-        self.time.textColor = self.tintColor
+        self.time.textColor = .lightBlue
         self.place.font = smallFont
         self.place.textColor = .darkGray
         
@@ -239,7 +239,7 @@ extension StudentSubjectCell {
     
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        self.contentView.backgroundColor = highlighted ? self.tintColor.withAlphaComponent(0.1) : .clear
+        self.contentView.backgroundColor = highlighted ? UIColor.lightBlue.withAlphaComponent(0.1) : .clear
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

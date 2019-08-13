@@ -1,5 +1,5 @@
 //
-//  AppTabBarController.swift
+//  AppController.swift
 //  kaist
 //
 //  Created by Airat K on 1/7/19.
@@ -9,7 +9,7 @@
 import UIKit
 
 
-class AppTabBarController: UITabBarController {
+class AppController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

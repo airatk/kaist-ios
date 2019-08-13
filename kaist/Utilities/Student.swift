@@ -21,31 +21,26 @@ class Student {
     ]
     
     public var institute: String? {
-        get {
-            return self.instituteName
-        }
-        set(instituteName) {
-            guard institutes.index(forKey: instituteName) != nil else { return }
+        get { return self.instituteName }
+        set {
+            guard institutes.index(forKey: newValue) != nil else { return }
             
-            self.instituteName = instituteName
-            self.instituteID = self.institutes[instituteName]
+            self.instituteName = newValue
+            self.instituteID = self.institutes[newValue]
         }
     }
     
     public var year: String?
     
     private var groupNumber: String?
-    #warning("Make private")
-    /*private*/public var groupScheduleID: String?
+    private var groupScheduleID: String?
     private var groupScoreID: String?
     
     public var group: String? {
-        get {
-            return self.groupNumber
-        }
-        set(groupNumber) {
-            self.groupNumber = groupNumber
-            guard let groupNumber = groupNumber else { return }
+        get { return self.groupNumber }
+        set {
+            self.groupNumber = newValue
+            guard let groupNumber = newValue else { return }
             
             self.getGroupScheduleID { (scheduleID, error) in
                 guard error == nil, let scheduleID = scheduleID else { return }
@@ -72,13 +67,11 @@ class Student {
     private var fellowStudentsNames: [String: String]?
     
     public var name: String? {
-        get {
-            return self.fullName
-        }
-        set(studentName) {
-            self.fullName = studentName
+        get { return self.fullName }
+        set {
+            self.fullName = newValue
             
-            guard let studentName = studentName else { return }
+            guard let studentName = newValue else { return }
             
             self.getData(ofType: .names) { (names, error) in
                 guard error == nil, let names = names, names.index(forKey: studentName) != nil else { return }
@@ -100,6 +93,11 @@ class Student {
             self.name != nil &&
             self.card != nil
         )
+    }
+    
+    
+    public func setUserDefaults() {
+        self.groupScheduleID = "17896"
     }
     
     

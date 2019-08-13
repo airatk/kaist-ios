@@ -50,7 +50,7 @@ extension AKMapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let renderer = MKPolylineRenderer(overlay: overlay)
         
-        renderer.strokeColor = self.tabBarController?.tabBar.tintColor
+        renderer.strokeColor = .lightBlue
         
         return renderer
     }

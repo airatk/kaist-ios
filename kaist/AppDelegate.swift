@@ -13,22 +13,18 @@ import UIKit
     
     var window: UIWindow?
     
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Window
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window?.rootViewController = Main()
+        self.window?.rootViewController = AppController()
         self.window?.makeKeyAndVisible()
         
+        let loginNavigationController = UINavigationController(rootViewController: LoginScreen())
         
-        // Status bar
-        let statusBarWindow = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
+        loginNavigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        loginNavigationController.navigationBar.shadowImage = UIImage()
         
-        let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .prominent))
-        blurEffectView.frame = UIApplication.shared.statusBarFrame
-        
-        statusBarWindow.addSubview(blurEffectView)
-        statusBarWindow.sendSubviewToBack(blurEffectView)
-        
+        self.window?.rootViewController?.present(loginNavigationController, animated: true)
         
         return true
     }
