@@ -1,5 +1,5 @@
 //
-//  LoginScreen.swift
+//  WelcomeScreen.swift
 //  kaist
 //
 //  Created by Airat K on 12/8/19.
@@ -8,7 +8,8 @@
 
 import UIKit
 
-class LoginScreen: UIViewController {
+
+class WelcomeScreen: UIViewController {
     
     private var welcomeLabel: UILabel!
     
@@ -52,10 +53,10 @@ class LoginScreen: UIViewController {
         self.hintLabel.text = [
             "Номер зачётки позволит видеть баллы — не только расписание.\n",
             "В студенческом билете он, кстати, тот же.\n\n",
-            "Выбери желаемый путь настройки.\n"
+            "Выбери желаемый путь настройки."
         ].joined()
-        self.hintLabel.font = .systemFont(ofSize: 17)
-        self.hintLabel.textColor = .darkGray
+        self.hintLabel.font = .systemFont(ofSize: 16)
+        self.hintLabel.textColor = .gray
         self.hintLabel.numberOfLines = 0
         
         self.view.addSubview(self.hintLabel)
@@ -64,7 +65,7 @@ class LoginScreen: UIViewController {
         NSLayoutConstraint.activate([
             self.hintLabel.topAnchor.constraint(equalTo: self.welcomeLabel.bottomAnchor, constant: 25),
             self.hintLabel.leadingAnchor.constraint(equalTo: self.welcomeLabel.leadingAnchor),
-            self.hintLabel.widthAnchor.constraint(equalToConstant: 275)
+            self.hintLabel.widthAnchor.constraint(equalToConstant: 260)
         ])
     }
     
@@ -118,11 +119,6 @@ class LoginScreen: UIViewController {
     
     @objc private func throwToFastLoginController() {
         self.navigationController?.pushViewController(FastLoginScreen(), animated: true)
-    }
-    
-    
-    @objc private func throwToAppController() {
-        self.navigationController?.dismiss(animated: true)
     }
     
 }

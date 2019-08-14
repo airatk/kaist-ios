@@ -15,4 +15,8 @@ extension UIColor {
         return UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
     }
     
+    open class var dimmedBlue: UIColor {
+        return UIColor(red: 102.0/255.0, green: 176.0/255.0, blue: 255.0/255.0, alpha: 1.0)
+    }
+    
 }

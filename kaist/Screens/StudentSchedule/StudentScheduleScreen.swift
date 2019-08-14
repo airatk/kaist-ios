@@ -11,8 +11,6 @@ import UIKit
 
 class StudentScheduleScreen: UITableViewController {
     
-    private let student = Student()
-    
     private var initialSchedule: [String: [[String: String]]]?
     private var schedule: [String: [[String: String]]]?
     
@@ -57,8 +55,6 @@ class StudentScheduleScreen: UITableViewController {
             
             return refreshControl
         }()
-        
-        self.student.setUserDefaults()
     }
     
     override func viewWillLayoutSubviews() {
@@ -67,12 +63,25 @@ class StudentScheduleScreen: UITableViewController {
         self.refreshControl?.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.refreshControl!.centerXAnchor.constraint(equalTo: self.tableView.centerXAnchor),
-            self.refreshControl!.topAnchor.constraint(equalTo: self.navigationController!.navigationBar.bottomAnchor, constant: 30)
+            self.refreshControl!.topAnchor.constraint(equalTo: self.tableView.safeAreaLayoutGuide.topAnchor, constant: 30)
         ])
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        guard AppDelegate.shared.student.isSetUp else {
+            let loginNavigationController = UINavigationController(rootViewController: WelcomeScreen())
+            
+            loginNavigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
+            loginNavigationController.navigationBar.shadowImage = UIImage()
+            
+            self.present(loginNavigationController, animated: true)
+            
+            self.initialSchedule = nil
+            
+            return
+        }
         
         if self.initialSchedule == nil {
             self.refreshControl?.beginRefreshing()
@@ -108,7 +117,7 @@ class StudentScheduleScreen: UITableViewController {
     
     
     @objc private func refreshSchedule() {
-        self.student.getSchedule(ofType: .classes) { (schedule, error) in
+        AppDelegate.shared.student.getSchedule(ofType: .classes) { (schedule, error) in
             if let error = error {
                 self.tableView.backgroundView = EmptyScreenView(emoji: "🤷🏼‍♀️", message: error.rawValue)
             } else {

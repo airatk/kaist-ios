@@ -13,8 +13,10 @@ import CoreLocation
 
 class MapScreen: AKMapViewController {
     
-    private let expectedTravelTimeView = UILabel()
-    private var expectedTravelTimeViewBottomConstraint = NSLayoutConstraint()
+    private let searchController = UISearchController(searchResultsController: nil)
+    
+    private let expectedTravelTimeLabel = UILabel()
+    private var expectedTravelTimeLabelBottomConstraint = NSLayoutConstraint()
     
     
     override func viewDidLoad() {
@@ -22,17 +24,7 @@ class MapScreen: AKMapViewController {
         
         self.tabBarController?.delegate = self
         
-        self.navigationItem.titleView = {
-            let searchBar = UISearchBar()
-            
-            searchBar.searchBarStyle = .minimal
-            searchBar.showsCancelButton = true
-            
-            searchBar.placeholder = "Найти здание"
-            
-            return searchBar
-        }()
-        
+        self.setUpSearchController()
         self.setUpExpectedTimeView()
         
         self.centerMapViewToMainLocation()
@@ -59,34 +51,50 @@ class MapScreen: AKMapViewController {
     }
     
     
+    private func setUpSearchController() {
+        self.searchController.delegate = self
+        self.searchController.searchResultsUpdater = self
+        self.searchController.hidesNavigationBarDuringPresentation = false
+        self.searchController.obscuresBackgroundDuringPresentation = true
+        
+        self.searchController.searchBar.delegate = self
+        self.searchController.searchBar.searchBarStyle = .minimal
+        self.searchController.searchBar.placeholder = "Найти каёвское здание"
+        
+        self.navigationItem.titleView = self.searchController.searchBar
+        
+        self.definesPresentationContext = true
+    }
+    
     private func setUpExpectedTimeView() {
-        self.expectedTravelTimeView.font = .boldSystemFont(ofSize: 16)
-        self.expectedTravelTimeView.textAlignment = .center
-        self.expectedTravelTimeView.textColor = .lightBlue
+        self.expectedTravelTimeLabel.font = .boldSystemFont(ofSize: 16)
+        self.expectedTravelTimeLabel.textAlignment = .center
+        self.expectedTravelTimeLabel.textColor = .lightBlue
         
-        self.expectedTravelTimeView.backgroundColor = UIColor.white.withAlphaComponent(0.95)
+        self.expectedTravelTimeLabel.backgroundColor = UIColor.white.withAlphaComponent(0.95)
         
-        self.expectedTravelTimeView.layer.borderWidth = 0.5
-        self.expectedTravelTimeView.layer.borderColor = UIColor.gray.cgColor
-        self.expectedTravelTimeView.layer.cornerRadius = 10
-        self.expectedTravelTimeView.clipsToBounds = true
+        self.expectedTravelTimeLabel.layer.borderWidth = 0.5
+        self.expectedTravelTimeLabel.layer.borderColor = UIColor.gray.cgColor
+        self.expectedTravelTimeLabel.layer.cornerRadius = 10
+        self.expectedTravelTimeLabel.clipsToBounds = true
         
-        self.mapView.addSubview(self.expectedTravelTimeView)
+        self.mapView.addSubview(self.expectedTravelTimeLabel)
         
-        self.expectedTravelTimeView.translatesAutoresizingMaskIntoConstraints = false
+        self.expectedTravelTimeLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        self.expectedTravelTimeViewBottomConstraint = self.expectedTravelTimeView.bottomAnchor.constraint(equalTo: self.mapView.safeAreaLayoutGuide.bottomAnchor, constant: 75)
+        // 75 if expectedTravelTimeLabel.isHidden is true, -15 if expectedTravelTimeLabel.isHidden is false
+        self.expectedTravelTimeLabelBottomConstraint = self.expectedTravelTimeLabel.bottomAnchor.constraint(equalTo: self.mapView.safeAreaLayoutGuide.bottomAnchor, constant: 75)
         
         NSLayoutConstraint.activate([
-            self.expectedTravelTimeViewBottomConstraint,
-            self.expectedTravelTimeView.centerXAnchor.constraint(equalTo: self.mapView.centerXAnchor),
-            self.expectedTravelTimeView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30),
-            self.expectedTravelTimeView.heightAnchor.constraint(equalToConstant: 60)
+            self.expectedTravelTimeLabelBottomConstraint,
+            self.expectedTravelTimeLabel.centerXAnchor.constraint(equalTo: self.mapView.centerXAnchor),
+            self.expectedTravelTimeLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30),
+            self.expectedTravelTimeLabel.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
     
-    private func showExpectedTravelTimeView(seconds: TimeInterval, transportType: MKDirectionsTransportType) {
+    private func showexpectedTravelTimeLabel(seconds: TimeInterval, transportType: MKDirectionsTransportType) {
         let hours = Int(seconds/3600)
         let minutes = Int(seconds.truncatingRemainder(dividingBy: 3600)/60)
         
@@ -124,17 +132,17 @@ class MapScreen: AKMapViewController {
             }
         }
         
-        self.expectedTravelTimeView.text = duration + transport
-        self.animateExpectedTravelTimeView(toHide: false)
+        self.expectedTravelTimeLabel.text = duration + transport
+        self.animateexpectedTravelTimeLabel(toHide: false)
     }
     
-    private func hideExpectedTravelTimeView() {
-        self.animateExpectedTravelTimeView(toHide: true)
-        self.expectedTravelTimeView.text = nil
+    private func hideexpectedTravelTimeLabel() {
+        self.animateexpectedTravelTimeLabel(toHide: true)
+        self.expectedTravelTimeLabel.text = nil
     }
     
-    private func animateExpectedTravelTimeView(toHide: Bool) {
-        self.expectedTravelTimeViewBottomConstraint.constant = toHide ? 75 : -15
+    private func animateexpectedTravelTimeLabel(toHide: Bool) {
+        self.expectedTravelTimeLabelBottomConstraint.constant = toHide ? 75 : -15
         
         UIView.animate(withDuration: 0.3) {
             self.mapView.layoutIfNeeded()
@@ -194,14 +202,34 @@ extension MapScreen {
         MKDirections(request: request).calculate { (response, error) in
             guard let route = response?.routes.first, error == nil else { return }
             
-            self.showExpectedTravelTimeView(seconds: route.expectedTravelTime, transportType: route.transportType)
+            self.showexpectedTravelTimeLabel(seconds: route.expectedTravelTime, transportType: route.transportType)
             mapView.addOverlay(route.polyline)
         }
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-        self.hideExpectedTravelTimeView()
+        self.hideexpectedTravelTimeLabel()
         mapView.removeOverlays(mapView.overlays)
+    }
+    
+}
+
+extension MapScreen: UISearchControllerDelegate {
+    
+    
+    
+}
+
+extension MapScreen: UISearchBarDelegate {
+    
+    
+    
+}
+
+extension MapScreen: UISearchResultsUpdating {
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        // TODO
     }
     
 }
@@ -209,7 +237,7 @@ extension MapScreen {
 extension MapScreen: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        self.hideExpectedTravelTimeView()
+        self.hideexpectedTravelTimeLabel()
         self.mapView.removeOverlays(self.mapView.overlays)
         self.mapView.deselectAnnotation(self.mapView.selectedAnnotations.first, animated: true)
         self.centerMapViewToMainLocation()

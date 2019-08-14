@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class FullLoginScreen: UIViewController {
 
     override func viewDidLoad() {
@@ -15,5 +16,10 @@ class FullLoginScreen: UIViewController {
 
         self.view.backgroundColor = .white
     }
-
+    
+    
+    @objc private func throwToAppController() {
+        self.navigationController?.dismiss(animated: true)
+    }
+    
 }

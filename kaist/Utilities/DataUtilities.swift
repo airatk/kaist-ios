@@ -14,6 +14,7 @@ enum DataFetchingError: String, Error {
     case noServerResponse = "Сайт kai.ru не отвечает"
     case onResponseParsing = "Не удалось загрузить расписание"
     case badServerResponse = "Нет данных"
+    case noAskedGroupReceived = "Такой группы нет"
 }
 
 enum ScheduleType: String {

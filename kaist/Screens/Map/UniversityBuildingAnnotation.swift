@@ -10,8 +10,6 @@ import UIKit
 import MapKit
 
 
-
-
 class UniversityBuildingAnnotation: NSObject, MKAnnotation {
     
     public static let ID = "UniversityBuildingAnnotation"
