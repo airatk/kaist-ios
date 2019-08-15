@@ -12,9 +12,9 @@ import Foundation
 enum DataFetchingError: String, Error {
     case onURLCreation = "Не удалось отправить запрос на сервера kai.ru"
     case noServerResponse = "Сайт kai.ru не отвечает"
-    case onResponseParsing = "Не удалось загрузить расписание"
+    case onResponseParsing = "Не удалось обработать ответ от серверов kai.ru"
     case badServerResponse = "Нет данных"
-    case noAskedGroupReceived = "Такой группы нет"
+    case noAskedGroupReceived = "Такой группы нет. Возможно, она появится позже, когда её внесут в каёвскую базу"
 }
 
 enum ScheduleType: String {

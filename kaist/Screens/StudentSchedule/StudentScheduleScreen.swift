@@ -120,6 +120,9 @@ class StudentScheduleScreen: UITableViewController {
         AppDelegate.shared.student.getSchedule(ofType: .classes) { (schedule, error) in
             if let error = error {
                 self.tableView.backgroundView = EmptyScreenView(emoji: "🤷🏼‍♀️", message: error.rawValue)
+                
+                self.initialSchedule = nil
+                self.schedule = nil
             } else {
                 self.initialSchedule = schedule
                 self.setScheduleUsingInitialSchedule()

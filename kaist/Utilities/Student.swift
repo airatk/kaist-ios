@@ -14,25 +14,24 @@ class Student {
     
     #warning("17896 - ID of the group 4101")
     
-    private var instituteName: String?
-    private var instituteID: String?
-    
     public let institutes: [String?: String] = [
         "ИАНТЭ": "1", "ФМФ": "2", "ИАЭП": "3",
         "ИКТЗИ": "4", "ИРЭТ": "5", "ИЭУСТ": "28"
     ]
     
-    public var institute: String? {
-        get { return self.instituteName }
-        set {
-            guard institutes.index(forKey: newValue) != nil else { return }
-            
-            self.instituteName = newValue
-            self.instituteID = self.institutes[newValue]
-        }
+    public var instituteName: String? {
+        get { return UserDefaults.standard.string(forKey: "instituteName") }
+        set { UserDefaults.standard.set(newValue, forKey: "instituteName") }
+    }
+    public var instituteID: String? {
+        get { return UserDefaults.standard.string(forKey: "instituteID") }
+        set { UserDefaults.standard.set(newValue, forKey: "instituteID") }
     }
     
-    public var year: String?
+    public var year: String? {
+        get { return UserDefaults.standard.string(forKey: "year") }
+        set { UserDefaults.standard.set(newValue, forKey: "year") }
+    }
     
     public var groupNumber: String? {
         get { return UserDefaults.standard.string(forKey: "groupNumber") }
@@ -42,55 +41,25 @@ class Student {
         get { return UserDefaults.standard.string(forKey: "groupScheduleID") }
         set { UserDefaults.standard.set(newValue, forKey: "groupScheduleID") }
     }
-    private var groupScoreID: String?
-    
-//    public var group: String? {
-//        get { return self.groupNumber }
-//        set {
-//            self.groupNumber = newValue
-//            guard let groupNumber = newValue else { return }
-//
-//            self.getGroupScheduleID { (scheduleID, error) in
-//                guard error == nil, let scheduleID = scheduleID else { return }
-//
-//                self.groupScheduleID = scheduleID
-//            }
-//
-//            self.getData(ofType: .groups) { (groups, error) in
-//                guard error == nil, let groups = groups, groups.index(forKey: groupNumber) != nil else { return }
-//
-//                self.groupScoreID = groups[groupNumber]
-//            }
-//
-//            if self.groupScheduleID == nil || self.groupScoreID == nil {
-//                self.groupNumber = nil
-//                self.groupScheduleID = nil
-//                self.groupScoreID = nil
-//            }
-//        }
-//    }
-    
-    private var fullName: String?
-    private var ID: String?
-    private var fellowStudentsNames: [String: String]?
-    
-    public var name: String? {
-        get { return self.fullName }
-        set {
-            self.fullName = newValue
-            
-            guard let studentName = newValue else { return }
-            
-            self.getData(ofType: .names) { (names, error) in
-                guard error == nil, let names = names, names.index(forKey: studentName) != nil else { return }
-                
-                self.ID = names[studentName]
-                self.fellowStudentsNames = names
-            }
-        }
+    public var groupScoreID: String? {
+        get { return UserDefaults.standard.string(forKey: "groupScoreID") }
+        set { UserDefaults.standard.set(newValue, forKey: "groupScoreID") }
     }
     
-    public var card: String?
+    public var fullName: String? {
+        get { return UserDefaults.standard.string(forKey: "studentFullName") }
+        set { UserDefaults.standard.set(newValue, forKey: "studentFullName") }
+    }
+    public var ID: String? {
+        get { return UserDefaults.standard.string(forKey: "studentID") }
+        set { UserDefaults.standard.set(newValue, forKey: "studentID") }
+    }
+    
+    public var card: String? {
+        get { return UserDefaults.standard.string(forKey: "studentCard") }
+        set { UserDefaults.standard.set(newValue, forKey: "studentCard") }
+    }
+    
     
     public var isSetUp: Bool {
         get { return UserDefaults.standard.bool(forKey: "isSetUp") }
@@ -119,7 +88,7 @@ class Student {
             "groupId": self.groupScheduleID ?? ""
         ]
         
-        guard let url = URL(string: self.scheduleURLString + "?" + parameters.URLParameters) else {
+        guard let url = URL(string: self.scheduleURLString + "?" + parameters.URLParametersString) else {
             completion(nil, .onURLCreation)
             return
         }
@@ -234,17 +203,17 @@ class Student {
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.httpBody = parameters.URLParameters.data(using: .utf8)
+        request.httpBody = parameters.URLParametersString.data(using: .utf8)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data, let response = response as? HTTPURLResponse, error == nil,
               (200...299) ~= response.statusCode else {
-                completion(nil, .noServerResponse)
+                DispatchQueue.main.async { completion(nil, .noServerResponse) }
                 return
             }
             
             guard let page = String(data: data, encoding: .windowsCP1251) else {
-                completion(nil, .badServerResponse)
+                DispatchQueue.main.async { completion(nil, .badServerResponse) }
                 return
             }
             
@@ -270,11 +239,11 @@ class Student {
                 
                 guard !subjects.isEmpty else { throw DataFetchingError.badServerResponse }
                 
-                completion(subjects, nil)
+                DispatchQueue.main.async { completion(subjects, nil) }
             } catch DataFetchingError.badServerResponse {
-                completion(nil, .badServerResponse)
+                DispatchQueue.main.async { completion(nil, .badServerResponse) }
             } catch {
-                completion(nil, .onResponseParsing)
+                DispatchQueue.main.async { completion(nil, .onResponseParsing) }
             }
         } .resume()
     }
@@ -296,7 +265,7 @@ class Student {
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.httpBody = parameters.URLParameters.data(using: .utf8)
+        request.httpBody = parameters.URLParametersString.data(using: .utf8)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data, let response = response as? HTTPURLResponse, error == nil,
@@ -341,7 +310,7 @@ class Student {
             "p_group": self.groupScoreID ?? ""
         ]
         
-        guard let url = URL(string: self.scoreURLString + "?" + parameters.URLParameters) else {
+        guard let url = URL(string: self.scoreURLString + "?" + parameters.URLParametersString) else {
             completion(nil, .onURLCreation)
             return
         }
@@ -349,12 +318,12 @@ class Student {
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let data = data, let response = response as? HTTPURLResponse, error == nil,
               (200...299) ~= response.statusCode else {
-                completion(nil, .noServerResponse)
+                DispatchQueue.main.async { completion(nil, .noServerResponse) }
                 return
             }
             
             guard let page = String(data: data, encoding: .windowsCP1251) else {
-                completion(nil, .onResponseParsing)
+                DispatchQueue.main.async { completion(nil, .onResponseParsing) }
                 return
             }
             
@@ -379,11 +348,11 @@ class Student {
                 
                 guard !studentData.isEmpty else { throw DataFetchingError.badServerResponse }
                 
-                completion(studentData, nil)
+                DispatchQueue.main.async { completion(studentData, nil) }
             } catch DataFetchingError.badServerResponse {
-                completion(nil, .badServerResponse)
+                DispatchQueue.main.async { completion(nil, .badServerResponse) }
             } catch {
-                completion(nil, .onResponseParsing)
+                DispatchQueue.main.async { completion(nil, .onResponseParsing) }
             }
         } .resume()
     }
@@ -396,7 +365,7 @@ class Student {
             "query": self.groupNumber ?? ""
         ]
         
-        guard let url = URL(string: self.scheduleURLString + "?" + parameters.URLParameters) else {
+        guard let url = URL(string: self.scheduleURLString + "?" + parameters.URLParametersString) else {
             completion(nil, .onURLCreation)
             return
         }
@@ -432,7 +401,7 @@ class Student {
 
 extension Dictionary {
 
-    public var URLParameters: String {
+    public var URLParametersString: String {
         return self.map { "\($0)=\($1)" } .joined(separator: "&")
     }
     

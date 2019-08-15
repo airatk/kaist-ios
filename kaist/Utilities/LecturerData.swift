@@ -9,15 +9,6 @@
 import Foundation
 
 
-extension Dictionary {
-
-    func toURLParametersData() -> Data {
-        return ("?" + self.map { "\($0)=\($1)" } .joined(separator: "&")).data(using: .utf8)!
-    }
-    
-}
-
-
 class LecturerData {
 
     private static let lecturersScheduleURLString: String = "https://kai.ru/for-staff/raspisanie"
@@ -32,7 +23,7 @@ class LecturerData {
             "query": namePart
         ]
         
-        guard let url = URL(dataRepresentation: parameters.toURLParametersData(), relativeTo: URL(string: self.lecturersScheduleURLString)) else {
+        guard let url = URL(dataRepresentation: parameters.URLParametersData, relativeTo: URL(string: self.lecturersScheduleURLString)) else {
             completion(nil, .onURLCreation)
             return
         }
@@ -67,7 +58,7 @@ class LecturerData {
             "prepodLogin": lecturerID
         ]
         
-        guard let url = URL(dataRepresentation: parameters.toURLParametersData(), relativeTo: URL(string: self.lecturersScheduleURLString)) else {
+        guard let url = URL(dataRepresentation: parameters.URLParametersData, relativeTo: URL(string: self.lecturersScheduleURLString)) else {
             completion(nil, .onURLCreation)
             return
         }
@@ -156,4 +147,13 @@ class LecturerData {
         } .resume()
     }
 
+}
+
+
+extension Dictionary {
+    
+    public var URLParametersData: Data {
+        return ("?" + self.map { "\($0)=\($1)" } .joined(separator: "&")).data(using: .utf8)!
+    }
+    
 }

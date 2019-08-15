@@ -11,9 +11,10 @@ import UIKit
 
 class FastLoginScreen: UIViewController {
     
+    private let inputViewToolbar = UIToolbar()
     private let groupTextField = UITextField()
-    private let activityIndicator = UIActivityIndicatorView()
-    private let groupTextFieldFooterLabel = UILabel()
+    private let groupFetchingIndicator = UIActivityIndicatorView()
+    private let footerWarningLabel = UILabel()
     private let endLoginButton = UIButton()
     
     private var groupScheduleID: String!
@@ -24,59 +25,70 @@ class FastLoginScreen: UIViewController {
 
         self.view.backgroundColor = .white
         
+        self.setUpInputViewToolbar()
         self.setUpGroupTextField()
-        self.setUpActivityIndicator()
-        self.setUpGroupTextFieldFooterLabel()
+        self.setUpGroupFetchingIndicator()
+        self.setUpFooterWarningLabel()
         self.setUpEndLoginButton()
     }
     
+    
+    private func setUpInputViewToolbar() {
+        self.inputViewToolbar.tintColor = .black
+        self.inputViewToolbar.barTintColor = .darkWhite
+        self.inputViewToolbar.isTranslucent = false
+        self.inputViewToolbar.sizeToFit()
+        
+        self.inputViewToolbar.setItems([
+            UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.dismissKeyboard))
+        ], animated: false)
+    }
     
     private func setUpGroupTextField() {
         self.groupTextField.delegate = self
         
         self.groupTextField.placeholder = "Введи номер группы"
-        self.groupTextField.keyboardType = .numberPad
         self.groupTextField.borderStyle = .roundedRect
+        self.groupTextField.keyboardType = .numberPad
+        self.groupTextField.inputAccessoryView = self.inputViewToolbar
         
         self.view.addSubview(self.groupTextField)
         
         self.groupTextField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.groupTextField.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 30),
+            self.groupTextField.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 15),
             self.groupTextField.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             self.groupTextField.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30),
             self.groupTextField.heightAnchor.constraint(equalToConstant: 60)
         ])
-        
-        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard)))
     }
     
-    private func setUpActivityIndicator() {
-        self.activityIndicator.color = .lightBlue
+    private func setUpGroupFetchingIndicator() {
+        self.groupFetchingIndicator.color = .lightBlue
         
-        self.groupTextField.addSubview(self.activityIndicator)
+        self.groupTextField.addSubview(self.groupFetchingIndicator)
         
-        self.activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        self.groupFetchingIndicator.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.activityIndicator.centerYAnchor.constraint(equalTo: self.groupTextField.centerYAnchor),
-            self.activityIndicator.trailingAnchor.constraint(equalTo: self.groupTextField.trailingAnchor, constant: -15)
+            self.groupFetchingIndicator.centerYAnchor.constraint(equalTo: self.groupTextField.centerYAnchor),
+            self.groupFetchingIndicator.trailingAnchor.constraint(equalTo: self.groupTextField.trailingAnchor, constant: -15)
         ])
     }
     
-    private func setUpGroupTextFieldFooterLabel() {
-        self.groupTextFieldFooterLabel.isHidden = true
+    private func setUpFooterWarningLabel() {
+        self.footerWarningLabel.isHidden = true
         
-        self.groupTextFieldFooterLabel.font = .systemFont(ofSize: 14)
-        self.groupTextFieldFooterLabel.textColor = .red
-        self.groupTextFieldFooterLabel.numberOfLines = 0
+        self.footerWarningLabel.font = .systemFont(ofSize: 13)
+        self.footerWarningLabel.textColor = .red
+        self.footerWarningLabel.numberOfLines = 0
         
-        self.view.addSubview(self.groupTextFieldFooterLabel)
+        self.view.addSubview(self.footerWarningLabel)
         
-        self.groupTextFieldFooterLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.footerWarningLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.groupTextFieldFooterLabel.topAnchor.constraint(equalTo: self.groupTextField.bottomAnchor, constant: 20),
-            self.groupTextFieldFooterLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.groupTextFieldFooterLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 46)
+            self.footerWarningLabel.topAnchor.constraint(equalTo: self.groupTextField.bottomAnchor, constant: 18),
+            self.footerWarningLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            self.footerWarningLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 46)
         ])
     }
     
@@ -96,7 +108,7 @@ class FastLoginScreen: UIViewController {
         
         self.endLoginButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.endLoginButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -12),
+            self.endLoginButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -15),
             self.endLoginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             self.endLoginButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30),
             self.endLoginButton.heightAnchor.constraint(equalToConstant: 60),
@@ -107,14 +119,12 @@ class FastLoginScreen: UIViewController {
     
     
     @objc private func dismissKeyboard() {
-        self.groupTextField.resignFirstResponder()
+        self.view.endEditing(true)
     }
     
     @objc private func throwToAppController() {
-        // Can not be nil because the host button appears only if self.groupScheduleID is correct
-        AppDelegate.shared.student.groupScheduleID = self.groupScheduleID
+        // User cannot come here with incorrect data, so there are no error-checks
         AppDelegate.shared.student.isSetUp = true
-        
         self.navigationController?.dismiss(animated: true)
     }
     
@@ -123,7 +133,11 @@ class FastLoginScreen: UIViewController {
 extension FastLoginScreen: UITextFieldDelegate {
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        self.groupTextFieldFooterLabel.isHidden = true
+        self.footerWarningLabel.text = nil
+        self.footerWarningLabel.isHidden = true
+        
+        AppDelegate.shared.student.groupNumber = nil
+        
         self.endLoginButton.setEnabled(false)
         
         return true
@@ -132,36 +146,24 @@ extension FastLoginScreen: UITextFieldDelegate {
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         guard !(textField.text?.isEmpty ?? true) else { return true }
         
-        self.activityIndicator.startAnimating()
+        self.groupFetchingIndicator.startAnimating()
         
         AppDelegate.shared.student.groupNumber = textField.text
+        
         AppDelegate.shared.student.getGroupScheduleID { (groupScheduleID, error) in
             if let error = error {
-                self.groupTextFieldFooterLabel.text = error.rawValue.lowercased()
-                self.groupTextFieldFooterLabel.isHidden = false
+                self.footerWarningLabel.text = error.rawValue
+                self.footerWarningLabel.isHidden = false
             } else {
-                self.groupScheduleID = groupScheduleID
-                
-                self.groupTextFieldFooterLabel.text = nil
-                self.groupTextFieldFooterLabel.isHidden = true
+                AppDelegate.shared.student.groupScheduleID = groupScheduleID
                 
                 self.endLoginButton.setEnabled(true)
             }
             
-            self.activityIndicator.stopAnimating()
+            self.groupFetchingIndicator.stopAnimating()
         }
         
         return true
-    }
-    
-}
-
-
-extension UIButton {
-    
-    open func setEnabled(_ isEnabled: Bool) {
-        self.isEnabled = isEnabled
-        self.backgroundColor = isEnabled ? .lightBlue : .dimmedBlue
     }
     
 }
