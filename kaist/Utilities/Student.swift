@@ -12,12 +12,11 @@ import SwiftSoup
 
 class Student {
     
-    #warning("17896 - ID of the group 4101")
-    
     public let institutes: [String?: String] = [
         "ИАНТЭ": "1", "ФМФ": "2", "ИАЭП": "3",
         "ИКТЗИ": "4", "ИРЭТ": "5", "ИЭУСТ": "28"
     ]
+    
     
     public var instituteName: String? {
         get { return UserDefaults.standard.string(forKey: "instituteName") }
@@ -37,13 +36,13 @@ class Student {
         get { return UserDefaults.standard.string(forKey: "groupNumber") }
         set { UserDefaults.standard.set(newValue, forKey: "groupNumber") }
     }
-    public var groupScheduleID: String? {
-        get { return UserDefaults.standard.string(forKey: "groupScheduleID") }
-        set { UserDefaults.standard.set(newValue, forKey: "groupScheduleID") }
-    }
     public var groupScoreID: String? {
         get { return UserDefaults.standard.string(forKey: "groupScoreID") }
         set { UserDefaults.standard.set(newValue, forKey: "groupScoreID") }
+    }
+    public var groupScheduleID: String? {
+        get { return UserDefaults.standard.string(forKey: "groupScheduleID") }
+        set { UserDefaults.standard.set(newValue, forKey: "groupScheduleID") }
     }
     
     public var fullName: String? {
@@ -67,28 +66,82 @@ class Student {
     }
     
     public func reset() {
-        self.isSetUp = false
+        self.instituteName = nil
+        self.instituteID = nil
+        
+        self.year = nil
         
         self.groupNumber = nil
+        self.groupScoreID = nil
         self.groupScheduleID = nil
+        
+        self.fullName = nil
+        self.ID = nil
+        
+        self.card = nil
+        
+        self.isSetUp = false
     }
     
     
+    // MARK: - schedule data
+
     private let scheduleURLString = "https://kai.ru/raspisanie"
-    private let scoreURLString = "http://old.kai.ru/info/students/brs.php"
     
+    public func getGroupScheduleID(_ completion: @escaping (String?, DataFetchingError?) -> Void) {
+        let parameters = "?" + [
+            "p_p_id": "pubStudentSchedule_WAR_publicStudentSchedule10",
+            "p_p_lifecycle": "2",
+            "p_p_resource_id": "getGroupsURL",
+            "query": self.groupNumber ?? ""
+        ].map {
+            "\($0.key)=\($0.value)"
+        } .joined(separator: "&")
+        
+        guard let url = URL(string: self.scheduleURLString + parameters) else {
+            completion(nil, .onURLCreation)
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let data = data, let response = response as? HTTPURLResponse, error == nil,
+              (200...299) ~= response.statusCode else {
+                DispatchQueue.main.async { completion(nil, .noServerResponse) }
+                return
+            }
+            
+            guard let json = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
+                DispatchQueue.main.async { completion(nil, .onResponseParsing) }
+                return
+            }
+            
+            guard json.count == 1 else {
+                DispatchQueue.main.async { completion(nil, .noAskedGroupReceived) }
+                return
+            }
+            
+            guard let groupScheduleID = json.first?["id"] as? Int else {
+                DispatchQueue.main.async { completion(nil, .badServerResponse) }
+                return
+            }
+            
+            DispatchQueue.main.async { completion(String(groupScheduleID), nil) }
+        } .resume()
+    }
     
     public func getSchedule(ofType type: ScheduleType,
       _ completion: @escaping ([String: [[String: String]]]?, DataFetchingError?) -> Void) {
-        let parameters = [
+        let parameters = "?" + [
             "p_p_id": "pubStudentSchedule_WAR_publicStudentSchedule10",
             "p_p_lifecycle": "2",
             "p_p_resource_id": type.rawValue,
             "p_p_col_count": "1",
             "groupId": self.groupScheduleID ?? ""
-        ]
+        ].map {
+            "\($0.key)=\($0.value)"
+        } .joined(separator: "&")
         
-        guard let url = URL(string: self.scheduleURLString + "?" + parameters.URLParametersString) else {
+        guard let url = URL(string: self.scheduleURLString + parameters) else {
             completion(nil, .onURLCreation)
             return
         }
@@ -184,133 +237,22 @@ class Student {
         } .resume()
     }
     
-    public func getScoretable(forSemester semester: Int,
-      _ completion: @escaping ([[String]]?, DataFetchingError?) -> Void) {
-        let parameters = [
-            "p_sub": "",  // Unknown nonsense thing which is necessary
-            "p_fac": self.instituteID ?? "",
-            "p_kurs": self.year ?? "",
-            "p_group": self.groupScoreID ?? "",
-            "p_stud": self.ID ?? "",
-            "p_zach": self.card ?? "",
-            "semestr": "\(semester)"
-        ]
-        
-        guard let url = URL(string: self.scoreURLString) else {
-            completion(nil, .onURLCreation)
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = parameters.URLParametersString.data(using: .utf8)
-        
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let data = data, let response = response as? HTTPURLResponse, error == nil,
-              (200...299) ~= response.statusCode else {
-                DispatchQueue.main.async { completion(nil, .noServerResponse) }
-                return
-            }
-            
-            guard let page = String(data: data, encoding: .windowsCP1251) else {
-                DispatchQueue.main.async { completion(nil, .badServerResponse) }
-                return
-            }
-            
-            do {
-                let document = try SwiftSoup.parse(page)
-                
-                let tables = try document.getElementsByAttributeValue("id", "reyt")
-                guard let table = tables.first() else { throw DataFetchingError.onResponseParsing }
-                
-                var subjects = [[String]]()
-                var subject = [String]()
-                
-                for tableRow in try table.getElementsByTag("tr") {
-                    for tableData in try tableRow.getElementsByTag("td") where !(try tableData.text()).isEmpty {
-                        subject.append(try tableData.text())
-                    }
-                    
-                    subjects.append(subject)
-                    subject = []
-                }
-                
-                subjects = Array(subjects[2...])
-                
-                guard !subjects.isEmpty else { throw DataFetchingError.badServerResponse }
-                
-                DispatchQueue.main.async { completion(subjects, nil) }
-            } catch DataFetchingError.badServerResponse {
-                DispatchQueue.main.async { completion(nil, .badServerResponse) }
-            } catch {
-                DispatchQueue.main.async { completion(nil, .onResponseParsing) }
-            }
-        } .resume()
-    }
     
-    public func getLastAvailableSemester(_ completion: @escaping (Int?, DataFetchingError?) -> Void) {
-        let parameters = [
-            "p_sub": "",  // Unknown nonsense thing which is necessary
-            "p_fac": self.instituteID ?? "",
-            "p_kurs": self.year ?? "",
-            "p_group": self.groupScoreID ?? "",
-            "p_stud": self.ID ?? "",
-            "p_zach": self.card ?? ""
-        ]
-        
-        guard let url = URL(string: self.scoreURLString) else {
-            completion(nil, .onURLCreation)
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = parameters.URLParametersString.data(using: .utf8)
-        
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let data = data, let response = response as? HTTPURLResponse, error == nil,
-              (200...299) ~= response.statusCode else {
-                completion(nil, .noServerResponse)
-                return
-            }
-            
-            guard let page = String(data: data, encoding: .windowsCP1251) else {
-                completion(nil, .badServerResponse)
-                return
-            }
-            
-            do {
-                let document = try SwiftSoup.parse(page)
-                
-                let selectors = try document.getElementsByAttributeValue("name", "semestr")
-                guard let selector = selectors.first() else { throw DataFetchingError.onResponseParsing }
-                
-                let options = Array(try selector.getElementsByTag("option"))
-                guard !options.isEmpty else { throw DataFetchingError.onResponseParsing }
-                
-                let semesters = try options.map { try $0.attr("value") }
-                guard !semesters.isEmpty else { throw DataFetchingError.badServerResponse }
-                
-                guard let lastSemester = semesters.max() else { throw DataFetchingError.badServerResponse }
-                
-                completion(Int(lastSemester), nil)
-            } catch DataFetchingError.badServerResponse {
-                completion(nil, .badServerResponse)
-            } catch {
-                completion(nil, .onResponseParsing)
-            }
-        } .resume()
-    }
+    // MARK: - score data
+    
+    private let scoreURLString = "http://old.kai.ru/info/students/brs.php"
     
     public func getData(ofType type: DataType,
       _ completion: @escaping ([String: String]?, DataFetchingError?) -> Void) {
-        let parameters: [String: String] = [
+        let parameters = "?" + [
             "p_fac": self.instituteID ?? "",
             "p_kurs": self.year ?? "",
             "p_group": self.groupScoreID ?? ""
-        ]
+        ].map {
+            "\($0.key)=\($0.value)"
+        } .joined(separator: "&")
         
-        guard let url = URL(string: self.scoreURLString + "?" + parameters.URLParametersString) else {
+        guard let url = URL(string: self.scoreURLString + parameters) else {
             completion(nil, .onURLCreation)
             return
         }
@@ -357,52 +299,145 @@ class Student {
         } .resume()
     }
     
-    public func getGroupScheduleID(_ completion: @escaping (String?, DataFetchingError?) -> Void) {
+    public func getLastAvailableSemester(_ completion: @escaping (Int?, DataFetchingError?) -> Void) {
         let parameters = [
-            "p_p_id": "pubStudentSchedule_WAR_publicStudentSchedule10",
-            "p_p_lifecycle": "2",
-            "p_p_resource_id": "getGroupsURL",
-            "query": self.groupNumber ?? ""
-        ]
+            "p_sub": "",  // Unknown nonsense thing which is necessary
+            "p_fac": self.instituteID ?? "",
+            "p_kurs": self.year ?? "",
+            "p_group": self.groupScoreID ?? "",
+            "p_stud": self.ID ?? "",
+            "p_zach": self.card ?? ""
+        ].map {
+            "\($0.key)=\($0.value)"
+        } .joined(separator: "&")
         
-        guard let url = URL(string: self.scheduleURLString + "?" + parameters.URLParametersString) else {
+        guard let url = URL(string: self.scoreURLString) else {
             completion(nil, .onURLCreation)
             return
         }
         
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = parameters.data(using: .utf8)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data, let response = response as? HTTPURLResponse, error == nil,
               (200...299) ~= response.statusCode else {
                 DispatchQueue.main.async { completion(nil, .noServerResponse) }
                 return
             }
             
-            guard let json = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
-                DispatchQueue.main.async { completion(nil, .onResponseParsing) }
-                return
-            }
-            
-            guard json.count == 1 else {
-                DispatchQueue.main.async { completion(nil, .noAskedGroupReceived) }
-                return
-            }
-            
-            guard let groupScheduleID = json.first?["id"] as? Int else {
+            guard let page = String(data: data, encoding: .windowsCP1251) else {
                 DispatchQueue.main.async { completion(nil, .badServerResponse) }
                 return
             }
             
-            DispatchQueue.main.async { completion(String(groupScheduleID), nil) }
+            do {
+                let document = try SwiftSoup.parse(page)
+                
+                let selectors = try document.getElementsByAttributeValue("name", "semestr")
+                guard let selector = selectors.first() else { throw DataFetchingError.onResponseParsing }
+                
+                let options = Array(try selector.getElementsByTag("option"))
+                guard !options.isEmpty else { throw DataFetchingError.onResponseParsing }
+                
+                let semesters = try options.map { try $0.attr("value") }
+                guard !semesters.isEmpty else { throw DataFetchingError.badServerResponse }
+                
+                guard let lastSemester = semesters.max() else { throw DataFetchingError.badServerResponse }
+                
+                DispatchQueue.main.async { completion(Int(lastSemester), nil) }
+            } catch DataFetchingError.badServerResponse {
+                DispatchQueue.main.async { completion(nil, .badServerResponse) }
+            } catch {
+                DispatchQueue.main.async { completion(nil, .onResponseParsing) }
+            }
         } .resume()
     }
     
-}
-
-
-extension Dictionary {
-
-    public var URLParametersString: String {
-        return self.map { "\($0)=\($1)" } .joined(separator: "&")
+    public func getScoretable(forSemester semester: Int,
+      _ completion: @escaping ([[String: String]]?, DataFetchingError?) -> Void) {
+        let parameters = [
+            "p_sub": "",  // Unknown nonsense thing which is necessary
+            "p_fac": self.instituteID ?? "",
+            "p_kurs": self.year ?? "",
+            "p_group": self.groupScoreID ?? "",
+            "p_stud": self.ID ?? "",
+            "p_zach": self.card ?? "",
+            "semestr": "\(semester)"
+        ].map {
+            "\($0.key)=\($0.value)"
+        } .joined(separator: "&")
+        
+        guard let url = URL(string: self.scoreURLString) else {
+            completion(nil, .onURLCreation)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = parameters.data(using: .utf8)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data, let response = response as? HTTPURLResponse, error == nil,
+              (200...299) ~= response.statusCode else {
+                DispatchQueue.main.async { completion(nil, .noServerResponse) }
+                return
+            }
+            
+            guard let page = String(data: data, encoding: .windowsCP1251) else {
+                DispatchQueue.main.async { completion(nil, .badServerResponse) }
+                return
+            }
+            
+            do {
+                let document = try SwiftSoup.parse(page)
+                
+                let tables = try document.getElementsByAttributeValue("id", "reyt")
+                guard let table = tables.first() else { throw DataFetchingError.onResponseParsing }
+                
+                var subjects = [[String: String]]()
+                var subject = [String: String]()
+                
+                for tableRow in try table.getElementsByTag("tr")[2...] {
+                    let tableCells = try tableRow.getElementsByTag("td")
+                    
+                    let title = try tableCells[1].text()
+                    guard !title.isEmpty else { continue }
+                    
+                    if title.hasSuffix(" (зач./оц.)") {
+                        subject["title"] = String(title.dropLast(11))
+                        subject["type"] = "зачёт с оценкой"
+                    } else if title.hasSuffix(" (зач.)") {
+                        subject["title"] = String(title.dropLast(7))
+                        subject["type"] = "зачёт"
+                    } else if title.hasSuffix(" (экз.)") {
+                        subject["title"] = String(title.dropLast(7))
+                        subject["type"] = "экзамен"
+                    }
+                    
+                    subject["1 gained"] = try tableCells[2].text()
+                    subject["1 maximum"] = try tableCells[3].text()
+                    subject["2 gained"] = try tableCells[4].text()
+                    subject["2 maximum"] = try tableCells[5].text()
+                    subject["3 gained"] = try tableCells[6].text()
+                    subject["3 maximum"] = try tableCells[7].text()
+                    
+                    subject["additional"] = try tableCells[9].text()
+                    subject["debts"] = try tableCells[10].text()
+                    
+                    subjects.append(subject)
+                }
+                
+                guard !subjects.isEmpty else { throw DataFetchingError.badServerResponse }
+                
+                DispatchQueue.main.async { completion(subjects, nil) }
+            } catch DataFetchingError.badServerResponse {
+                DispatchQueue.main.async { completion(nil, .badServerResponse) }
+            } catch {
+                DispatchQueue.main.async { completion(nil, .onResponseParsing) }
+            }
+        } .resume()
     }
     
 }

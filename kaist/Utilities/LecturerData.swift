@@ -16,14 +16,16 @@ class LecturerData {
     
     public static func getLecturers(startingWith namePart: String,
       _ completion: @escaping ([[String: String]]?, DataFetchingError?) -> Void) {
-        let parameters = [
+        let parameters = "?" + [
             "p_p_id": "pubLecturerSchedule_WAR_publicLecturerSchedule10",
             "p_p_lifecycle": "2",
             "p_p_resource_id": "getLecturersURL",
             "query": namePart
-        ]
+        ].map {
+            "\($0)=\($1)"
+        } .joined(separator: "&")
         
-        guard let url = URL(dataRepresentation: parameters.URLParametersData, relativeTo: URL(string: self.lecturersScheduleURLString)) else {
+        guard let url = URL(dataRepresentation: parameters.data(using: .utf8)!, relativeTo: URL(string: self.lecturersScheduleURLString)) else {
             completion(nil, .onURLCreation)
             return
         }
@@ -51,14 +53,16 @@ class LecturerData {
     
     public static func getSchedule(ofLecturerWithID lecturerID: String, ofType type: ScheduleType,
       _ completion: @escaping ([String: [[String: String]]]?, DataFetchingError?) -> Void) {
-        let parameters = [
+        let parameters = "?" + [
             "p_p_id": "pubLecturerSchedule_WAR_publicLecturerSchedule10",
             "p_p_lifecycle": "2",
             "p_p_resource_id": type.rawValue,
             "prepodLogin": lecturerID
-        ]
+        ].map {
+            "\($0)=\($1)"
+        } .joined(separator: "&")
         
-        guard let url = URL(dataRepresentation: parameters.URLParametersData, relativeTo: URL(string: self.lecturersScheduleURLString)) else {
+        guard let url = URL(dataRepresentation: parameters.data(using: .utf8)!, relativeTo: URL(string: self.lecturersScheduleURLString)) else {
             completion(nil, .onURLCreation)
             return
         }
@@ -147,13 +151,4 @@ class LecturerData {
         } .resume()
     }
 
-}
-
-
-extension Dictionary {
-    
-    public var URLParametersData: Data {
-        return ("?" + self.map { "\($0)=\($1)" } .joined(separator: "&")).data(using: .utf8)!
-    }
-    
 }

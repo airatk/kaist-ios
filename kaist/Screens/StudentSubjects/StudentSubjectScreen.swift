@@ -1,5 +1,5 @@
 //
-//  ScheduleScreen.swift
+//  StudentSubjectsScreen.swift
 //  kaist
 //
 //  Created by Airat K on 28/6/19.
@@ -9,7 +9,7 @@
 import UIKit
 
 
-class StudentScheduleScreen: UITableViewController {
+class StudentSubjectsScreen: UITableViewController {
     
     private var initialSchedule: [String: [[String: String]]]?
     private var schedule: [String: [[String: String]]]?
@@ -23,11 +23,11 @@ class StudentScheduleScreen: UITableViewController {
         self.tableView = {
             let tableView = UITableView(frame: .zero, style: .grouped)
             
+            tableView.separatorStyle = .none
+            tableView.showsVerticalScrollIndicator = false
+            
             tableView.backgroundColor = .white
             tableView.backgroundView = EmptyScreenView(emoji: "✈️", emojiSize: 50, isEmojiCentered: true)
-            
-            tableView.showsVerticalScrollIndicator = false
-            tableView.separatorStyle = .none
             
             tableView.register(StudentSubjectCell.self, forCellReuseIdentifier: StudentSubjectCell.ID)
             
@@ -79,6 +79,8 @@ class StudentScheduleScreen: UITableViewController {
             self.present(loginNavigationController, animated: true)
             
             self.initialSchedule = nil
+            self.schedule = nil
+            self.tableView.reloadData()
             
             return
         }
@@ -92,9 +94,10 @@ class StudentScheduleScreen: UITableViewController {
     
     
     private func setScheduleUsingInitialSchedule() {
-        guard self.initialSchedule != nil else { return }
-        
         self.schedule = self.initialSchedule
+        
+        // Still need to change self.schedule itself, so no `let` is allowed
+        guard self.schedule != nil else { return }
         
         let oppositeWeektypeTrait = (self.isNextWeekSelected ? CurrentDay.isWeekEven : !CurrentDay.isWeekEven) ? "чет" : "неч"
         var indexOfSubject = 0
@@ -116,23 +119,6 @@ class StudentScheduleScreen: UITableViewController {
     }
     
     
-    @objc private func refreshSchedule() {
-        AppDelegate.shared.student.getSchedule(ofType: .classes) { (schedule, error) in
-            if let error = error {
-                self.tableView.backgroundView = EmptyScreenView(emoji: "🤷🏼‍♀️", message: error.rawValue)
-                
-                self.initialSchedule = nil
-                self.schedule = nil
-            } else {
-                self.initialSchedule = schedule
-                self.setScheduleUsingInitialSchedule()
-            }
-            
-            self.tableView.reloadData()
-            self.refreshControl?.endRefreshing()
-        }
-    }
-    
     @objc private func selectWeektype(_ sender: UISegmentedControl) {
         self.isNextWeekSelected = sender.selectedSegmentIndex == 1
         
@@ -140,9 +126,23 @@ class StudentScheduleScreen: UITableViewController {
         self.tableView.reloadData()
     }
     
+    @objc private func refreshSchedule() {
+        AppDelegate.shared.student.getSchedule(ofType: .classes) { (schedule, error) in
+            if let error = error {
+                self.tableView.backgroundView = EmptyScreenView(emoji: "🤷🏼‍♀️", message: error.rawValue)
+            }
+            
+            self.initialSchedule = schedule
+            self.setScheduleUsingInitialSchedule()
+            
+            self.tableView.reloadData()
+            self.refreshControl?.endRefreshing()
+        }
+    }
+    
 }
 
-extension StudentScheduleScreen {
+extension StudentSubjectsScreen {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         tableView.backgroundView?.isHidden = self.schedule != nil
@@ -179,10 +179,11 @@ extension StudentScheduleScreen {
         
         if (section + 1) == CurrentDay.weekday && !self.isNextWeekSelected {
             headerView.textLabel?.textColor = .lightBlue
+        } else {
+            headerView.textLabel?.textColor = .darkGray
         }
-        
-        headerView.textLabel?.font = .boldSystemFont(ofSize: 12)
         headerView.textLabel?.textColor = headerView.textLabel?.textColor.withAlphaComponent(0.8)
+        headerView.textLabel?.font = .boldSystemFont(ofSize: 12)
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -223,7 +224,7 @@ extension StudentScheduleScreen {
     
 }
 
-extension StudentScheduleScreen {
+extension StudentSubjectsScreen {
     
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard self.schedule != nil else { return }

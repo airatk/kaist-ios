@@ -18,7 +18,7 @@ class AppController: UITabBarController {
         let dateTitle = "\(currentDate.day) \(currentDate.month)"
         
         self.viewControllers = [
-            self.getTab(for: StudentScheduleScreen(), withTitle: dateTitle, withImageNamed: CurrentDay.imageNameWeekday),
+            self.getTab(for: StudentSubjectsScreen(), withTitle: dateTitle, withImageNamed: CurrentDay.imageNameWeekday),
             self.getTab(for: ScoreScreen(), withTitle: "Баллы", withImageNamed: "score"),
             self.getTab(for: MapScreen(), withTitle: "Карта", withImageNamed: "map"),
             self.getTab(for: SettingsScreen(), withTitle: "Настройки", withImageNamed: "settings")

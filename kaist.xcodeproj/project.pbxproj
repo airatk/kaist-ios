@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		60060B342301956E0077A69B /* WelcomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60060B332301956E0077A69B /* WelcomeScreen.swift */; };
+		6011659F230712DC00C8C185 /* ScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6011659E230712DC00C8C185 /* ScoreCell.swift */; };
 		603E1AC822CDDC2200746F5B /* LecturerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603E1AC722CDDC2200746F5B /* LecturerData.swift */; };
 		60574CCE230054DB000723E3 /* UniversityBuildings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 60574CCD230054DB000723E3 /* UniversityBuildings.plist */; };
 		605BCC4122E3852F0099DFCF /* EmptyScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605BCC4022E3852F0099DFCF /* EmptyScreenView.swift */; };
@@ -20,7 +21,7 @@
 		609F7D1B22FACCE6003F8965 /* AKMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609F7D1A22FACCE6003F8965 /* AKMapViewController.swift */; };
 		60A5D678230546A30004B667 /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A5D677230546A30004B667 /* UIButtonExtension.swift */; };
 		60AD001A22FDB6F900A5DE32 /* UniversityBuildingAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD001922FDB6F900A5DE32 /* UniversityBuildingAnnotation.swift */; };
-		60B2E42D22CB182600BEAB23 /* StudentScheduleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E42A22CB182600BEAB23 /* StudentScheduleScreen.swift */; };
+		60B2E42D22CB182600BEAB23 /* StudentSubjectScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E42A22CB182600BEAB23 /* StudentSubjectScreen.swift */; };
 		60B2E42E22CB182600BEAB23 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E42C22CB182600BEAB23 /* SettingsScreen.swift */; };
 		60B2E43322CB54EB00BEAB23 /* ScoreScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E43222CB54EB00BEAB23 /* ScoreScreen.swift */; };
 		60B2E43622CB58F800BEAB23 /* MapScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E43522CB58F800BEAB23 /* MapScreen.swift */; };
@@ -36,6 +37,7 @@
 		2122653EEB719A9CDBF82F16 /* Pods_kaist.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kaist.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FDD590DF6B6A87C3237CF1B /* Pods-kaist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kaist.debug.xcconfig"; path = "Target Support Files/Pods-kaist/Pods-kaist.debug.xcconfig"; sourceTree = "<group>"; };
 		60060B332301956E0077A69B /* WelcomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeScreen.swift; sourceTree = "<group>"; };
+		6011659E230712DC00C8C185 /* ScoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreCell.swift; sourceTree = "<group>"; };
 		603E1AC722CDDC2200746F5B /* LecturerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LecturerData.swift; sourceTree = "<group>"; };
 		60574CCD230054DB000723E3 /* UniversityBuildings.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = UniversityBuildings.plist; sourceTree = "<group>"; };
 		605BCC4022E3852F0099DFCF /* EmptyScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyScreenView.swift; sourceTree = "<group>"; };
@@ -50,7 +52,7 @@
 		609F7D1A22FACCE6003F8965 /* AKMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AKMapViewController.swift; sourceTree = "<group>"; };
 		60A5D677230546A30004B667 /* UIButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
 		60AD001922FDB6F900A5DE32 /* UniversityBuildingAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversityBuildingAnnotation.swift; sourceTree = "<group>"; };
-		60B2E42A22CB182600BEAB23 /* StudentScheduleScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentScheduleScreen.swift; sourceTree = "<group>"; };
+		60B2E42A22CB182600BEAB23 /* StudentSubjectScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentSubjectScreen.swift; sourceTree = "<group>"; };
 		60B2E42C22CB182600BEAB23 /* SettingsScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
 		60B2E43222CB54EB00BEAB23 /* ScoreScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreScreen.swift; sourceTree = "<group>"; };
 		60B2E43522CB58F800BEAB23 /* MapScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScreen.swift; sourceTree = "<group>"; };
@@ -131,7 +133,7 @@
 			children = (
 				606B379122CA858900929369 /* AppController.swift */,
 				6019D3E42301952000BA0DDB /* LoginScreen */,
-				60B2E42922CB182600BEAB23 /* StudentSchedule */,
+				60B2E42922CB182600BEAB23 /* StudentSubjects */,
 				60B2E43122CB54C400BEAB23 /* Score */,
 				60B2E43422CB58D500BEAB23 /* Map */,
 				60B2E42B22CB182600BEAB23 /* Settings */,
@@ -139,13 +141,13 @@
 			path = Screens;
 			sourceTree = "<group>";
 		};
-		60B2E42922CB182600BEAB23 /* StudentSchedule */ = {
+		60B2E42922CB182600BEAB23 /* StudentSubjects */ = {
 			isa = PBXGroup;
 			children = (
-				60B2E42A22CB182600BEAB23 /* StudentScheduleScreen.swift */,
+				60B2E42A22CB182600BEAB23 /* StudentSubjectScreen.swift */,
 				60CBD93522DF46A000D387CF /* StudentSubjectCell.swift */,
 			);
-			path = StudentSchedule;
+			path = StudentSubjects;
 			sourceTree = "<group>";
 		};
 		60B2E42B22CB182600BEAB23 /* Settings */ = {
@@ -160,6 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				60B2E43222CB54EB00BEAB23 /* ScoreScreen.swift */,
+				6011659E230712DC00C8C185 /* ScoreCell.swift */,
 			);
 			path = Score;
 			sourceTree = "<group>";
@@ -332,10 +335,11 @@
 				60CBD93222D88DE600D387CF /* Student.swift in Sources */,
 				608844012303197E009C11F2 /* FastLoginScreen.swift in Sources */,
 				606B379222CA858900929369 /* AppController.swift in Sources */,
-				60B2E42D22CB182600BEAB23 /* StudentScheduleScreen.swift in Sources */,
+				60B2E42D22CB182600BEAB23 /* StudentSubjectScreen.swift in Sources */,
 				60B2E43622CB58F800BEAB23 /* MapScreen.swift in Sources */,
 				603E1AC822CDDC2200746F5B /* LecturerData.swift in Sources */,
 				6068569722C610420010D324 /* AppDelegate.swift in Sources */,
+				6011659F230712DC00C8C185 /* ScoreCell.swift in Sources */,
 				60060B342301956E0077A69B /* WelcomeScreen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

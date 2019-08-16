@@ -1,5 +1,5 @@
 //
-//  SubjectCell.swift
+//  StudentSubjectCell.swift
 //  kaist
 //
 //  Created by Airat K on 17/7/19.
@@ -12,6 +12,7 @@ import UIKit
 class StudentSubjectCell: UITableViewCell {
     
     public static let ID = "SubjectCell"
+    
     
     private let iconSize: CGFloat = 14
     private let iconRightMagrin: CGFloat = 8
@@ -44,6 +45,48 @@ class StudentSubjectCell: UITableViewCell {
         
         self.setUpSubviews()
         self.addSubviews()
+    }
+    
+    
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        self.contentView.backgroundColor = highlighted ? UIColor.lightBlue.withAlphaComponent(0.1) : .clear
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        self.contentView.backgroundColor = selected ? UIColor.lightBlue.withAlphaComponent(0.1) : .clear
+    }
+    
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        self.title.text = ""
+        
+        self.type.isHidden = false
+        self.type.text = ""
+        
+        self.lecturerIcon.isHidden = false
+        self.lecturer.isHidden = false
+        self.lecturer.text = ""
+        
+        self.departmentIcon.isHidden = false
+        self.department.isHidden = false
+        self.department.text = ""
+        self.departmentToTypeConstraint.isActive = false
+        self.departmentToLecturerConstraint.isActive = true
+        
+        self.coordinatesIcon.isHidden = false
+        self.time.isHidden = false
+        self.time.text = ""
+        self.place.isHidden = false
+        self.place.text = ""
+        
+        self.dates.isHidden = false
+        self.dates.text = ""
+        
+        self.bottomToTitleConstraint.isActive = false
+        self.bottomToTimeConstraint.isActive = false
+        self.bottomToDatesConstraint.isActive = true
     }
     
 }
@@ -201,51 +244,6 @@ extension StudentSubjectCell {
         }
     }
 
-}
-
-extension StudentSubjectCell {
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        
-        self.title.text = ""
-        
-        self.type.isHidden = false
-        self.type.text = ""
-        
-        self.lecturerIcon.isHidden = false
-        self.lecturer.isHidden = false
-        self.lecturer.text = ""
-        
-        self.departmentIcon.isHidden = false
-        self.department.isHidden = false
-        self.department.text = ""
-        self.departmentToTypeConstraint.isActive = false
-        self.departmentToLecturerConstraint.isActive = true
-        
-        self.coordinatesIcon.isHidden = false
-        self.time.isHidden = false
-        self.time.text = ""
-        self.place.isHidden = false
-        self.place.text = ""
-        
-        self.dates.isHidden = false
-        self.dates.text = ""
-        
-        self.bottomToTitleConstraint.isActive = false
-        self.bottomToTimeConstraint.isActive = false
-        self.bottomToDatesConstraint.isActive = true
-    }
-    
-    
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        self.contentView.backgroundColor = highlighted ? UIColor.lightBlue.withAlphaComponent(0.1) : .clear
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        self.setHighlighted(selected, animated: animated)
-    }
-    
 }
 
 

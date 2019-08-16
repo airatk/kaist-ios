@@ -350,7 +350,8 @@ extension FullLoginScreen: UITextFieldDelegate {
                 AppDelegate.shared.student.groupNumber = textField.text
                 AppDelegate.shared.student.groupScoreID = self.groups[textField.text!]
                 
-                #warning("Uncomment to enable the full functionality")
+                #warning("Uncomment to enable the full functionality & delete 17896-thing exactly below")
+                AppDelegate.shared.student.groupScheduleID = "17896"
 //                AppDelegate.shared.student.getGroupScheduleID { (groupScheduleID, error) in
 //                    if let error = error {
 //                        self.footerWarningLabel.text = error.rawValue
@@ -386,7 +387,7 @@ extension FullLoginScreen: UITextFieldDelegate {
                 
                 AppDelegate.shared.student.card = textField.text
                 
-                AppDelegate.shared.student.getScoretable(forSemester: Int(AppDelegate.shared.student.year!)!) { (_, error) in
+                AppDelegate.shared.student.getLastAvailableSemester { (_, error) in
                     if error == nil {
                         self.endLoginButton.setEnabled(true)
                     } else {
