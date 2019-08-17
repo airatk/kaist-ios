@@ -11,7 +11,7 @@ import MapKit
 import CoreLocation
 
 
-class MapScreen: AKMapViewController {
+class MapScreen: AUIMapViewController {
     
     private let searchController = UISearchController(searchResultsController: nil)
     
@@ -216,7 +216,7 @@ extension MapScreen {
 
 extension MapScreen: UISearchControllerDelegate {
     
-    
+    #warning("Implement search bar")
     
 }
 

@@ -18,7 +18,7 @@
 		606B379422CAA07F00929369 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 606B379322CAA07F00929369 /* LaunchScreen.storyboard */; };
 		608843FF23031968009C11F2 /* FullLoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608843FE23031968009C11F2 /* FullLoginScreen.swift */; };
 		608844012303197E009C11F2 /* FastLoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608844002303197E009C11F2 /* FastLoginScreen.swift */; };
-		609F7D1B22FACCE6003F8965 /* AKMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609F7D1A22FACCE6003F8965 /* AKMapViewController.swift */; };
+		609F7D1B22FACCE6003F8965 /* AUIMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609F7D1A22FACCE6003F8965 /* AUIMapViewController.swift */; };
 		60A5D678230546A30004B667 /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A5D677230546A30004B667 /* UIButtonExtension.swift */; };
 		60AD001A22FDB6F900A5DE32 /* UniversityBuildingAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD001922FDB6F900A5DE32 /* UniversityBuildingAnnotation.swift */; };
 		60B2E42D22CB182600BEAB23 /* StudentSubjectScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E42A22CB182600BEAB23 /* StudentSubjectScreen.swift */; };
@@ -49,7 +49,7 @@
 		606B379322CAA07F00929369 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		608843FE23031968009C11F2 /* FullLoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullLoginScreen.swift; sourceTree = "<group>"; };
 		608844002303197E009C11F2 /* FastLoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastLoginScreen.swift; sourceTree = "<group>"; };
-		609F7D1A22FACCE6003F8965 /* AKMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AKMapViewController.swift; sourceTree = "<group>"; };
+		609F7D1A22FACCE6003F8965 /* AUIMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AUIMapViewController.swift; sourceTree = "<group>"; };
 		60A5D677230546A30004B667 /* UIButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
 		60AD001922FDB6F900A5DE32 /* UniversityBuildingAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversityBuildingAnnotation.swift; sourceTree = "<group>"; };
 		60B2E42A22CB182600BEAB23 /* StudentSubjectScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentSubjectScreen.swift; sourceTree = "<group>"; };
@@ -170,7 +170,7 @@
 		60B2E43422CB58D500BEAB23 /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				609F7D1A22FACCE6003F8965 /* AKMapViewController.swift */,
+				609F7D1A22FACCE6003F8965 /* AUIMapViewController.swift */,
 				60B2E43522CB58F800BEAB23 /* MapScreen.swift */,
 				60AD001922FDB6F900A5DE32 /* UniversityBuildingAnnotation.swift */,
 				60574CCD230054DB000723E3 /* UniversityBuildings.plist */,
@@ -324,7 +324,7 @@
 				60CBD93A22E10F5E00D387CF /* DataUtilities.swift in Sources */,
 				60B2E42E22CB182600BEAB23 /* SettingsScreen.swift in Sources */,
 				60A5D678230546A30004B667 /* UIButtonExtension.swift in Sources */,
-				609F7D1B22FACCE6003F8965 /* AKMapViewController.swift in Sources */,
+				609F7D1B22FACCE6003F8965 /* AUIMapViewController.swift in Sources */,
 				60CBD93622DF46A000D387CF /* StudentSubjectCell.swift in Sources */,
 				60B2E43322CB54EB00BEAB23 /* ScoreScreen.swift in Sources */,
 				60B92B192302D95500D29D2F /* UIColorExtension.swift in Sources */,

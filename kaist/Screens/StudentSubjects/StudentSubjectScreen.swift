@@ -86,8 +86,8 @@ class StudentSubjectsScreen: UITableViewController {
         }
         
         if self.initialSchedule == nil {
-            self.refreshControl?.beginRefreshing()
             self.tableView.setContentOffset(CGPoint(x: 0, y: -100), animated: true)
+            self.refreshControl?.beginRefreshing()
             self.refreshSchedule()
         }
     }

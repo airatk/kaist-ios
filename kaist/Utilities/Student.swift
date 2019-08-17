@@ -426,6 +426,11 @@ class Student {
                     subject["additional"] = try tableCells[9].text()
                     subject["debts"] = try tableCells[10].text()
                     
+                    // Filling empties with zeros
+                    for (key, value) in subject where value.isEmpty {
+                        subject[key] = "0"
+                    }
+                    
                     subjects.append(subject)
                 }
                 

@@ -60,29 +60,29 @@ class StudentSubjectCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        self.title.text = ""
+        self.title.text = nil
         
         self.type.isHidden = false
-        self.type.text = ""
+        self.type.text = nil
         
         self.lecturerIcon.isHidden = false
         self.lecturer.isHidden = false
-        self.lecturer.text = ""
+        self.lecturer.text = nil
         
         self.departmentIcon.isHidden = false
         self.department.isHidden = false
-        self.department.text = ""
+        self.department.text = nil
         self.departmentToTypeConstraint.isActive = false
         self.departmentToLecturerConstraint.isActive = true
         
         self.coordinatesIcon.isHidden = false
         self.time.isHidden = false
-        self.time.text = ""
+        self.time.text = nil
         self.place.isHidden = false
-        self.place.text = ""
+        self.place.text = nil
         
         self.dates.isHidden = false
-        self.dates.text = ""
+        self.dates.text = nil
         
         self.bottomToTitleConstraint.isActive = false
         self.bottomToTimeConstraint.isActive = false
@@ -158,8 +158,10 @@ extension StudentSubjectCell {
         self.contentView.addSubview(self.department)
         self.departmentIcon.translatesAutoresizingMaskIntoConstraints = false
         self.department.translatesAutoresizingMaskIntoConstraints = false
+        
         self.departmentToLecturerConstraint = self.department.topAnchor.constraint(equalTo: self.lecturer.bottomAnchor, constant: 5)
         self.departmentToTypeConstraint = self.department.topAnchor.constraint(equalTo: self.type.bottomAnchor, constant: 8)
+        
         NSLayoutConstraint.activate([
             self.departmentIcon.topAnchor.constraint(equalTo: self.department.topAnchor, constant: 1.75),
             self.departmentIcon.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
@@ -198,9 +200,8 @@ extension StudentSubjectCell {
         self.bottomToDatesConstraint = self.contentView.bottomAnchor.constraint(equalTo: self.dates.bottomAnchor, constant: 12)
         self.bottomToTimeConstraint = self.contentView.bottomAnchor.constraint(equalTo: self.time.bottomAnchor, constant: 12)
         self.bottomToTitleConstraint = self.contentView.heightAnchor.constraint(equalToConstant: 44)
-        NSLayoutConstraint.activate([
-            self.bottomToDatesConstraint
-        ])
+        
+        self.bottomToDatesConstraint.isActive = true
     }
     
 }

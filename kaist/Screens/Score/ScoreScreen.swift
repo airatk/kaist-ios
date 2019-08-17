@@ -11,11 +11,17 @@ import UIKit
 
 class ScoreScreen: UITableViewController {
     
+    private var lastAvailableSemester: Int?
+    private var selectedSemester: Int? = 1
+    
     private var scoretable: [[String: String]]?
     
     private var tests: [[String: String]]?
     private var evaluatedTests: [[String: String]]?
     private var exams: [[String: String]]?
+    
+    
+    private let semesterPicker = UIPickerView()
     
     
     override func viewDidLoad() {
@@ -30,12 +36,16 @@ class ScoreScreen: UITableViewController {
             tableView.backgroundColor = .white
             tableView.backgroundView = EmptyScreenView(emoji: "✈️", emojiSize: 50, isEmojiCentered: true)
             
+            self.semesterPicker.dataSource = self
+            self.semesterPicker.delegate = self
+            tableView.tableHeaderView = self.semesterPicker
+            
             tableView.register(ScoreCell.self, forCellReuseIdentifier: ScoreCell.ID)
             
             return tableView
         }()
         
-        self.navigationItem.title = "Баллы"
+        self.navigationItem.title = "1 семестр"
         
         self.refreshControl = {
             let refreshControl = UIRefreshControl()
@@ -50,8 +60,8 @@ class ScoreScreen: UITableViewController {
         super.viewDidAppear(animated)
         
         if self.scoretable == nil {
-            self.refreshControl?.beginRefreshing()
             self.tableView.setContentOffset(CGPoint(x: 0, y: -100), animated: true)
+            self.refreshControl?.beginRefreshing()
             self.refreshScoretable()
         }
     }
@@ -65,16 +75,28 @@ class ScoreScreen: UITableViewController {
     
     
     @objc private func refreshScoretable() {
-        AppDelegate.shared.student.getScoretable(forSemester: 4) { (scoretable, error) in
+        AppDelegate.shared.student.getLastAvailableSemester { (lastAvailableSemester, error) in
             if let error = error {
                 self.tableView.backgroundView = EmptyScreenView(emoji: "🤷🏼‍♀️", message: error.rawValue)
+                
+                self.tableView.reloadData()
+                self.refreshControl?.endRefreshing()
+            } else {
+                self.lastAvailableSemester = lastAvailableSemester
+                self.semesterPicker.reloadAllComponents()
+                
+                AppDelegate.shared.student.getScoretable(forSemester: self.selectedSemester ?? 0) { (scoretable, error) in
+                    if let error = error {
+                        self.tableView.backgroundView = EmptyScreenView(emoji: "🤷🏼‍♀️", message: error.rawValue)
+                    }
+                    
+                    self.scoretable = scoretable
+                    self.splitScoretable()
+                    
+                    self.tableView.reloadData()
+                    self.refreshControl?.endRefreshing()
+                }
             }
-            
-            self.scoretable = scoretable
-            self.splitScoretable()
-            
-            self.tableView.reloadData()
-            self.refreshControl?.endRefreshing()
         }
     }
     
@@ -130,7 +152,7 @@ extension ScoreScreen {
         
         scoreCell.title.text = sectionScoretable[indexPath.row]["title"]
         scoreCell.debts.text = {
-            let debts = Int(sectionScoretable[indexPath.row]["debts"]!) ?? 0
+            let debts = Int(sectionScoretable[indexPath.row]["debts"]!)!
             
             switch debts {
                 case 1: return "\(debts) долг"
@@ -139,6 +161,26 @@ extension ScoreScreen {
                 default: return "\(debts) долгов"
             }
         }()
+        
+        let gained1 = sectionScoretable[indexPath.row]["1 gained"]!
+        let gained2 = sectionScoretable[indexPath.row]["2 gained"]!
+        let gained3 = sectionScoretable[indexPath.row]["3 gained"]!
+        
+        let maximum1 = sectionScoretable[indexPath.row]["1 maximum"]!
+        let maximum2 = sectionScoretable[indexPath.row]["2 maximum"]!
+        let maximum3 = sectionScoretable[indexPath.row]["3 maximum"]!
+        
+        scoreCell.setScoreLineWidth(withMultiplier: maximum1 == "0" ? 0 : CGFloat(Int(gained1)!)/CGFloat(Int(maximum1)!), scoreLine: .first)
+        scoreCell.setScoreLineWidth(withMultiplier: maximum2 == "0" ? 0 : CGFloat(Int(gained2)!)/CGFloat(Int(maximum2)!), scoreLine: .middle)
+        scoreCell.setScoreLineWidth(withMultiplier: maximum3 == "0" ? 0 : CGFloat(Int(gained3)!)/CGFloat(Int(maximum3)!), scoreLine: .last)
+        
+        scoreCell.sertification1Gained.text = maximum1 == "0" ? nil : gained1
+        scoreCell.sertification2Gained.text = maximum2 == "0" ? nil : gained2
+        scoreCell.sertification3Gained.text = maximum3 == "0" ? nil : gained3
+        
+        scoreCell.sertification1Maximum.text = maximum1
+        scoreCell.sertification2Maximum.text = maximum2
+        scoreCell.sertification3Maximum.text = maximum3
         
         return scoreCell
     }
@@ -182,6 +224,31 @@ extension ScoreScreen {
             navBar.isHidden = isHidden
             tabBar.isHidden = isHidden
         })
+    }
+    
+}
+
+extension ScoreScreen: UIPickerViewDataSource, UIPickerViewDelegate {
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return self.lastAvailableSemester ?? 0
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return String(row + 1)
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        self.navigationItem.title = "\(row + 1) семестр"
+        self.selectedSemester = row + 1
+        
+        self.tableView.setContentOffset(CGPoint(x: 0, y: -100), animated: true)
+        self.refreshControl?.beginRefreshing()
+        self.refreshScoretable()
     }
     
 }

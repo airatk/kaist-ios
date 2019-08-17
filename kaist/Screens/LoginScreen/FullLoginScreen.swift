@@ -241,9 +241,6 @@ extension FullLoginScreen: UITextFieldDelegate {
         
         switch textField {
             case self.instituteTextField:
-                AppDelegate.shared.student.instituteName = nil
-                AppDelegate.shared.student.instituteID = nil
-                
                 self.yearTextField.text = nil
                 self.groupTextField.text = nil
                 self.nameTextField.text = nil
@@ -259,8 +256,6 @@ extension FullLoginScreen: UITextFieldDelegate {
                 self.nameTextField.isEnabled = false
                 self.cardTextField.isEnabled = false
             case self.yearTextField:
-                AppDelegate.shared.student.year = nil
-                
                 self.groupTextField.text = nil
                 self.nameTextField.text = nil
                 self.cardTextField.text = nil
@@ -273,10 +268,6 @@ extension FullLoginScreen: UITextFieldDelegate {
                 self.nameTextField.isEnabled = false
                 self.cardTextField.isEnabled = false
             case self.groupTextField:
-                AppDelegate.shared.student.groupNumber = nil
-                AppDelegate.shared.student.groupScoreID = nil
-                AppDelegate.shared.student.groupScheduleID = nil
-                
                 self.nameTextField.text = nil
                 self.cardTextField.text = nil
                 
@@ -286,9 +277,6 @@ extension FullLoginScreen: UITextFieldDelegate {
                 self.nameTextField.isEnabled = false
                 self.cardTextField.isEnabled = false
             case self.nameTextField:
-                AppDelegate.shared.student.fullName = nil
-                AppDelegate.shared.student.ID = nil
-                
                 self.cardTextField.text = nil
                 self.cardTextField.placeholder = nil
                 self.cardTextField.isEnabled = false

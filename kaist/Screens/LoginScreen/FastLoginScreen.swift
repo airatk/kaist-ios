@@ -136,8 +136,6 @@ extension FastLoginScreen: UITextFieldDelegate {
         self.footerWarningLabel.text = nil
         self.footerWarningLabel.isHidden = true
         
-        AppDelegate.shared.student.groupNumber = nil
-        
         self.endLoginButton.setEnabled(false)
         
         return true

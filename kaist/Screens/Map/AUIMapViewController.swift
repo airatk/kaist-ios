@@ -1,5 +1,5 @@
 //
-//  AKMapViewController.swift
+//  AUIMapViewController.swift
 //  kaist
 //
 //  Created by Airat K on 7/8/19.
@@ -11,7 +11,7 @@ import MapKit
 import CoreLocation
 
 
-class AKMapViewController: UIViewController, CLLocationManagerDelegate {
+class AUIMapViewController: UIViewController, CLLocationManagerDelegate {
     
     public var mapView: MKMapView!
     public var locationManager: CLLocationManager!
@@ -45,7 +45,7 @@ class AKMapViewController: UIViewController, CLLocationManagerDelegate {
     
 }
 
-extension AKMapViewController: MKMapViewDelegate {
+extension AUIMapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let renderer = MKPolylineRenderer(overlay: overlay)
