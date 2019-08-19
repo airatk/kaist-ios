@@ -9,9 +9,10 @@
 /* Begin PBXBuildFile section */
 		60060B342301956E0077A69B /* WelcomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60060B332301956E0077A69B /* WelcomeScreen.swift */; };
 		6011659F230712DC00C8C185 /* ScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6011659E230712DC00C8C185 /* ScoreCell.swift */; };
+		603229D8230AC0BA005B699F /* AUIExpandableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603229D7230AC0BA005B699F /* AUIExpandableTableViewController.swift */; };
 		603E1AC822CDDC2200746F5B /* LecturerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603E1AC722CDDC2200746F5B /* LecturerData.swift */; };
 		60574CCE230054DB000723E3 /* UniversityBuildings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 60574CCD230054DB000723E3 /* UniversityBuildings.plist */; };
-		605BCC4122E3852F0099DFCF /* EmptyScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605BCC4022E3852F0099DFCF /* EmptyScreenView.swift */; };
+		605BCC4122E3852F0099DFCF /* AUIEmptyScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605BCC4022E3852F0099DFCF /* AUIEmptyScreenView.swift */; };
 		6068569722C610420010D324 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6068569622C610420010D324 /* AppDelegate.swift */; };
 		6068569E22C610430010D324 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6068569D22C610430010D324 /* Assets.xcassets */; };
 		606B379222CA858900929369 /* AppController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 606B379122CA858900929369 /* AppController.swift */; };
@@ -38,9 +39,10 @@
 		4FDD590DF6B6A87C3237CF1B /* Pods-kaist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kaist.debug.xcconfig"; path = "Target Support Files/Pods-kaist/Pods-kaist.debug.xcconfig"; sourceTree = "<group>"; };
 		60060B332301956E0077A69B /* WelcomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeScreen.swift; sourceTree = "<group>"; };
 		6011659E230712DC00C8C185 /* ScoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreCell.swift; sourceTree = "<group>"; };
+		603229D7230AC0BA005B699F /* AUIExpandableTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AUIExpandableTableViewController.swift; sourceTree = "<group>"; };
 		603E1AC722CDDC2200746F5B /* LecturerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LecturerData.swift; sourceTree = "<group>"; };
 		60574CCD230054DB000723E3 /* UniversityBuildings.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = UniversityBuildings.plist; sourceTree = "<group>"; };
-		605BCC4022E3852F0099DFCF /* EmptyScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyScreenView.swift; sourceTree = "<group>"; };
+		605BCC4022E3852F0099DFCF /* AUIEmptyScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AUIEmptyScreenView.swift; sourceTree = "<group>"; };
 		6068569322C610420010D324 /* kaist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kaist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6068569622C610420010D324 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6068569D22C610430010D324 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -89,7 +91,8 @@
 		605BCC4222E3855A0099DFCF /* Views & Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				605BCC4022E3852F0099DFCF /* EmptyScreenView.swift */,
+				603229D7230AC0BA005B699F /* AUIExpandableTableViewController.swift */,
+				605BCC4022E3852F0099DFCF /* AUIEmptyScreenView.swift */,
 				60B92B182302D95500D29D2F /* UIColorExtension.swift */,
 				60A5D677230546A30004B667 /* UIButtonExtension.swift */,
 			);
@@ -328,13 +331,14 @@
 				60CBD93622DF46A000D387CF /* StudentSubjectCell.swift in Sources */,
 				60B2E43322CB54EB00BEAB23 /* ScoreScreen.swift in Sources */,
 				60B92B192302D95500D29D2F /* UIColorExtension.swift in Sources */,
-				605BCC4122E3852F0099DFCF /* EmptyScreenView.swift in Sources */,
+				605BCC4122E3852F0099DFCF /* AUIEmptyScreenView.swift in Sources */,
 				60AD001A22FDB6F900A5DE32 /* UniversityBuildingAnnotation.swift in Sources */,
 				60B2E43B22CCEA6500BEAB23 /* CurrentDay.swift in Sources */,
 				608843FF23031968009C11F2 /* FullLoginScreen.swift in Sources */,
 				60CBD93222D88DE600D387CF /* Student.swift in Sources */,
 				608844012303197E009C11F2 /* FastLoginScreen.swift in Sources */,
 				606B379222CA858900929369 /* AppController.swift in Sources */,
+				603229D8230AC0BA005B699F /* AUIExpandableTableViewController.swift in Sources */,
 				60B2E42D22CB182600BEAB23 /* StudentSubjectScreen.swift in Sources */,
 				60B2E43622CB58F800BEAB23 /* MapScreen.swift in Sources */,
 				603E1AC822CDDC2200746F5B /* LecturerData.swift in Sources */,

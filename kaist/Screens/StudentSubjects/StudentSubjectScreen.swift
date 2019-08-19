@@ -9,12 +9,12 @@
 import UIKit
 
 
-class StudentSubjectsScreen: UITableViewController {
+class StudentSubjectsScreen: AUIExpandableTableViewController {
+    
+    private var isNextWeekSelected: Bool = false
     
     private var initialSchedule: [String: [[String: String]]]?
     private var schedule: [String: [[String: String]]]?
-    
-    private var isNextWeekSelected: Bool = false
     
     
     override func viewDidLoad() {
@@ -27,7 +27,7 @@ class StudentSubjectsScreen: UITableViewController {
             tableView.showsVerticalScrollIndicator = false
             
             tableView.backgroundColor = .white
-            tableView.backgroundView = EmptyScreenView(emoji: "✈️", emojiSize: 50, isEmojiCentered: true)
+            tableView.backgroundView = AUIEmptyScreenView(emoji: "✈️", emojiSize: 50, isEmojiCentered: true)
             
             tableView.register(StudentSubjectCell.self, forCellReuseIdentifier: StudentSubjectCell.ID)
             
@@ -71,12 +71,14 @@ class StudentSubjectsScreen: UITableViewController {
         super.viewDidAppear(animated)
         
         guard AppDelegate.shared.student.isSetUp else {
-            let loginNavigationController = UINavigationController(rootViewController: WelcomeScreen())
+            self.present({
+                let welcomeScreen = UINavigationController(rootViewController: WelcomeScreen())
             
-            loginNavigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
-            loginNavigationController.navigationBar.shadowImage = UIImage()
-            
-            self.present(loginNavigationController, animated: true)
+                welcomeScreen.navigationBar.setBackgroundImage(UIImage(), for: .default)
+                welcomeScreen.navigationBar.shadowImage = UIImage()
+                
+                return welcomeScreen
+            }(), animated: true)
             
             self.initialSchedule = nil
             self.schedule = nil
@@ -96,8 +98,7 @@ class StudentSubjectsScreen: UITableViewController {
     private func setScheduleUsingInitialSchedule() {
         self.schedule = self.initialSchedule
         
-        // Still need to change self.schedule itself, so no `let` is allowed
-        guard self.schedule != nil else { return }
+        guard self.schedule != nil else { return }  // Still need to change self.schedule itself, so no `let` is allowed
         
         let oppositeWeektypeTrait = (self.isNextWeekSelected ? CurrentDay.isWeekEven : !CurrentDay.isWeekEven) ? "чет" : "неч"
         var indexOfSubject = 0
@@ -108,20 +109,21 @@ class StudentSubjectsScreen: UITableViewController {
                     self.schedule![numberOfDay]!.remove(at: indexOfSubject)
                     indexOfSubject -= 1
                 }
+                
                 indexOfSubject += 1
             }
-            indexOfSubject = 0
             
             if self.schedule![numberOfDay]!.isEmpty {
                 self.schedule![numberOfDay] = [ ["disciplName": "Выходной"] ]
             }
+            
+            indexOfSubject = 0
         }
     }
     
     
     @objc private func selectWeektype(_ sender: UISegmentedControl) {
         self.isNextWeekSelected = sender.selectedSegmentIndex == 1
-        
         self.setScheduleUsingInitialSchedule()
         self.tableView.reloadData()
     }
@@ -129,7 +131,7 @@ class StudentSubjectsScreen: UITableViewController {
     @objc private func refreshSchedule() {
         AppDelegate.shared.student.getSchedule(ofType: .classes) { (schedule, error) in
             if let error = error {
-                self.tableView.backgroundView = EmptyScreenView(emoji: "🤷🏼‍♀️", message: error.rawValue)
+                self.tableView.backgroundView = AUIEmptyScreenView(emoji: "🤷🏼‍♀️", message: error.rawValue)
             }
             
             self.initialSchedule = schedule
@@ -163,31 +165,24 @@ extension StudentSubjectsScreen {
             "5": "Пятница",
             "6": "Суббота"
         ]
-        let weekdayKey = self.schedule!.keys.sorted()[section]
-        let weekday = weekdays[weekdayKey]!
         
-        let currentWeekday = CurrentDay.weekday
-        let askedDayWeekday = Int(weekdayKey)!
+        let askedDayWeekday = self.schedule!.keys.sorted()[section]
+        let date = CurrentDay.date(shiftedToDays: Int(askedDayWeekday)! - CurrentDay.weekday + (self.isNextWeekSelected ? 7 : 0))
         
-        let date = CurrentDay.date(shiftedToDays: askedDayWeekday - currentWeekday + (self.isNextWeekSelected ? 7 : 0))
-        
-        return "\(weekday), \(date.day) \(date.month)"
+        return "\(weekdays[askedDayWeekday]!), \(date.day) \(date.month)"
     }
     
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        guard let headerView = view as? UITableViewHeaderFooterView else { return }
+        guard let weekday = view as? UITableViewHeaderFooterView else { return }
         
-        if (section + 1) == CurrentDay.weekday && !self.isNextWeekSelected {
-            headerView.textLabel?.textColor = .lightBlue
-        } else {
-            headerView.textLabel?.textColor = .darkGray
-        }
-        headerView.textLabel?.textColor = headerView.textLabel?.textColor.withAlphaComponent(0.8)
-        headerView.textLabel?.font = .boldSystemFont(ofSize: 12)
+        weekday.textLabel?.textColor = ((section + 1) == CurrentDay.weekday && !self.isNextWeekSelected) ? .lightBlue : .darkGray
+        weekday.textLabel?.textColor = weekday.textLabel?.textColor.withAlphaComponent(0.8)
+        weekday.textLabel?.font = .boldSystemFont(ofSize: 12)
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let subjectCell = tableView.dequeueReusableCell(withIdentifier: StudentSubjectCell.ID, for: indexPath) as! StudentSubjectCell
+        
         let subject = self.schedule!["\(indexPath.section + 1)"]![indexPath.row]
         
         subjectCell.title.text = subject["disciplName"]
@@ -220,43 +215,6 @@ extension StudentSubjectsScreen {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-}
-
-extension StudentSubjectsScreen {
-    
-    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard self.schedule != nil else { return }
-
-        self.changeBarsVisibility(isHidden: scrollView.panGestureRecognizer.translation(in: scrollView).y <= 0)
-    }
-
-    override func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
-        self.changeBarsVisibility(isHidden: false)
-
-        return true
-    }
-
-
-    private func changeBarsVisibility(isHidden: Bool) {
-        guard self.navigationController?.navigationBar.isHidden != isHidden else { return }
-
-        guard let navBar = self.navigationController?.navigationBar else { return }
-        guard let tabBar = self.tabBarController?.tabBar else { return }
-
-        navBar.isHidden = false
-        tabBar.isHidden = false
-
-        UIView.animate(withDuration: 0.25, animations: {
-            (UIApplication.shared.value(forKey: "statusBar") as! UIView).backgroundColor = isHidden ? .white : .clear
-            
-            navBar.frame = navBar.frame.offsetBy(dx: 0, dy: isHidden ? -navBar.frame.height : navBar.frame.height)
-            tabBar.frame = tabBar.frame.offsetBy(dx: 0, dy: isHidden ? tabBar.frame.height : -tabBar.frame.height)
-        }, completion: { _ in
-            navBar.isHidden = isHidden
-            tabBar.isHidden = isHidden
-        })
     }
     
 }

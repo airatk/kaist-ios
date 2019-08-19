@@ -1,5 +1,5 @@
 //
-//  EmptyScreenView.swift
+//  AUIEmptyScreenView.swift
 //  kaist
 //
 //  Created by Airat K on 17/7/19.
@@ -9,7 +9,7 @@
 import UIKit
 
 
-class EmptyScreenView: UIView {
+class AUIEmptyScreenView: UIView {
 
     private var emoji = UILabel()
     private var emojiSize: CGFloat = 64

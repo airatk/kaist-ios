@@ -57,16 +57,9 @@ class ScoreCell: UITableViewCell {
     }
     
     
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        self.contentView.backgroundColor = highlighted ? UIColor.lightBlue.withAlphaComponent(0.1) : .clear
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        self.contentView.backgroundColor = selected ? UIColor.lightBlue.withAlphaComponent(0.1) : .clear
-    }
-    
-    
     override func prepareForReuse() {
+        super.prepareForReuse()
+        
         self.sertification1Maximum.text = nil
         self.sertification2Maximum.text = nil
         self.sertification3Maximum.text = nil
@@ -128,7 +121,7 @@ extension ScoreCell {
         self.contentView.addSubview(self.debts)
         self.debts.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.debts.topAnchor.constraint(equalTo: self.title.bottomAnchor, constant: 3.5),
+            self.debts.topAnchor.constraint(equalTo: self.title.bottomAnchor, constant: 3),
             self.debts.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
             self.debts.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor)
         ])

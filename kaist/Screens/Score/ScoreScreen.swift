@@ -9,7 +9,7 @@
 import UIKit
 
 
-class ScoreScreen: UITableViewController {
+class ScoreScreen: AUIExpandableTableViewController {
     
     private var lastAvailableSemester: Int?
     private var selectedSemester: Int? = 1
@@ -34,7 +34,7 @@ class ScoreScreen: UITableViewController {
             tableView.showsVerticalScrollIndicator = false
             
             tableView.backgroundColor = .white
-            tableView.backgroundView = EmptyScreenView(emoji: "✈️", emojiSize: 50, isEmojiCentered: true)
+            tableView.backgroundView = AUIEmptyScreenView(emoji: "✈️", emojiSize: 50, isEmojiCentered: true)
             
             self.semesterPicker.dataSource = self
             self.semesterPicker.delegate = self
@@ -77,7 +77,7 @@ class ScoreScreen: UITableViewController {
     @objc private func refreshScoretable() {
         AppDelegate.shared.student.getLastAvailableSemester { (lastAvailableSemester, error) in
             if let error = error {
-                self.tableView.backgroundView = EmptyScreenView(emoji: "🤷🏼‍♀️", message: error.rawValue)
+                self.tableView.backgroundView = AUIEmptyScreenView(emoji: "🤷🏼‍♀️", message: error.rawValue)
                 
                 self.tableView.reloadData()
                 self.refreshControl?.endRefreshing()
@@ -87,7 +87,7 @@ class ScoreScreen: UITableViewController {
                 
                 AppDelegate.shared.student.getScoretable(forSemester: self.selectedSemester ?? 0) { (scoretable, error) in
                     if let error = error {
-                        self.tableView.backgroundView = EmptyScreenView(emoji: "🤷🏼‍♀️", message: error.rawValue)
+                        self.tableView.backgroundView = AUIEmptyScreenView(emoji: "🤷🏼‍♀️", message: error.rawValue)
                     }
                     
                     self.scoretable = scoretable
@@ -187,43 +187,6 @@ extension ScoreScreen {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-}
-
-extension ScoreScreen {
-    
-    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard self.scoretable != nil else { return }
-        
-        self.changeBarsVisibility(isHidden: scrollView.panGestureRecognizer.translation(in: scrollView).y <= 0)
-    }
-
-    override func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
-        self.changeBarsVisibility(isHidden: false)
-
-        return true
-    }
-
-
-    private func changeBarsVisibility(isHidden: Bool) {
-        guard self.navigationController?.navigationBar.isHidden != isHidden else { return }
-
-        guard let navBar = self.navigationController?.navigationBar else { return }
-        guard let tabBar = self.tabBarController?.tabBar else { return }
-
-        navBar.isHidden = false
-        tabBar.isHidden = false
-
-        UIView.animate(withDuration: 0.25, animations: {
-            (UIApplication.shared.value(forKey: "statusBar") as! UIView).backgroundColor = isHidden ? .white : .clear
-            
-            navBar.frame = navBar.frame.offsetBy(dx: 0, dy: isHidden ? -navBar.frame.height : navBar.frame.height)
-            tabBar.frame = tabBar.frame.offsetBy(dx: 0, dy: isHidden ? tabBar.frame.height : -tabBar.frame.height)
-        }, completion: { _ in
-            navBar.isHidden = isHidden
-            tabBar.isHidden = isHidden
-        })
     }
     
 }

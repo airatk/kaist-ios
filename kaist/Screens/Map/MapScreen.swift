@@ -216,13 +216,9 @@ extension MapScreen {
 
 extension MapScreen: UISearchControllerDelegate {
     
-    #warning("Implement search bar")
-    
 }
 
 extension MapScreen: UISearchBarDelegate {
-    
-    
     
 }
 

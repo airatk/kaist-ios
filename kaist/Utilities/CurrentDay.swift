@@ -18,34 +18,43 @@ struct CurrentDay {
     public static var isWeekEven: Bool {
         let isCurrentSemesterFirst = self.calendar.component(.month, from: self.today) > 8
         
-        let day = isCurrentSemesterFirst ? 1 : 26
-        let month = isCurrentSemesterFirst ? 9 : 1
+        let firstDayOfSemester = DateComponents(
+            calendar: self.calendar,
+            year: self.calendar.component(.year, from: self.today),
+            month: isCurrentSemesterFirst ? 9 : 1,
+            day: isCurrentSemesterFirst ? 1 : 26
+        ).date!
         
-        let currentYear = self.calendar.component(.year, from: self.today)
-        let currentWeekOfYear = self.calendar.component(.weekOfYear, from: self.today)
+        // Sunday is the 1st weekday by default, so some fixes are needed
+        let firstWeekOfSemester = self.calendar.component(.weekOfYear, from: firstDayOfSemester) - (self.calendar.component(.weekday, from: firstDayOfSemester) == 1 ? 1 : 0)
+        let currentWeekOfYear = self.calendar.component(.weekOfYear, from: self.today) - (self.weekday == 7 ? 1 : 0)
         
-        // Cannot be even semantically as its index is equal to 1
-        let firstWeekOfSemester = self.calendar.component(.weekOfYear, from: DateComponents(calendar: self.calendar, year: currentYear, month: month, day: day).date!)
-        
+        // The 1st week of semester cannot be even semantically as its index is equal to 1
         return currentWeekOfYear % 2 != firstWeekOfSemester % 2
     }
     
     public static var weekday: Int {
-        // Sunday is the 1st weekday by default, and Sunday is official day-off.
-        // Its value is equal to -1 after decrementing which allows to show the next week schedule as a current one on Sunday
-        return self.calendar.component(.weekday, from: self.today) - 1
+        let weekday = self.calendar.component(.weekday, from: self.today) - 1
+        
+        // Sunday is the 1st weekday by default, so need to throw it from 0 to 7.
+        return weekday == 0 ? 7 : weekday
     }
     
     public static var imageNameWeekday: String {
-        return [ "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday" ][self.weekday]
+        return [ "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" ][self.weekday - 1]
     }
 
     public static func date(shiftedToDays days: Int = 0) -> (day: Int, month: String) {
         let date = self.calendar.date(byAdding: .day, value: days, to: self.today)!
-        let day = self.calendar.component(.day, from: date)
-        let month = self.calendar.component(.month, from: date) - 1  // Array key, so decremented
         
-        return (day: day, month: [ "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря" ][month])
+        let day = self.calendar.component(.day, from: date)
+        let month = self.calendar.component(.month, from: date)
+        
+        return (day: day, month: [
+            "января", "февраля", "марта", "апреля",
+            "мая", "июня", "июля", "августа",
+            "сентября", "октября", "ноября", "декабря"
+        ][month - 1])
     }
 
 }

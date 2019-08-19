@@ -48,15 +48,6 @@ class StudentSubjectCell: UITableViewCell {
     }
     
     
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        self.contentView.backgroundColor = highlighted ? UIColor.lightBlue.withAlphaComponent(0.1) : .clear
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        self.contentView.backgroundColor = selected ? UIColor.lightBlue.withAlphaComponent(0.1) : .clear
-    }
-    
-    
     override func prepareForReuse() {
         super.prepareForReuse()
         
@@ -135,7 +126,7 @@ extension StudentSubjectCell {
         self.contentView.addSubview(self.type)
         self.type.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.type.topAnchor.constraint(equalTo: self.title.bottomAnchor, constant: 3.5),
+            self.type.topAnchor.constraint(equalTo: self.title.bottomAnchor, constant: 3),
             self.type.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
             self.type.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor)
         ])
@@ -149,8 +140,9 @@ extension StudentSubjectCell {
             self.lecturerIcon.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
             self.lecturerIcon.widthAnchor.constraint(equalToConstant: self.iconSize),
             self.lecturerIcon.heightAnchor.constraint(equalTo: self.lecturerIcon.widthAnchor, multiplier: 1),
+            
             self.lecturer.topAnchor.constraint(equalTo: self.type.bottomAnchor, constant: 8),
-            self.lecturer.leadingAnchor.constraint(equalTo: self.lecturerIcon.trailingAnchor, constant: iconRightMagrin),
+            self.lecturer.leadingAnchor.constraint(equalTo: self.lecturerIcon.trailingAnchor, constant: self.iconRightMagrin),
             self.lecturer.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor)
         ])
         
@@ -167,8 +159,9 @@ extension StudentSubjectCell {
             self.departmentIcon.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
             self.departmentIcon.widthAnchor.constraint(equalToConstant: self.iconSize),
             self.departmentIcon.heightAnchor.constraint(equalTo: self.departmentIcon.widthAnchor, multiplier: 1),
+            
             self.departmentToLecturerConstraint,
-            self.department.leadingAnchor.constraint(equalTo: self.departmentIcon.trailingAnchor, constant: iconRightMagrin),
+            self.department.leadingAnchor.constraint(equalTo: self.departmentIcon.trailingAnchor, constant: self.iconRightMagrin),
             self.department.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor)
         ])
         
@@ -183,8 +176,10 @@ extension StudentSubjectCell {
             self.coordinatesIcon.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
             self.coordinatesIcon.widthAnchor.constraint(equalToConstant: self.iconSize),
             self.coordinatesIcon.heightAnchor.constraint(equalTo: self.coordinatesIcon.widthAnchor, multiplier: 1),
+            
             self.time.topAnchor.constraint(equalTo: self.department.bottomAnchor, constant: 6),
-            self.time.leadingAnchor.constraint(equalTo: self.coordinatesIcon.trailingAnchor, constant: iconRightMagrin),
+            self.time.leadingAnchor.constraint(equalTo: self.coordinatesIcon.trailingAnchor, constant: self.iconRightMagrin),
+            
             self.place.centerYAnchor.constraint(equalTo: self.time.centerYAnchor),
             self.place.leadingAnchor.constraint(equalTo: self.time.trailingAnchor, constant: 8)
         ])
@@ -208,13 +203,13 @@ extension StudentSubjectCell {
 
 extension StudentSubjectCell {
     
-    public enum Subviews {
+    public enum SubviewsToHide {
         case dates
         case lecturer
         case allButTitle
     }
     
-    public func hide(_ subview: StudentSubjectCell.Subviews) {
+    public func hide(_ subview: StudentSubjectCell.SubviewsToHide) {
         switch subview {
             case .dates:
                 self.dates.isHidden = true
