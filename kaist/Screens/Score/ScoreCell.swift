@@ -11,7 +11,7 @@ import UIKit
 
 class ScoreCell: UITableViewCell {
     
-    public static let ID = "ScoreCell"
+    public static let reuseID = "ScoreCell"
     
     
     private let scoreLineHeight: CGFloat = 26
@@ -37,12 +37,20 @@ class ScoreCell: UITableViewCell {
     private var scoreLine2WidthConstraint: NSLayoutConstraint!
     private var scoreLine3WidthConstraint: NSLayoutConstraint!
     
-    public let sertification1Maximum = UILabel()
-    public let sertification2Maximum = UILabel()
-    public let sertification3Maximum = UILabel()
-    public let sertification1Gained = UILabel()
-    public let sertification2Gained = UILabel()
-    public let sertification3Gained = UILabel()
+    public let scoreLine1MaximumScore = UILabel()
+    public let scoreLine2MaximumScore = UILabel()
+    public let scoreLine3MaximumScore = UILabel()
+    public let scoreLine1GainedScore = UILabel()
+    public let scoreLine2GainedScore = UILabel()
+    public let scoreLine3GainedScore = UILabel()
+    
+    private let scoreLine1HitMaximum = UIImageView(image: UIImage(named: "hit-maximum-score"))
+    private let scoreLine2HitMaximum = UIImageView(image: UIImage(named: "hit-maximum-score"))
+    private let scoreLine3HitMaximum = UIImageView(image: UIImage(named: "hit-maximum-score"))
+    
+    private var iconSize: CGFloat {
+        return self.scoreLineHeight*0.6
+    }
     
     
     required init?(coder aDecoder: NSCoder) {
@@ -54,18 +62,20 @@ class ScoreCell: UITableViewCell {
         
         self.setUpSubviews()
         self.addSubviews()
+        
+        self.selectionStyle = .none
     }
     
     
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        self.sertification1Maximum.text = nil
-        self.sertification2Maximum.text = nil
-        self.sertification3Maximum.text = nil
-        self.sertification1Gained.text = nil
-        self.sertification2Gained.text = nil
-        self.sertification3Gained.text = nil
+        self.scoreLine1MaximumScore.text = nil
+        self.scoreLine2MaximumScore.text = nil
+        self.scoreLine3MaximumScore.text = nil
+        self.scoreLine1GainedScore.text = nil
+        self.scoreLine2GainedScore.text = nil
+        self.scoreLine3GainedScore.text = nil
     }
 
 }
@@ -77,36 +87,41 @@ extension ScoreCell {
         let middleFont = UIFont.boldSystemFont(ofSize: 12)
         let smallFont = UIFont.systemFont(ofSize: 12)
         
+        let scoreLineColor = UIColor.lightBlue.withAlphaComponent(0.875)
+        let scoreLineCornerRadius: CGFloat = 6
+        
         self.title.font = largeFont
         self.title.numberOfLines = 0
         
         self.debts.font = smallFont
         self.debts.textColor = .gray
         
-        self.scoreLine1.backgroundColor = UIColor.lightBlue.withAlphaComponent(0.75)
-        self.scoreLine1.layer.cornerRadius = 6
+        self.scoreLine1.backgroundColor = scoreLineColor
+        self.scoreLine1.layer.cornerRadius = scoreLineCornerRadius
         self.scoreLine1.clipsToBounds = true
-        
-        self.scoreLine2.backgroundColor = UIColor.lightBlue.withAlphaComponent(0.75)
-        self.scoreLine2.layer.cornerRadius = 6
+        self.scoreLine2.backgroundColor = scoreLineColor
+        self.scoreLine2.layer.cornerRadius = scoreLineCornerRadius
         self.scoreLine2.clipsToBounds = true
-        
-        self.scoreLine3.backgroundColor = UIColor.lightBlue.withAlphaComponent(0.75)
-        self.scoreLine3.layer.cornerRadius = 6
+        self.scoreLine3.backgroundColor = scoreLineColor
+        self.scoreLine3.layer.cornerRadius = scoreLineCornerRadius
         self.scoreLine3.clipsToBounds = true
         
-        self.sertification1Maximum.font = middleFont
-        self.sertification1Maximum.textColor = .white
-        self.sertification2Maximum.font = middleFont
-        self.sertification2Maximum.textColor = .white
-        self.sertification3Maximum.font = middleFont
-        self.sertification3Maximum.textColor = .white
-        self.sertification1Gained.font = middleFont
-        self.sertification1Gained.textColor = .white
-        self.sertification2Gained.font = middleFont
-        self.sertification2Gained.textColor = .white
-        self.sertification3Gained.font = middleFont
-        self.sertification3Gained.textColor = .white
+        self.scoreLine1MaximumScore.font = middleFont
+        self.scoreLine1MaximumScore.textColor = .white
+        self.scoreLine2MaximumScore.font = middleFont
+        self.scoreLine2MaximumScore.textColor = .white
+        self.scoreLine3MaximumScore.font = middleFont
+        self.scoreLine3MaximumScore.textColor = .white
+        self.scoreLine1GainedScore.font = middleFont
+        self.scoreLine1GainedScore.textColor = .white
+        self.scoreLine2GainedScore.font = middleFont
+        self.scoreLine2GainedScore.textColor = .white
+        self.scoreLine3GainedScore.font = middleFont
+        self.scoreLine3GainedScore.textColor = .white
+        
+        self.scoreLine1HitMaximum.setTintColor(.white)
+        self.scoreLine2HitMaximum.setTintColor(.white)
+        self.scoreLine3HitMaximum.setTintColor(.white)
     }
     
     private func addSubviews() {
@@ -154,61 +169,92 @@ extension ScoreCell {
             self.scoreLine3.heightAnchor.constraint(equalToConstant: self.scoreLineHeight),
         ])
         
-        self.contentView.addSubview(self.sertification1Maximum)
-        self.contentView.addSubview(self.sertification2Maximum)
-        self.contentView.addSubview(self.sertification3Maximum)
-        self.contentView.addSubview(self.sertification1Gained)
-        self.contentView.addSubview(self.sertification2Gained)
-        self.contentView.addSubview(self.sertification3Gained)
-        self.sertification1Maximum.translatesAutoresizingMaskIntoConstraints = false
-        self.sertification2Maximum.translatesAutoresizingMaskIntoConstraints = false
-        self.sertification3Maximum.translatesAutoresizingMaskIntoConstraints = false
-        self.sertification1Gained.translatesAutoresizingMaskIntoConstraints = false
-        self.sertification2Gained.translatesAutoresizingMaskIntoConstraints = false
-        self.sertification3Gained.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(self.scoreLine1MaximumScore)
+        self.contentView.addSubview(self.scoreLine2MaximumScore)
+        self.contentView.addSubview(self.scoreLine3MaximumScore)
+        self.contentView.addSubview(self.scoreLine1GainedScore)
+        self.contentView.addSubview(self.scoreLine2GainedScore)
+        self.contentView.addSubview(self.scoreLine3GainedScore)
+        self.scoreLine1MaximumScore.translatesAutoresizingMaskIntoConstraints = false
+        self.scoreLine2MaximumScore.translatesAutoresizingMaskIntoConstraints = false
+        self.scoreLine3MaximumScore.translatesAutoresizingMaskIntoConstraints = false
+        self.scoreLine1GainedScore.translatesAutoresizingMaskIntoConstraints = false
+        self.scoreLine2GainedScore.translatesAutoresizingMaskIntoConstraints = false
+        self.scoreLine3GainedScore.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.sertification1Maximum.centerYAnchor.constraint(equalTo: self.scoreLine1.centerYAnchor),
-            self.sertification1Maximum.leadingAnchor.constraint(equalTo: self.scoreLine1.leadingAnchor, constant: self.scoreLineHorizontalPadding),
+            self.scoreLine1MaximumScore.centerYAnchor.constraint(equalTo: self.scoreLine1.centerYAnchor),
+            self.scoreLine1MaximumScore.leadingAnchor.constraint(equalTo: self.scoreLine1.leadingAnchor, constant: self.scoreLineHorizontalPadding),
             
-            self.sertification2Maximum.centerYAnchor.constraint(equalTo: self.scoreLine2.centerYAnchor),
-            self.sertification2Maximum.leadingAnchor.constraint(equalTo: self.scoreLine2.leadingAnchor, constant: self.scoreLineHorizontalPadding),
+            self.scoreLine2MaximumScore.centerYAnchor.constraint(equalTo: self.scoreLine2.centerYAnchor),
+            self.scoreLine2MaximumScore.leadingAnchor.constraint(equalTo: self.scoreLine2.leadingAnchor, constant: self.scoreLineHorizontalPadding),
             
-            self.sertification3Maximum.centerYAnchor.constraint(equalTo: self.scoreLine3.centerYAnchor),
-            self.sertification3Maximum.leadingAnchor.constraint(equalTo: self.scoreLine3.leadingAnchor, constant: self.scoreLineHorizontalPadding),
+            self.scoreLine3MaximumScore.centerYAnchor.constraint(equalTo: self.scoreLine3.centerYAnchor),
+            self.scoreLine3MaximumScore.leadingAnchor.constraint(equalTo: self.scoreLine3.leadingAnchor, constant: self.scoreLineHorizontalPadding),
             
-            self.sertification1Gained.centerYAnchor.constraint(equalTo: self.scoreLine1.centerYAnchor),
-            self.sertification1Gained.trailingAnchor.constraint(equalTo: self.scoreLine1.trailingAnchor, constant: -self.scoreLineHorizontalPadding),
+            self.scoreLine1GainedScore.centerYAnchor.constraint(equalTo: self.scoreLine1.centerYAnchor),
+            self.scoreLine1GainedScore.trailingAnchor.constraint(equalTo: self.scoreLine1.trailingAnchor, constant: -self.scoreLineHorizontalPadding),
             
-            self.sertification2Gained.centerYAnchor.constraint(equalTo: self.scoreLine2.centerYAnchor),
-            self.sertification2Gained.trailingAnchor.constraint(equalTo: self.scoreLine2.trailingAnchor, constant: -self.scoreLineHorizontalPadding),
+            self.scoreLine2GainedScore.centerYAnchor.constraint(equalTo: self.scoreLine2.centerYAnchor),
+            self.scoreLine2GainedScore.trailingAnchor.constraint(equalTo: self.scoreLine2.trailingAnchor, constant: -self.scoreLineHorizontalPadding),
             
-            self.sertification3Gained.centerYAnchor.constraint(equalTo: self.scoreLine3.centerYAnchor),
-            self.sertification3Gained.trailingAnchor.constraint(equalTo: self.scoreLine3.trailingAnchor, constant: -self.scoreLineHorizontalPadding),
+            self.scoreLine3GainedScore.centerYAnchor.constraint(equalTo: self.scoreLine3.centerYAnchor),
+            self.scoreLine3GainedScore.trailingAnchor.constraint(equalTo: self.scoreLine3.trailingAnchor, constant: -self.scoreLineHorizontalPadding),
+        ])
+        
+        self.contentView.addSubview(self.scoreLine1HitMaximum)
+        self.contentView.addSubview(self.scoreLine2HitMaximum)
+        self.contentView.addSubview(self.scoreLine3HitMaximum)
+        self.scoreLine1HitMaximum.translatesAutoresizingMaskIntoConstraints = false
+        self.scoreLine2HitMaximum.translatesAutoresizingMaskIntoConstraints = false
+        self.scoreLine3HitMaximum.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.scoreLine1HitMaximum.centerXAnchor.constraint(equalTo: self.scoreLine1.centerXAnchor),
+            self.scoreLine1HitMaximum.centerYAnchor.constraint(equalTo: self.scoreLine1.centerYAnchor),
+            self.scoreLine1HitMaximum.widthAnchor.constraint(equalToConstant: self.iconSize),
+            self.scoreLine1HitMaximum.heightAnchor.constraint(equalTo: self.scoreLine1HitMaximum.widthAnchor, multiplier: 1),
+            
+            self.scoreLine2HitMaximum.centerXAnchor.constraint(equalTo: self.scoreLine2.centerXAnchor),
+            self.scoreLine2HitMaximum.centerYAnchor.constraint(equalTo: self.scoreLine2.centerYAnchor),
+            self.scoreLine2HitMaximum.widthAnchor.constraint(equalToConstant: self.iconSize),
+            self.scoreLine2HitMaximum.heightAnchor.constraint(equalTo: self.scoreLine2HitMaximum.widthAnchor, multiplier: 1),
+            
+            self.scoreLine3HitMaximum.centerXAnchor.constraint(equalTo: self.scoreLine3.centerXAnchor),
+            self.scoreLine3HitMaximum.centerYAnchor.constraint(equalTo: self.scoreLine3.centerYAnchor),
+            self.scoreLine3HitMaximum.widthAnchor.constraint(equalToConstant: self.iconSize),
+            self.scoreLine3HitMaximum.heightAnchor.constraint(equalTo: self.scoreLine3HitMaximum.widthAnchor, multiplier: 1)
         ])
         
         self.contentView.bottomAnchor.constraint(equalTo: self.scoreLine3.bottomAnchor, constant: 12).isActive = true
     }
     
     
-    public func setScoreLineWidth(withMultiplier multiplier: CGFloat = 0, scoreLine: ScoreCell.ScoreLine) {
-        var width: CGFloat {
-            switch multiplier {
-                case 0: return self.zeroScoreLineWidth
-                case _ where self.maxScoreLineWidth*multiplier < self.minScoreLineWidth: return self.minScoreLineWidth
-                
-                default: return self.maxScoreLineWidth*multiplier
-            }
+    public func setScoreLine(_ scoreLine: ScoreCell.ScoreLine, gained: String, maximum: String) {
+        let multiplier = maximum == "0" ? 0 : CGFloat(Int(gained)!)/CGFloat(Int(maximum)!)
+        var width = self.maxScoreLineWidth*multiplier
+        
+        if width == 0 {
+            width = self.zeroScoreLineWidth
+        } else if width < self.minScoreLineWidth {
+            width = self.minScoreLineWidth
         }
         
         switch scoreLine {
-            case .first: self.scoreLine1WidthConstraint.constant = width
-            case .middle: self.scoreLine2WidthConstraint.constant = width
-            case .last: self.scoreLine3WidthConstraint.constant = width
+            case .first:
+                self.scoreLine1WidthConstraint.constant = width
+                self.scoreLine1MaximumScore.text = maximum
+                self.scoreLine1GainedScore.text = maximum == "0" ? nil : gained
+                self.scoreLine1HitMaximum.isHidden = gained != maximum || maximum == "0"
+            case .middle:
+                self.scoreLine2WidthConstraint.constant = width
+                self.scoreLine2MaximumScore.text = maximum
+                self.scoreLine2GainedScore.text = maximum == "0" ? nil : gained
+                self.scoreLine2HitMaximum.isHidden = gained != maximum || maximum == "0"
+            case .last:
+                self.scoreLine3WidthConstraint.constant = width
+                self.scoreLine3MaximumScore.text = maximum
+                self.scoreLine3GainedScore.text = maximum == "0" ? nil : gained
+                self.scoreLine3HitMaximum.isHidden = gained != maximum || maximum == "0"
         }
-        
-        UIView.animate(withDuration: 0.6, delay: 0.4, options: .curveEaseOut, animations: {
-            self.contentView.layoutIfNeeded()
-        })
     }
     
     public enum ScoreLine {

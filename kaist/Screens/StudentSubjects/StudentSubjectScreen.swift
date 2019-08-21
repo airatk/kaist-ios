@@ -13,26 +13,12 @@ class StudentSubjectsScreen: AUIExpandableTableViewController {
     
     private var isNextWeekSelected: Bool = false
     
-    private var initialSchedule: [String: [[String: String]]]?
-    private var schedule: [String: [[String: String]]]?
+    private var initialSchedule: Student.Schedule?
+    private var schedule: Student.Schedule?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.tableView = {
-            let tableView = UITableView(frame: .zero, style: .grouped)
-            
-            tableView.separatorStyle = .none
-            tableView.showsVerticalScrollIndicator = false
-            
-            tableView.backgroundColor = .white
-            tableView.backgroundView = AUIEmptyScreenView(emoji: "✈️", emojiSize: 50, isEmojiCentered: true)
-            
-            tableView.register(StudentSubjectCell.self, forCellReuseIdentifier: StudentSubjectCell.ID)
-            
-            return tableView
-        }()
         
         self.navigationItem.titleView = {
             let weektypeChooser = UISegmentedControl(items: [
@@ -48,13 +34,8 @@ class StudentSubjectsScreen: AUIExpandableTableViewController {
             return weektypeChooser
         }()
         
-        self.refreshControl = {
-            let refreshControl = UIRefreshControl()
-            
-            refreshControl.addTarget(self, action: #selector(self.refreshSchedule), for: .valueChanged)
-            
-            return refreshControl
-        }()
+        self.refreshControl?.addTarget(self, action: #selector(self.refreshSchedule), for: .valueChanged)
+        self.tableView.register(StudentSubjectCell.self, forCellReuseIdentifier: StudentSubjectCell.reuseID)
     }
     
     override func viewWillLayoutSubviews() {
@@ -131,7 +112,7 @@ class StudentSubjectsScreen: AUIExpandableTableViewController {
     @objc private func refreshSchedule() {
         AppDelegate.shared.student.getSchedule(ofType: .classes) { (schedule, error) in
             if let error = error {
-                self.tableView.backgroundView = AUIEmptyScreenView(emoji: "🤷🏼‍♀️", message: error.rawValue)
+                self.tableView.backgroundView = AUIEmptyScreenView(message: error.rawValue)
             }
             
             self.initialSchedule = schedule
@@ -181,7 +162,7 @@ extension StudentSubjectsScreen {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let subjectCell = tableView.dequeueReusableCell(withIdentifier: StudentSubjectCell.ID, for: indexPath) as! StudentSubjectCell
+        let subjectCell = tableView.dequeueReusableCell(withIdentifier: StudentSubjectCell.reuseID, for: indexPath) as! StudentSubjectCell
         
         let subject = self.schedule!["\(indexPath.section + 1)"]![indexPath.row]
         
@@ -211,10 +192,6 @@ extension StudentSubjectsScreen {
         }
         
         return subjectCell
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
     }
     
 }

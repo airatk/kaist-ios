@@ -84,9 +84,12 @@ class Student {
     }
     
     
-    // MARK: - schedule data
-
+    // MARK: - Schedule Data
+    
     private let scheduleURLString = "https://kai.ru/raspisanie"
+    
+    public typealias Schedule = [String: [[String: String]]]
+    
     
     public func getGroupScheduleID(_ completion: @escaping (String?, DataFetchingError?) -> Void) {
         let parameters = "?" + [
@@ -130,7 +133,7 @@ class Student {
     }
     
     public func getSchedule(ofType type: ScheduleType,
-      _ completion: @escaping ([String: [[String: String]]]?, DataFetchingError?) -> Void) {
+      _ completion: @escaping (Student.Schedule?, DataFetchingError?) -> Void) {
         let parameters = "?" + [
             "p_p_id": "pubStudentSchedule_WAR_publicStudentSchedule10",
             "p_p_lifecycle": "2",
@@ -153,7 +156,7 @@ class Student {
                 return
             }
             
-            guard var schedule = try? JSONSerialization.jsonObject(with: data) as? [String: [[String: String]]] else {
+            guard var schedule = try? JSONSerialization.jsonObject(with: data) as? Student.Schedule else {
                 DispatchQueue.main.async { completion(nil, .onResponseParsing) }
                 return
             }
@@ -238,12 +241,16 @@ class Student {
     }
     
     
-    // MARK: - score data
+    // MARK: - Score Data
     
     private let scoreURLString = "http://old.kai.ru/info/students/brs.php"
     
+    public typealias StudentData = [String: String]
+    public typealias Scoretable = [Student.StudentData]
+    
+    
     public func getData(ofType type: DataType,
-      _ completion: @escaping ([String: String]?, DataFetchingError?) -> Void) {
+      _ completion: @escaping (Student.StudentData?, DataFetchingError?) -> Void) {
         let parameters = "?" + [
             "p_fac": self.instituteID ?? "",
             "p_kurs": self.year ?? "",
@@ -279,7 +286,7 @@ class Student {
                 guard !options.isEmpty else { throw DataFetchingError.onResponseParsing }
                 options.removeFirst()
                 
-                var studentData: [String: String] = [:]
+                var studentData = Student.StudentData()
                 
                 for option in options {
                     let key = try option.text()
@@ -356,7 +363,7 @@ class Student {
     }
     
     public func getScoretable(forSemester semester: Int,
-      _ completion: @escaping ([[String: String]]?, DataFetchingError?) -> Void) {
+      _ completion: @escaping (Student.Scoretable?, DataFetchingError?) -> Void) {
         let parameters = [
             "p_sub": "",  // Unknown nonsense thing which is necessary
             "p_fac": self.instituteID ?? "",
@@ -396,8 +403,8 @@ class Student {
                 let tables = try document.getElementsByAttributeValue("id", "reyt")
                 guard let table = tables.first() else { throw DataFetchingError.onResponseParsing }
                 
-                var subjects = [[String: String]]()
-                var subject = [String: String]()
+                var subjects = Student.Scoretable()
+                var subject = Student.StudentData()
                 
                 for tableRow in try table.getElementsByTag("tr")[2...] {
                     let tableCells = try tableRow.getElementsByTag("td")

@@ -12,54 +12,39 @@ import UIKit
 class ScoreScreen: AUIExpandableTableViewController {
     
     private var lastAvailableSemester: Int?
-    private var selectedSemester: Int? = 1
-    
-    private var scoretable: [[String: String]]?
-    
-    private var tests: [[String: String]]?
-    private var evaluatedTests: [[String: String]]?
-    private var exams: [[String: String]]?
-    
-    
     private let semesterPicker = UIPickerView()
+    private var selectedSemester: Int!
+    private let semesterInTitle = UIButton()
+    private let semestersFetchingIndicator = UIActivityIndicatorView()
+    
+    private var initialScoretable: Student.Scoretable?
+    
+    private var tests: Student.Scoretable?
+    private var evaluatedTests: Student.Scoretable?
+    private var exams: Student.Scoretable?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView = {
-            let tableView = UITableView(frame: .zero, style: .grouped)
-            
-            tableView.separatorStyle = .none
-            tableView.showsVerticalScrollIndicator = false
-            
-            tableView.backgroundColor = .white
-            tableView.backgroundView = AUIEmptyScreenView(emoji: "✈️", emojiSize: 50, isEmojiCentered: true)
-            
-            self.semesterPicker.dataSource = self
-            self.semesterPicker.delegate = self
-            tableView.tableHeaderView = self.semesterPicker
-            
-            tableView.register(ScoreCell.self, forCellReuseIdentifier: ScoreCell.ID)
-            
-            return tableView
-        }()
+        self.setUpTitle()
         
-        self.navigationItem.title = "1 семестр"
-        
-        self.refreshControl = {
-            let refreshControl = UIRefreshControl()
-            
-            refreshControl.addTarget(self, action: #selector(self.refreshScoretable), for: .valueChanged)
-            
-            return refreshControl
-        }()
+        self.refreshControl?.addTarget(self, action: #selector(self.refreshScoretable), for: .valueChanged)
+        self.tableView.register(ScoreCell.self, forCellReuseIdentifier: ScoreCell.reuseID)
+        self.semesterPicker.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if self.scoretable == nil {
+        if self.initialScoretable == nil {
+            let currentSemester = Int(AppDelegate.shared.student.year!)!*2 - (CurrentDay.isCurrentSemesterFirst ? 1 : 0)
+            
+            self.setSelectedSemester(currentSemester)
+            self.lastAvailableSemester = currentSemester
+            self.semesterPicker.selectRow(currentSemester - 1, inComponent: 0, animated: false)
+            self.changeSemestersFetchingIndicatorVisibility(isHidden: true)
+            
             self.tableView.setContentOffset(CGPoint(x: 0, y: -100), animated: true)
             self.refreshControl?.beginRefreshing()
             self.refreshScoretable()
@@ -67,36 +52,82 @@ class ScoreScreen: AUIExpandableTableViewController {
     }
     
     
-    private func splitScoretable() {
-        self.tests = self.scoretable?.filter { $0["type"] == "зачёт" }
-        self.evaluatedTests = self.scoretable?.filter { $0["type"] == "зачёт с оценкой" }
-        self.exams = self.scoretable?.filter { $0["type"] == "экзамен" }
+    private func setUpTitle() {
+        self.semesterInTitle.titleLabel?.font = .boldSystemFont(ofSize: 17)
+        self.semesterInTitle.setTitleColor(.black, for: .normal)
+        self.semesterInTitle.setTitleColor(.gray, for: .highlighted)
+        self.semesterInTitle.frame = self.navigationController!.navigationBar.frame
+        self.semesterInTitle.addTarget(self, action: #selector(self.presentSemesterPickerSheet), for: .touchUpInside)
+        
+        self.semestersFetchingIndicator.color = .black
+        self.semestersFetchingIndicator.frame = self.navigationController!.navigationBar.frame
+        
+        self.changeSemestersFetchingIndicatorVisibility(isHidden: false)
+    }
+    
+    private func changeSemestersFetchingIndicatorVisibility(isHidden: Bool) {
+        if isHidden {
+            self.semestersFetchingIndicator.stopAnimating()
+        } else {
+            self.semestersFetchingIndicator.startAnimating()
+        }
+        
+        self.navigationItem.titleView = isHidden ? self.semesterInTitle : self.semestersFetchingIndicator
+    }
+    
+    private func setSelectedSemester(_ semester: Int?) {
+        self.selectedSemester = semester ?? 0
+        self.semesterInTitle.setTitle((semester == nil ? "Выбрать" : String(semester!)) + " семестр ▴▾", for: .normal)
+    }
+    
+    private func setScoretable(_ scoretable: Student.Scoretable?) {
+        self.initialScoretable = scoretable
+        
+        self.tests = scoretable?.filter { $0["type"] == "зачёт" }
+        self.evaluatedTests = scoretable?.filter { $0["type"] == "зачёт с оценкой" }
+        self.exams = scoretable?.filter { $0["type"] == "экзамен" }
     }
     
     
     @objc private func refreshScoretable() {
-        AppDelegate.shared.student.getLastAvailableSemester { (lastAvailableSemester, error) in
+        AppDelegate.shared.student.getScoretable(forSemester: self.selectedSemester) { (scoretable, error) in
             if let error = error {
-                self.tableView.backgroundView = AUIEmptyScreenView(emoji: "🤷🏼‍♀️", message: error.rawValue)
-                
-                self.tableView.reloadData()
-                self.refreshControl?.endRefreshing()
-            } else {
-                self.lastAvailableSemester = lastAvailableSemester
-                self.semesterPicker.reloadAllComponents()
-                
-                AppDelegate.shared.student.getScoretable(forSemester: self.selectedSemester ?? 0) { (scoretable, error) in
-                    if let error = error {
-                        self.tableView.backgroundView = AUIEmptyScreenView(emoji: "🤷🏼‍♀️", message: error.rawValue)
-                    }
-                    
-                    self.scoretable = scoretable
-                    self.splitScoretable()
-                    
-                    self.tableView.reloadData()
-                    self.refreshControl?.endRefreshing()
-                }
+                self.tableView.backgroundView = AUIEmptyScreenView(message: error.rawValue)
             }
+            
+            self.setScoretable(scoretable)
+            
+            self.tableView.reloadData()
+            self.refreshControl?.endRefreshing()
+        }
+    }
+    
+    @objc private func presentSemesterPickerSheet() {
+        self.changeSemestersFetchingIndicatorVisibility(isHidden: false)
+        
+        AppDelegate.shared.student.getLastAvailableSemester { (lastAvailableSemester, error) in
+            self.lastAvailableSemester = lastAvailableSemester
+            
+            let semesterPickerSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            
+            semesterPickerSheet.setValue({
+                let semesterPickerController = UIViewController()
+                
+                semesterPickerController.view = error == nil ? self.semesterPicker : AUIEmptyScreenView(messageAtCenter: error!.rawValue)
+                
+                return semesterPickerController
+            }(), forKey: "contentViewController")
+            
+            semesterPickerSheet.addAction(UIAlertAction(title: "Выбрано", style: .cancel, handler: { (_) in
+                self.setSelectedSemester(error != nil ? nil : self.semesterPicker.selectedRow(inComponent: 0) + 1)
+                
+                self.tableView.setContentOffset(CGPoint(x: 0, y: -100), animated: true)
+                self.refreshControl?.beginRefreshing()
+                self.refreshScoretable()
+            }))
+            
+            self.present(semesterPickerSheet, animated: true)
+            self.changeSemestersFetchingIndicatorVisibility(isHidden: true)
         }
     }
     
@@ -105,9 +136,9 @@ class ScoreScreen: AUIExpandableTableViewController {
 extension ScoreScreen {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        tableView.backgroundView?.isHidden = self.scoretable != nil
+        tableView.backgroundView?.isHidden = self.initialScoretable != nil
         
-        return self.scoretable == nil ? 0 : 3
+        return self.initialScoretable == nil ? 0 : 3
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -138,16 +169,16 @@ extension ScoreScreen {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let scoreCell = tableView.dequeueReusableCell(withIdentifier: ScoreCell.ID, for: indexPath) as! ScoreCell
+        let scoreCell = tableView.dequeueReusableCell(withIdentifier: ScoreCell.reuseID, for: indexPath) as! ScoreCell
         
-        var sectionScoretable: [[String: String]]
+        var sectionScoretable = Student.Scoretable()
         
         switch indexPath.section {
             case 0: sectionScoretable = self.tests!
             case 1: sectionScoretable = self.evaluatedTests!
             case 2: sectionScoretable = self.exams!
             
-            default: sectionScoretable = [[:]]
+            default: break
         }
         
         scoreCell.title.text = sectionScoretable[indexPath.row]["title"]
@@ -162,31 +193,14 @@ extension ScoreScreen {
             }
         }()
         
-        let gained1 = sectionScoretable[indexPath.row]["1 gained"]!
-        let gained2 = sectionScoretable[indexPath.row]["2 gained"]!
-        let gained3 = sectionScoretable[indexPath.row]["3 gained"]!
-        
-        let maximum1 = sectionScoretable[indexPath.row]["1 maximum"]!
-        let maximum2 = sectionScoretable[indexPath.row]["2 maximum"]!
-        let maximum3 = sectionScoretable[indexPath.row]["3 maximum"]!
-        
-        scoreCell.setScoreLineWidth(withMultiplier: maximum1 == "0" ? 0 : CGFloat(Int(gained1)!)/CGFloat(Int(maximum1)!), scoreLine: .first)
-        scoreCell.setScoreLineWidth(withMultiplier: maximum2 == "0" ? 0 : CGFloat(Int(gained2)!)/CGFloat(Int(maximum2)!), scoreLine: .middle)
-        scoreCell.setScoreLineWidth(withMultiplier: maximum3 == "0" ? 0 : CGFloat(Int(gained3)!)/CGFloat(Int(maximum3)!), scoreLine: .last)
-        
-        scoreCell.sertification1Gained.text = maximum1 == "0" ? nil : gained1
-        scoreCell.sertification2Gained.text = maximum2 == "0" ? nil : gained2
-        scoreCell.sertification3Gained.text = maximum3 == "0" ? nil : gained3
-        
-        scoreCell.sertification1Maximum.text = maximum1
-        scoreCell.sertification2Maximum.text = maximum2
-        scoreCell.sertification3Maximum.text = maximum3
+        scoreCell.setScoreLine(.first,
+            gained: sectionScoretable[indexPath.row]["1 gained"]!, maximum: sectionScoretable[indexPath.row]["1 maximum"]!)
+        scoreCell.setScoreLine(.middle,
+            gained: sectionScoretable[indexPath.row]["2 gained"]!, maximum: sectionScoretable[indexPath.row]["2 maximum"]!)
+        scoreCell.setScoreLine(.last,
+            gained: sectionScoretable[indexPath.row]["3 gained"]!, maximum: sectionScoretable[indexPath.row]["3 maximum"]!)
         
         return scoreCell
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
     }
     
 }
@@ -198,20 +212,11 @@ extension ScoreScreen: UIPickerViewDataSource, UIPickerViewDelegate {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return self.lastAvailableSemester ?? 0
+        return self.lastAvailableSemester!
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return String(row + 1)
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        self.navigationItem.title = "\(row + 1) семестр"
-        self.selectedSemester = row + 1
-        
-        self.tableView.setContentOffset(CGPoint(x: 0, y: -100), animated: true)
-        self.refreshControl?.beginRefreshing()
-        self.refreshScoretable()
     }
     
 }

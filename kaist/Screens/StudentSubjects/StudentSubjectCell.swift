@@ -11,7 +11,7 @@ import UIKit
 
 class StudentSubjectCell: UITableViewCell {
     
-    public static let ID = "SubjectCell"
+    public static let reuseID = "SubjectCell"
     
     
     private let iconSize: CGFloat = 14
@@ -45,6 +45,8 @@ class StudentSubjectCell: UITableViewCell {
         
         self.setUpSubviews()
         self.addSubviews()
+        
+        self.selectionStyle = .none
     }
     
     
@@ -95,15 +97,15 @@ extension StudentSubjectCell {
         self.type.font = smallFont
         self.type.textColor = .gray
         
-        self.lecturerIcon.set(tintColor: .darkGray)
+        self.lecturerIcon.setTintColor(.darkGray)
         self.lecturer.font = middleFont
         self.lecturer.numberOfLines = 0
         
-        self.departmentIcon.set(tintColor: .darkGray)
+        self.departmentIcon.setTintColor(.darkGray)
         self.department.font = middleFont
         self.department.numberOfLines = 0
         
-        self.coordinatesIcon.set(tintColor: .lightBlue)
+        self.coordinatesIcon.setTintColor(.lightBlue)
         self.time.font = smallFont
         self.time.textColor = .lightBlue
         self.place.font = smallFont
@@ -240,14 +242,4 @@ extension StudentSubjectCell {
         }
     }
 
-}
-
-
-extension UIImageView {
-    
-    func set(tintColor: UIColor) {
-        self.image = self.image?.withRenderingMode(.alwaysTemplate)
-        self.tintColor = tintColor
-    }
-    
 }

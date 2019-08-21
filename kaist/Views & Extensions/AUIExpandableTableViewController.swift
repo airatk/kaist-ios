@@ -17,6 +17,26 @@ class AUIExpandableTableViewController: UITableViewController {
     private var previousScrollViewContentOffsetY: CGFloat = 0
     
     
+    override func viewDidLoad() {
+        self.tableView = {
+            let tableView = UITableView(frame: .zero, style: .grouped)
+            
+            tableView.separatorStyle = .none
+            tableView.showsVerticalScrollIndicator = false
+            
+            tableView.backgroundColor = .white
+            tableView.backgroundView = AUIEmptyScreenView(emojiAtCenter: "✈️")
+            
+            return tableView
+        }()
+        
+        self.refreshControl = UIRefreshControl()
+    }
+    
+}
+
+extension AUIExpandableTableViewController {
+    
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard scrollView.contentOffset.y >= 0 &&  // Is not at the top edge
             scrollView.contentOffset.y < scrollView.contentSize.height - scrollView.frame.height  // Is not at the bottom adge

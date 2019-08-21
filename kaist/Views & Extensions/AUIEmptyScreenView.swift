@@ -12,9 +12,6 @@ import UIKit
 class AUIEmptyScreenView: UIView {
 
     private var emoji = UILabel()
-    private var emojiSize: CGFloat = 64
-    private var isEmojiCentered = false
-    
     private var message = UILabel()
     
     
@@ -22,20 +19,29 @@ class AUIEmptyScreenView: UIView {
         super.init(coder: aDecoder)
     }
     
-    init(emoji: String, emojiSize: CGFloat = 64, isEmojiCentered: Bool = false, message: String = "") {
+    init(emoji: String? = "🤷🏼‍♀️", message: String? = nil) {
         super.init(frame: .zero)
-        
-        self.emojiSize = emojiSize
-        self.isEmojiCentered = isEmojiCentered
         
         self.setUpEmojiView(using: emoji)
         self.setUpMessageView(using: message)
     }
     
+    init(emojiAtCenter emoji: String) {
+        super.init(frame: .zero)
+        
+        setUpEmojiView(using: emoji, ofSize: 48, isCentered: true)
+    }
     
-    private func setUpEmojiView(using emoji: String) {
+    init(messageAtCenter message: String) {
+        super.init(frame: .zero)
+        
+        self.setUpMessageView(using: message, isCentered: true)
+    }
+    
+    
+    private func setUpEmojiView(using emoji: String?, ofSize size: CGFloat = 64, isCentered: Bool = false) {
         self.emoji.text = emoji
-        self.emoji.font = .systemFont(ofSize: self.emojiSize)
+        self.emoji.font = .systemFont(ofSize: size)
         self.emoji.textAlignment = .center
         
         self.addSubview(self.emoji)
@@ -43,11 +49,11 @@ class AUIEmptyScreenView: UIView {
         self.emoji.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.emoji.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            self.emoji.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: self.isEmojiCentered ? 0 : -10)
+            self.emoji.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: isCentered ? 0 : -15)
         ])
     }
     
-    private func setUpMessageView(using message: String) {
+    private func setUpMessageView(using message: String?, isCentered: Bool = false) {
         self.message.text = message
         self.message.font = .systemFont(ofSize: 16)
         self.message.textColor = .gray
@@ -58,7 +64,7 @@ class AUIEmptyScreenView: UIView {
         
         self.message.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.message.topAnchor.constraint(equalTo: self.emoji.bottomAnchor, constant: 10),
+            isCentered ? self.message.centerYAnchor.constraint(equalTo: self.centerYAnchor) : self.message.topAnchor.constraint(equalTo: self.emoji.bottomAnchor, constant: 10),
             self.message.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             self.message.widthAnchor.constraint(equalToConstant: 200)
         ])

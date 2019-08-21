@@ -15,14 +15,16 @@ struct CurrentDay {
     private static let today = Date()
     
     
+    public static var isCurrentSemesterFirst: Bool {
+        return self.calendar.component(.month, from: self.today) > 8
+    }
+    
     public static var isWeekEven: Bool {
-        let isCurrentSemesterFirst = self.calendar.component(.month, from: self.today) > 8
-        
         let firstDayOfSemester = DateComponents(
             calendar: self.calendar,
             year: self.calendar.component(.year, from: self.today),
-            month: isCurrentSemesterFirst ? 9 : 1,
-            day: isCurrentSemesterFirst ? 1 : 26
+            month: self.isCurrentSemesterFirst ? 9 : 1,
+            day: self.isCurrentSemesterFirst ? 1 : 26
         ).date!
         
         // Sunday is the 1st weekday by default, so some fixes are needed

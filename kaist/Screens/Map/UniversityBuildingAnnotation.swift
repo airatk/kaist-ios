@@ -12,7 +12,7 @@ import MapKit
 
 class UniversityBuildingAnnotation: NSObject, MKAnnotation {
     
-    public static let ID = "UniversityBuildingAnnotation"
+    public static let reuseID = "UniversityBuildingAnnotation"
     public static let clusteringID = "UniversityBuildingsCluster"
     
     public var title: String?

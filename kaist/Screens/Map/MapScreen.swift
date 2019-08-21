@@ -29,7 +29,7 @@ class MapScreen: AUIMapViewController {
         
         self.centerMapViewToMainLocation()
         
-        self.mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: UniversityBuildingAnnotation.ID)
+        self.mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: UniversityBuildingAnnotation.reuseID)
         self.mapView.addAnnotations(self.getUniversityBuildings().map { UniversityBuildingAnnotation(
             title: $0["title"] as? String, subtitle: $0["address"] as? String,
             coordinate: CLLocationCoordinate2D(latitude: $0["latitude"] as! Double, longitude: $0["longitude"] as! Double)
@@ -82,8 +82,7 @@ class MapScreen: AUIMapViewController {
         
         self.expectedTravelTimeLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        // 75 if expectedTravelTimeLabel.isHidden is true, -15 if expectedTravelTimeLabel.isHidden is false
-        self.expectedTravelTimeLabelBottomConstraint = self.expectedTravelTimeLabel.bottomAnchor.constraint(equalTo: self.mapView.safeAreaLayoutGuide.bottomAnchor, constant: 75)
+        self.expectedTravelTimeLabelBottomConstraint = self.expectedTravelTimeLabel.bottomAnchor.constraint(equalTo: self.mapView.safeAreaLayoutGuide.bottomAnchor, constant: 60 + 15 + self.tabBarController!.tabBar.frame.height)
         
         NSLayoutConstraint.activate([
             self.expectedTravelTimeLabelBottomConstraint,
@@ -94,7 +93,7 @@ class MapScreen: AUIMapViewController {
     }
     
     
-    private func showexpectedTravelTimeLabel(seconds: TimeInterval, transportType: MKDirectionsTransportType) {
+    private func showExpectedTravelTimeLabel(seconds: TimeInterval, transportType: MKDirectionsTransportType) {
         let hours = Int(seconds/3600)
         let minutes = Int(seconds.truncatingRemainder(dividingBy: 3600)/60)
         
@@ -136,13 +135,13 @@ class MapScreen: AUIMapViewController {
         self.animateexpectedTravelTimeLabel(toHide: false)
     }
     
-    private func hideexpectedTravelTimeLabel() {
+    private func hideExpectedTravelTimeLabel() {
         self.animateexpectedTravelTimeLabel(toHide: true)
         self.expectedTravelTimeLabel.text = nil
     }
     
     private func animateexpectedTravelTimeLabel(toHide: Bool) {
-        self.expectedTravelTimeLabelBottomConstraint.constant = toHide ? 75 : -15
+        self.expectedTravelTimeLabelBottomConstraint.constant = toHide ? (60 + 15 + self.tabBarController!.tabBar.frame.height) : -15
         
         UIView.animate(withDuration: 0.3) {
             self.mapView.layoutIfNeeded()
@@ -168,7 +167,7 @@ extension MapScreen {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
         
-        let buildingAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: UniversityBuildingAnnotation.ID, for: annotation) as! MKMarkerAnnotationView
+        let buildingAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: UniversityBuildingAnnotation.reuseID, for: annotation) as! MKMarkerAnnotationView
         
         buildingAnnotationView.clusteringIdentifier = UniversityBuildingAnnotation.clusteringID
         
@@ -202,13 +201,13 @@ extension MapScreen {
         MKDirections(request: request).calculate { (response, error) in
             guard let route = response?.routes.first, error == nil else { return }
             
-            self.showexpectedTravelTimeLabel(seconds: route.expectedTravelTime, transportType: route.transportType)
+            self.showExpectedTravelTimeLabel(seconds: route.expectedTravelTime, transportType: route.transportType)
             mapView.addOverlay(route.polyline)
         }
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-        self.hideexpectedTravelTimeLabel()
+        self.hideExpectedTravelTimeLabel()
         mapView.removeOverlays(mapView.overlays)
     }
     
@@ -233,7 +232,7 @@ extension MapScreen: UISearchResultsUpdating {
 extension MapScreen: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        self.hideexpectedTravelTimeLabel()
+        self.hideExpectedTravelTimeLabel()
         self.mapView.removeOverlays(self.mapView.overlays)
         self.mapView.deselectAnnotation(self.mapView.selectedAnnotations.first, animated: true)
         self.centerMapViewToMainLocation()
