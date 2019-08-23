@@ -17,8 +17,6 @@ class FastLoginScreen: UIViewController {
     private let footerWarningLabel = UILabel()
     private let endLoginButton = UIButton()
     
-    private var groupScheduleID: String!
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +51,6 @@ class FastLoginScreen: UIViewController {
         self.groupTextField.inputAccessoryView = self.inputViewToolbar
         
         self.view.addSubview(self.groupTextField)
-        
         self.groupTextField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.groupTextField.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 15),
@@ -67,7 +64,6 @@ class FastLoginScreen: UIViewController {
         self.groupFetchingIndicator.color = .lightBlue
         
         self.groupTextField.addSubview(self.groupFetchingIndicator)
-        
         self.groupFetchingIndicator.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.groupFetchingIndicator.centerYAnchor.constraint(equalTo: self.groupTextField.centerYAnchor),
@@ -83,7 +79,6 @@ class FastLoginScreen: UIViewController {
         self.footerWarningLabel.numberOfLines = 0
         
         self.view.addSubview(self.footerWarningLabel)
-        
         self.footerWarningLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.footerWarningLabel.topAnchor.constraint(equalTo: self.groupTextField.bottomAnchor, constant: 18),
@@ -105,7 +100,6 @@ class FastLoginScreen: UIViewController {
         self.endLoginButton.clipsToBounds = true
         
         self.view.addSubview(self.endLoginButton)
-        
         self.endLoginButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.endLoginButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -15),

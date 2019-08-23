@@ -13,9 +13,12 @@ class LecturerData {
 
     private static let lecturersScheduleURLString: String = "https://kai.ru/for-staff/raspisanie"
     
+    public typealias Lecturers = [[String: String]]
+    public typealias Schedule = [String: [[String: String]]]
+    
     
     public static func getLecturers(startingWith namePart: String,
-      _ completion: @escaping ([[String: String]]?, DataFetchingError?) -> Void) {
+      _ completion: @escaping (LecturerData.Lecturers?, DataFetchingError?) -> Void) {
         let parameters = "?" + [
             "p_p_id": "pubLecturerSchedule_WAR_publicLecturerSchedule10",
             "p_p_lifecycle": "2",
@@ -37,7 +40,7 @@ class LecturerData {
                 return
             }
             
-            guard let json = try? JSONSerialization.jsonObject(with: data) as? [[String: String]] else {
+            guard let json = try? JSONSerialization.jsonObject(with: data) as? LecturerData.Lecturers else {
                 completion(nil, .onResponseParsing)
                 return
             }
@@ -52,7 +55,7 @@ class LecturerData {
     }
     
     public static func getSchedule(ofLecturerWithID lecturerID: String, ofType type: ScheduleType,
-      _ completion: @escaping ([String: [[String: String]]]?, DataFetchingError?) -> Void) {
+      _ completion: @escaping (LecturerData.Schedule?, DataFetchingError?) -> Void) {
         let parameters = "?" + [
             "p_p_id": "pubLecturerSchedule_WAR_publicLecturerSchedule10",
             "p_p_lifecycle": "2",
@@ -87,7 +90,7 @@ class LecturerData {
             /* Fixing the bad quality data *** */
             
             // Casting Any to String & removing extra whitespaces
-            var schedule = [String: [[String: String]]]()
+            var schedule = LecturerData.Schedule()
 
             for (numberOfDay, subjects) in json {
                 schedule[numberOfDay] = []

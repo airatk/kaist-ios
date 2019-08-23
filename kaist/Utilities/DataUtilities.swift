@@ -10,10 +10,10 @@ import Foundation
 
 
 enum DataFetchingError: String, Error {
-    case onURLCreation = "Не удалось отправить запрос на сервера kai.ru"
-    case noServerResponse = "Сайт kai.ru не отвечает"
-    case onResponseParsing = "Не удалось обработать ответ от серверов kai.ru"
-    case badServerResponse = "Нет данных"
+    case onURLCreation = "Не удалось отправить запрос на сервера КАИ"
+    case noServerResponse = "Сайт КАИ не отвечает"
+    case onResponseParsing = "Не удалось обработать ответ от серверов КАИ"
+    case badServerResponse = "В каёвской базе нет соответсвующих данных"
     case noAskedGroupReceived = "Такой группы нет. Возможно, она появится позже, когда её внесут в каёвскую базу"
 }
 

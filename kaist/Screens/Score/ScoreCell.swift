@@ -87,7 +87,7 @@ extension ScoreCell {
         let middleFont = UIFont.boldSystemFont(ofSize: 12)
         let smallFont = UIFont.systemFont(ofSize: 12)
         
-        let scoreLineColor = UIColor.lightBlue.withAlphaComponent(0.875)
+        let scoreLineColor = UIColor.lightBlue.withAlphaComponent(0.85)
         let scoreLineCornerRadius: CGFloat = 6
         
         self.title.font = largeFont

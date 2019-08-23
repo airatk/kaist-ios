@@ -28,15 +28,13 @@ import UIKit
         self.window?.makeKeyAndVisible()
         
         // MARK: - Status Bar
-        let statusBarWindow = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
-        
         self.statusBarBlur = UIVisualEffectView(effect: UIBlurEffect(style: .prominent))
         self.statusBarBlur.frame = UIApplication.shared.statusBarFrame
         self.statusBarBlur.isHidden = true
         
+        let statusBarWindow = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
         statusBarWindow.addSubview(self.statusBarBlur)
         statusBarWindow.sendSubviewToBack(self.statusBarBlur)
-        
         
         return true
     }

@@ -171,14 +171,14 @@ extension ScoreScreen {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let scoreCell = tableView.dequeueReusableCell(withIdentifier: ScoreCell.reuseID, for: indexPath) as! ScoreCell
         
-        var sectionScoretable = Student.Scoretable()
-        
-        switch indexPath.section {
-            case 0: sectionScoretable = self.tests!
-            case 1: sectionScoretable = self.evaluatedTests!
-            case 2: sectionScoretable = self.exams!
-            
-            default: break
+        var sectionScoretable: Student.Scoretable {
+            switch indexPath.section {
+                case 0: return self.tests!
+                case 1: return self.evaluatedTests!
+                case 2: return self.exams!
+                
+                default: return Student.Scoretable()
+            }
         }
         
         scoreCell.title.text = sectionScoretable[indexPath.row]["title"]

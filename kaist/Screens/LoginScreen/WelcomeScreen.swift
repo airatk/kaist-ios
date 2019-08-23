@@ -11,9 +11,8 @@ import UIKit
 
 class WelcomeScreen: UIViewController {
     
-    private var welcomeLabel: UILabel!
-    
-    private var hintLabel: UILabel!
+    private let welcomeLabel = UILabel()
+    private let hintLabel = UILabel()
     
     private var fullLoginButton: UIButton!
     private var fastLoginButton: UIButton!
@@ -31,14 +30,11 @@ class WelcomeScreen: UIViewController {
     
     
     private func setUpWelcomeLabel() {
-        self.welcomeLabel = UILabel()
-        
         self.welcomeLabel.text = "Добро\nпожаловать♥️"
         self.welcomeLabel.font = .boldSystemFont(ofSize: 34)
         self.welcomeLabel.numberOfLines = 2
         
         self.view.addSubview(self.welcomeLabel)
-        
         self.welcomeLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.welcomeLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
@@ -48,8 +44,6 @@ class WelcomeScreen: UIViewController {
     }
     
     private func setUpHintLabel() {
-        self.hintLabel = UILabel()
-        
         self.hintLabel.text = [
             "Номер зачётки позволит видеть баллы — не только расписание.\n",
             "В студенческом билете он, кстати, тот же.\n\n",
@@ -60,7 +54,6 @@ class WelcomeScreen: UIViewController {
         self.hintLabel.numberOfLines = 0
         
         self.view.addSubview(self.hintLabel)
-        
         self.hintLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.hintLabel.topAnchor.constraint(equalTo: self.welcomeLabel.bottomAnchor, constant: 25),
@@ -70,21 +63,16 @@ class WelcomeScreen: UIViewController {
     }
     
     private func setUpLoginButtons() {
-        self.fullLoginButton = self.getDefaultButton()
-        self.fastLoginButton = self.getDefaultButton()
-        
-        self.fullLoginButton.setTitle("с зачёткой", for: .normal)
-        self.fastLoginButton.setTitle("без зачётки", for: .normal)
+        self.fullLoginButton = self.getLoginButton(withTitle: "с зачёткой")
+        self.fastLoginButton = self.getLoginButton(withTitle: "без зачётки")
         
         self.fullLoginButton.addTarget(self, action: #selector(self.throwToFullLoginController), for: .touchUpInside)
         self.fastLoginButton.addTarget(self, action: #selector(self.throwToFastLoginController), for: .touchUpInside)
         
         self.view.addSubview(self.fullLoginButton)
         self.view.addSubview(self.fastLoginButton)
-        
         self.fullLoginButton.translatesAutoresizingMaskIntoConstraints = false
         self.fastLoginButton.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             self.fastLoginButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -15),
             self.fastLoginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
@@ -98,18 +86,20 @@ class WelcomeScreen: UIViewController {
         ])
     }
     
-    private func getDefaultButton() -> UIButton {
-        let defaultButton = UIButton()
+    private func getLoginButton(withTitle title: String) -> UIButton {
+        let loginButton = UIButton()
         
-        defaultButton.setTitleColor(.white, for: .normal)
-        defaultButton.setTitleColor(.lightText, for: .highlighted)
+        loginButton.setTitle(title, for: .normal)
         
-        defaultButton.backgroundColor = .lightBlue
+        loginButton.setTitleColor(.white, for: .normal)
+        loginButton.setTitleColor(.lightText, for: .highlighted)
         
-        defaultButton.layer.cornerRadius = 10
-        defaultButton.clipsToBounds = true
+        loginButton.backgroundColor = .lightBlue
         
-        return defaultButton
+        loginButton.layer.cornerRadius = 10
+        loginButton.clipsToBounds = true
+        
+        return loginButton
     }
     
     

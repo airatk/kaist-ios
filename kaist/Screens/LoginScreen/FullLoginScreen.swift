@@ -11,6 +11,8 @@ import UIKit
 
 class FullLoginScreen: UIViewController {
     
+    private var instituteTextFieldTopConstraint: NSLayoutConstraint!
+    
     private let instituteTextField = UITextField()
     private let yearTextField = UITextField()
     private let groupTextField = UITextField()
@@ -18,6 +20,7 @@ class FullLoginScreen: UIViewController {
     private let cardTextField = UITextField()
     
     private let inputViewToolbar = UIToolbar()
+    
     private let institutePicker = UIPickerView()
     private let yearPicker = UIPickerView()
     private let groupPicker = UIPickerView()
@@ -33,9 +36,9 @@ class FullLoginScreen: UIViewController {
     private let endLoginButton = UIButton()
     
     private let institutes = AppDelegate.shared.student.institutes
-    private var years: [String: String]!
-    private var groups: [String: String]!
-    private var names: [String: String]!
+    private var years: Student.StudentData!
+    private var groups: Student.StudentData!
+    private var names: Student.StudentData!
     
     
     override func viewDidLoad() {
@@ -64,11 +67,6 @@ class FullLoginScreen: UIViewController {
     }
     
     private func setUpInputViews() {
-        self.institutePicker.dataSource = self
-        self.yearPicker.dataSource = self
-        self.groupPicker.dataSource = self
-        self.namePicker.dataSource = self
-        
         self.institutePicker.delegate = self
         self.yearPicker.delegate = self
         self.groupPicker.delegate = self
@@ -112,15 +110,16 @@ class FullLoginScreen: UIViewController {
         self.view.addSubview(self.groupTextField)
         self.view.addSubview(self.nameTextField)
         self.view.addSubview(self.cardTextField)
-        
         self.instituteTextField.translatesAutoresizingMaskIntoConstraints = false
         self.yearTextField.translatesAutoresizingMaskIntoConstraints = false
         self.groupTextField.translatesAutoresizingMaskIntoConstraints = false
         self.nameTextField.translatesAutoresizingMaskIntoConstraints = false
         self.cardTextField.translatesAutoresizingMaskIntoConstraints = false
         
+        self.instituteTextFieldTopConstraint = self.instituteTextField.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 15)
+        
         NSLayoutConstraint.activate([
-            self.instituteTextField.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 15),
+            self.instituteTextFieldTopConstraint,
             self.instituteTextField.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             self.instituteTextField.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30),
             self.instituteTextField.heightAnchor.constraint(equalToConstant: 60),
@@ -157,12 +156,10 @@ class FullLoginScreen: UIViewController {
         self.yearTextField.addSubview(self.yearFetchingIndicator)
         self.groupTextField.addSubview(self.groupFetchingIndicator)
         self.cardTextField.addSubview(self.cardFetchingIndicator)
-        
         self.instituteFetchingIndicator.translatesAutoresizingMaskIntoConstraints = false
         self.yearFetchingIndicator.translatesAutoresizingMaskIntoConstraints = false
         self.groupFetchingIndicator.translatesAutoresizingMaskIntoConstraints = false
         self.cardFetchingIndicator.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             self.instituteFetchingIndicator.centerYAnchor.constraint(equalTo: self.instituteTextField.centerYAnchor),
             self.instituteFetchingIndicator.trailingAnchor.constraint(equalTo: self.instituteTextField.trailingAnchor, constant: -15),
@@ -186,7 +183,6 @@ class FullLoginScreen: UIViewController {
         self.footerWarningLabel.numberOfLines = 0
         
         self.view.addSubview(self.footerWarningLabel)
-        
         self.footerWarningLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.footerWarningLabel.topAnchor.constraint(equalTo: self.cardTextField.bottomAnchor, constant: 18),
@@ -208,7 +204,6 @@ class FullLoginScreen: UIViewController {
         self.endLoginButton.clipsToBounds = true
         
         self.view.addSubview(self.endLoginButton)
-        
         self.endLoginButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.endLoginButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -15),
@@ -242,58 +237,55 @@ extension FullLoginScreen: UITextFieldDelegate {
         switch textField {
             case self.instituteTextField:
                 self.yearTextField.text = nil
-                self.groupTextField.text = nil
-                self.nameTextField.text = nil
-                self.cardTextField.text = nil
-
                 self.yearTextField.placeholder = nil
-                self.groupTextField.placeholder = nil
-                self.nameTextField.placeholder = nil
-                self.cardTextField.placeholder = nil
-                
                 self.yearTextField.isEnabled = false
-                self.groupTextField.isEnabled = false
-                self.nameTextField.isEnabled = false
-                self.cardTextField.isEnabled = false
+                
+                fallthrough
             case self.yearTextField:
                 self.groupTextField.text = nil
-                self.nameTextField.text = nil
-                self.cardTextField.text = nil
-                
                 self.groupTextField.placeholder = nil
-                self.nameTextField.placeholder = nil
-                self.cardTextField.placeholder = nil
-                
                 self.groupTextField.isEnabled = false
-                self.nameTextField.isEnabled = false
-                self.cardTextField.isEnabled = false
+                
+                fallthrough
             case self.groupTextField:
                 self.nameTextField.text = nil
-                self.cardTextField.text = nil
-                
                 self.nameTextField.placeholder = nil
-                self.cardTextField.placeholder = nil
-                
                 self.nameTextField.isEnabled = false
-                self.cardTextField.isEnabled = false
+                
+                fallthrough
             case self.nameTextField:
                 self.cardTextField.text = nil
                 self.cardTextField.placeholder = nil
                 self.cardTextField.isEnabled = false
+                
+                fallthrough
             case self.cardTextField:
-                AppDelegate.shared.student.card = nil
-            
-            default: break
+                fallthrough
+            default:
+                self.endLoginButton.setEnabled(false)
         }
         
-        self.endLoginButton.setEnabled(false)
+        if textField.text?.isEmpty ?? true {
+            var studentDataPicker: UIPickerView {
+                switch textField {
+                    case self.instituteTextField: return self.institutePicker
+                    case self.yearTextField: return self.yearPicker
+                    case self.groupTextField: return self.groupPicker
+                    case self.nameTextField: return self.namePicker
+                    
+                    default: return UIPickerView()
+                }
+            }
+            
+            studentDataPicker.delegate?.pickerView?(studentDataPicker, didSelectRow: 0, inComponent: 0)
+        }
+        
+        self.didChangeKeyboardVisibility(isHidden: false, beingAtTextField: textField)
         
         return true
     }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        guard !(textField.text?.isEmpty ?? true) else { return true }
-        
         switch textField {
             case self.instituteTextField:
                 self.instituteFetchingIndicator.startAnimating()
@@ -312,6 +304,7 @@ extension FullLoginScreen: UITextFieldDelegate {
                         self.yearTextField.isEnabled = true
                     }
                     
+                    self.didChangeKeyboardVisibility(isHidden: true, beingAtTextField: textField)
                     self.instituteFetchingIndicator.stopAnimating()
                 }
             case self.yearTextField:
@@ -330,11 +323,12 @@ extension FullLoginScreen: UITextFieldDelegate {
                         self.groupTextField.isEnabled = true
                     }
                     
+                    self.didChangeKeyboardVisibility(isHidden: true, beingAtTextField: textField)
                     self.yearFetchingIndicator.stopAnimating()
                 }
             case self.groupTextField:
                 self.groupFetchingIndicator.startAnimating()
-
+                
                 AppDelegate.shared.student.groupNumber = textField.text
                 AppDelegate.shared.student.groupScoreID = self.groups[textField.text!]
                 
@@ -345,6 +339,7 @@ extension FullLoginScreen: UITextFieldDelegate {
 //                        self.footerWarningLabel.text = error.rawValue
 //                        self.footerWarningLabel.isHidden = false
 //
+//                        self.didChangeKeyboardVisibility(isHidden: true, beingAtTextField: textField)
 //                        self.groupFetchingIndicator.stopAnimating()
 //                    } else {
 //                        AppDelegate.shared.student.groupScheduleID = groupScheduleID
@@ -360,6 +355,7 @@ extension FullLoginScreen: UITextFieldDelegate {
                                 self.nameTextField.isEnabled = true
                             }
                             
+                            self.didChangeKeyboardVisibility(isHidden: true, beingAtTextField: textField)
                             self.groupFetchingIndicator.stopAnimating()
                         }
 //                    }
@@ -370,7 +366,13 @@ extension FullLoginScreen: UITextFieldDelegate {
                 
                 self.cardTextField.placeholder = "Введи номер зачётки"
                 self.cardTextField.isEnabled = true
+                self.didChangeKeyboardVisibility(isHidden: true, beingAtTextField: textField)
             case self.cardTextField:
+                guard !(textField.text?.isEmpty ?? true) else {
+                    self.didChangeKeyboardVisibility(isHidden: true, beingAtTextField: textField)
+                    break
+                }
+                
                 self.cardFetchingIndicator.startAnimating()
                 
                 AppDelegate.shared.student.card = textField.text
@@ -379,10 +381,11 @@ extension FullLoginScreen: UITextFieldDelegate {
                     if error == nil {
                         self.endLoginButton.setEnabled(true)
                     } else {
-                        self.footerWarningLabel.text = "Неверный номер зачётки"
+                        self.footerWarningLabel.text = "Номер зачётки неверен"
                         self.footerWarningLabel.isHidden = false
                     }
                     
+                    self.didChangeKeyboardVisibility(isHidden: true, beingAtTextField: textField)
                     self.cardFetchingIndicator.stopAnimating()
                 }
             
@@ -390,6 +393,25 @@ extension FullLoginScreen: UITextFieldDelegate {
         }
         
         return true
+    }
+    
+    
+    private func didChangeKeyboardVisibility(isHidden: Bool, beingAtTextField textField: UITextField) {
+        self.view.layoutIfNeeded()  // The below animation should be applied only for below changes
+        
+        let offset = self.view.safeAreaLayoutGuide.layoutFrame.origin.y - textField.frame.origin.y + 30
+        self.instituteTextFieldTopConstraint.constant = isHidden ? 15 : offset
+        
+        if textField != self.instituteTextField {
+            self.navigationItem.setHidesBackButton(true, animated: true)
+        }
+        
+        UIView.animate(withDuration: 0.25, animations: {
+            self.view.layoutIfNeeded()
+        }, completion: { (_) in
+            guard textField != self.instituteTextField else { return }
+            self.navigationItem.setHidesBackButton(!isHidden, animated: true)
+        })
     }
     
 }
