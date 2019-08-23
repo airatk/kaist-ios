@@ -64,6 +64,10 @@ class Student {
         get { return UserDefaults.standard.bool(forKey: "isSetUp") }
         set { UserDefaults.standard.set(newValue, forKey: "isSetUp") }
     }
+    public var isFull: Bool {
+        get { return UserDefaults.standard.bool(forKey: "isFull") }
+        set { UserDefaults.standard.set(newValue, forKey: "isFull") }
+    }
     
     public func reset() {
         self.instituteName = nil

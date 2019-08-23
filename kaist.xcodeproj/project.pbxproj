@@ -18,7 +18,7 @@
 		606B379222CA858900929369 /* AppController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 606B379122CA858900929369 /* AppController.swift */; };
 		606B379422CAA07F00929369 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 606B379322CAA07F00929369 /* LaunchScreen.storyboard */; };
 		608843FF23031968009C11F2 /* FullLoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608843FE23031968009C11F2 /* FullLoginScreen.swift */; };
-		608844012303197E009C11F2 /* FastLoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608844002303197E009C11F2 /* FastLoginScreen.swift */; };
+		608844012303197E009C11F2 /* CompactLoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608844002303197E009C11F2 /* CompactLoginScreen.swift */; };
 		609976C0230D8ACC00119689 /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609976BF230D8ACC00119689 /* UIImageViewExtension.swift */; };
 		609F7D1B22FACCE6003F8965 /* AUIMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609F7D1A22FACCE6003F8965 /* AUIMapViewController.swift */; };
 		60A5D678230546A30004B667 /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A5D677230546A30004B667 /* UIButtonExtension.swift */; };
@@ -51,7 +51,7 @@
 		606B379122CA858900929369 /* AppController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppController.swift; sourceTree = "<group>"; };
 		606B379322CAA07F00929369 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		608843FE23031968009C11F2 /* FullLoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullLoginScreen.swift; sourceTree = "<group>"; };
-		608844002303197E009C11F2 /* FastLoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastLoginScreen.swift; sourceTree = "<group>"; };
+		608844002303197E009C11F2 /* CompactLoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactLoginScreen.swift; sourceTree = "<group>"; };
 		609976BF230D8ACC00119689 /* UIImageViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
 		609F7D1A22FACCE6003F8965 /* AUIMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AUIMapViewController.swift; sourceTree = "<group>"; };
 		60A5D677230546A30004B667 /* UIButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
@@ -85,7 +85,7 @@
 			children = (
 				60060B332301956E0077A69B /* WelcomeScreen.swift */,
 				608843FE23031968009C11F2 /* FullLoginScreen.swift */,
-				608844002303197E009C11F2 /* FastLoginScreen.swift */,
+				608844002303197E009C11F2 /* CompactLoginScreen.swift */,
 			);
 			path = LoginScreen;
 			sourceTree = "<group>";
@@ -340,7 +340,7 @@
 				60B2E43B22CCEA6500BEAB23 /* CurrentDay.swift in Sources */,
 				608843FF23031968009C11F2 /* FullLoginScreen.swift in Sources */,
 				60CBD93222D88DE600D387CF /* Student.swift in Sources */,
-				608844012303197E009C11F2 /* FastLoginScreen.swift in Sources */,
+				608844012303197E009C11F2 /* CompactLoginScreen.swift in Sources */,
 				606B379222CA858900929369 /* AppController.swift in Sources */,
 				603229D8230AC0BA005B699F /* AUIExpandableTableViewController.swift in Sources */,
 				60B2E42D22CB182600BEAB23 /* StudentSubjectScreen.swift in Sources */,

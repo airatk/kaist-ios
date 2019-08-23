@@ -68,6 +68,8 @@ class StudentSubjectsScreen: AUIExpandableTableViewController {
             return
         }
         
+        self.tabBarController?.tabBar.items?[1].isEnabled = AppDelegate.shared.student.isFull
+        
         if self.initialSchedule == nil {
             self.tableView.setContentOffset(CGPoint(x: 0, y: -100), animated: true)
             self.refreshControl?.beginRefreshing()

@@ -15,7 +15,7 @@ class WelcomeScreen: UIViewController {
     private let hintLabel = UILabel()
     
     private var fullLoginButton: UIButton!
-    private var fastLoginButton: UIButton!
+    private var compactLoginButton: UIButton!
     
     
     override func viewDidLoad() {
@@ -64,22 +64,22 @@ class WelcomeScreen: UIViewController {
     
     private func setUpLoginButtons() {
         self.fullLoginButton = self.getLoginButton(withTitle: "с зачёткой")
-        self.fastLoginButton = self.getLoginButton(withTitle: "без зачётки")
+        self.compactLoginButton = self.getLoginButton(withTitle: "без зачётки")
         
         self.fullLoginButton.addTarget(self, action: #selector(self.throwToFullLoginController), for: .touchUpInside)
-        self.fastLoginButton.addTarget(self, action: #selector(self.throwToFastLoginController), for: .touchUpInside)
+        self.compactLoginButton.addTarget(self, action: #selector(self.throwToCompactLoginController), for: .touchUpInside)
         
         self.view.addSubview(self.fullLoginButton)
-        self.view.addSubview(self.fastLoginButton)
+        self.view.addSubview(self.compactLoginButton)
         self.fullLoginButton.translatesAutoresizingMaskIntoConstraints = false
-        self.fastLoginButton.translatesAutoresizingMaskIntoConstraints = false
+        self.compactLoginButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.fastLoginButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -15),
-            self.fastLoginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.fastLoginButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30),
-            self.fastLoginButton.heightAnchor.constraint(equalToConstant: 60),
+            self.compactLoginButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -15),
+            self.compactLoginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            self.compactLoginButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30),
+            self.compactLoginButton.heightAnchor.constraint(equalToConstant: 60),
             
-            self.fullLoginButton.bottomAnchor.constraint(equalTo: self.fastLoginButton.topAnchor, constant: -10),
+            self.fullLoginButton.bottomAnchor.constraint(equalTo: self.compactLoginButton.topAnchor, constant: -10),
             self.fullLoginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             self.fullLoginButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30),
             self.fullLoginButton.heightAnchor.constraint(equalToConstant: 60)
@@ -107,8 +107,8 @@ class WelcomeScreen: UIViewController {
         self.navigationController?.pushViewController(FullLoginScreen(), animated: true)
     }
     
-    @objc private func throwToFastLoginController() {
-        self.navigationController?.pushViewController(FastLoginScreen(), animated: true)
+    @objc private func throwToCompactLoginController() {
+        self.navigationController?.pushViewController(CompactLoginScreen(), animated: true)
     }
     
 }

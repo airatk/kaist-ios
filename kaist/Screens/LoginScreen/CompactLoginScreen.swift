@@ -1,5 +1,5 @@
 //
-//  FastLoginScreen.swift
+//  CompactLoginScreen.swift
 //  kaist
 //
 //  Created by Airat K on 13/8/19.
@@ -9,7 +9,7 @@
 import UIKit
 
 
-class FastLoginScreen: UIViewController {
+class CompactLoginScreen: UIViewController {
     
     private let inputViewToolbar = UIToolbar()
     private let groupTextField = UITextField()
@@ -119,12 +119,14 @@ class FastLoginScreen: UIViewController {
     @objc private func throwToAppController() {
         // User cannot come here with incorrect data, so there are no error-checks
         AppDelegate.shared.student.isSetUp = true
+        AppDelegate.shared.student.isFull = false
+        
         self.navigationController?.dismiss(animated: true)
     }
     
 }
 
-extension FastLoginScreen: UITextFieldDelegate {
+extension CompactLoginScreen: UITextFieldDelegate {
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         self.footerWarningLabel.text = nil

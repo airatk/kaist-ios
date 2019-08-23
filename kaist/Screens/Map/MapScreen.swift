@@ -24,7 +24,8 @@ class MapScreen: AUIMapViewController {
         
         self.tabBarController?.delegate = self
         
-        self.setUpSearchController()
+        //self.setUpSearchController()
+        self.navigationItem.title = "Здания КАИ"
         self.setUpExpectedTimeView()
         
         self.centerMapViewToMainLocation()
@@ -79,7 +80,6 @@ class MapScreen: AUIMapViewController {
         self.expectedTravelTimeLabel.clipsToBounds = true
         
         self.mapView.addSubview(self.expectedTravelTimeLabel)
-        
         self.expectedTravelTimeLabel.translatesAutoresizingMaskIntoConstraints = false
         
         self.expectedTravelTimeLabelBottomConstraint = self.expectedTravelTimeLabel.bottomAnchor.constraint(equalTo: self.mapView.safeAreaLayoutGuide.bottomAnchor, constant: 60 + 15 + self.tabBarController!.tabBar.frame.height)
@@ -143,7 +143,7 @@ class MapScreen: AUIMapViewController {
     private func animateexpectedTravelTimeLabel(toHide: Bool) {
         self.expectedTravelTimeLabelBottomConstraint.constant = toHide ? (60 + 15 + self.tabBarController!.tabBar.frame.height) : -15
         
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.25) {
             self.mapView.layoutIfNeeded()
         }
     }

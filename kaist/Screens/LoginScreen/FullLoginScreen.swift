@@ -223,6 +223,8 @@ class FullLoginScreen: UIViewController {
     @objc private func throwToAppController() {
         // User cannot come here with incorrect data, so there are no error-checks
         AppDelegate.shared.student.isSetUp = true
+        AppDelegate.shared.student.isFull = true
+        
         self.navigationController?.dismiss(animated: true)
     }
     
