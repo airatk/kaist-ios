@@ -80,14 +80,48 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6019D3E42301952000BA0DDB /* LoginScreen */ = {
+		6019D3E42301952000BA0DDB /* WelcomeScreen */ = {
 			isa = PBXGroup;
 			children = (
 				60060B332301956E0077A69B /* WelcomeScreen.swift */,
 				608843FE23031968009C11F2 /* FullLoginScreen.swift */,
 				608844002303197E009C11F2 /* CompactLoginScreen.swift */,
 			);
-			path = LoginScreen;
+			path = WelcomeScreen;
+			sourceTree = "<group>";
+		};
+		603AEEC023144CB6005DA090 /* Score Tab */ = {
+			isa = PBXGroup;
+			children = (
+				60B2E43122CB54C400BEAB23 /* Score */,
+			);
+			path = "Score Tab";
+			sourceTree = "<group>";
+		};
+		603AEEC123144CE7005DA090 /* Settings Tab */ = {
+			isa = PBXGroup;
+			children = (
+				60B2E42B22CB182600BEAB23 /* Settings */,
+			);
+			path = "Settings Tab";
+			sourceTree = "<group>";
+		};
+		603AEEC223144CF0005DA090 /* Information Tab */ = {
+			isa = PBXGroup;
+			children = (
+				60B2E43422CB58D500BEAB23 /* Map */,
+			);
+			path = "Information Tab";
+			sourceTree = "<group>";
+		};
+		603AEEC323144D4E005DA090 /* Kaist API */ = {
+			isa = PBXGroup;
+			children = (
+				60CBD93122D88DE600D387CF /* Student.swift */,
+				603E1AC722CDDC2200746F5B /* LecturerData.swift */,
+				60CBD93922E10F5E00D387CF /* DataUtilities.swift */,
+			);
+			path = "Kaist API";
 			sourceTree = "<group>";
 		};
 		605BCC4222E3855A0099DFCF /* Views & Extensions */ = {
@@ -138,11 +172,11 @@
 			isa = PBXGroup;
 			children = (
 				606B379122CA858900929369 /* AppController.swift */,
-				6019D3E42301952000BA0DDB /* LoginScreen */,
-				60B2E42922CB182600BEAB23 /* StudentSubjects */,
-				60B2E43122CB54C400BEAB23 /* Score */,
-				60B2E43422CB58D500BEAB23 /* Map */,
-				60B2E42B22CB182600BEAB23 /* Settings */,
+				6019D3E42301952000BA0DDB /* WelcomeScreen */,
+				60BBC5D023144C2100F7BB83 /* Schedule Tab */,
+				603AEEC023144CB6005DA090 /* Score Tab */,
+				603AEEC223144CF0005DA090 /* Information Tab */,
+				603AEEC123144CE7005DA090 /* Settings Tab */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -187,12 +221,18 @@
 		60B2E43C22CCEAF200BEAB23 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				60CBD93122D88DE600D387CF /* Student.swift */,
-				603E1AC722CDDC2200746F5B /* LecturerData.swift */,
-				60CBD93922E10F5E00D387CF /* DataUtilities.swift */,
+				603AEEC323144D4E005DA090 /* Kaist API */,
 				60B2E43A22CCEA6500BEAB23 /* CurrentDay.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		60BBC5D023144C2100F7BB83 /* Schedule Tab */ = {
+			isa = PBXGroup;
+			children = (
+				60B2E42922CB182600BEAB23 /* StudentSubjects */,
+			);
+			path = "Schedule Tab";
 			sourceTree = "<group>";
 		};
 		8DAA9F1620FCA732B176297F /* Pods */ = {

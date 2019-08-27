@@ -202,6 +202,7 @@ extension MapScreen {
             guard let route = response?.routes.first, error == nil else { return }
             
             self.showExpectedTravelTimeLabel(seconds: route.expectedTravelTime, transportType: route.transportType)
+            mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
             mapView.addOverlay(route.polyline)
         }
     }

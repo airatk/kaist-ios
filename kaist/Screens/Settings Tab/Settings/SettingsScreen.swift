@@ -19,18 +19,27 @@ class SettingsScreen: UIViewController {
     
     private let resetSettingsButton = UIButton()
     
+    private var isSetUp = false
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.title = "Настройки"
         
+        self.setUpResetSettingsButton()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        guard !self.isSetUp else { return }
+        
         if AppDelegate.shared.student.isFull {
             self.setUpFullUserInfo()
         } else {
             self.setUpCompactUserInfo()
         }
-        self.setUpResetSettingsButton()
+        
+        self.isSetUp = true
     }
     
     
@@ -91,6 +100,7 @@ class SettingsScreen: UIViewController {
     private func setUpCompactUserInfo() {
         self.groupLabel.text = "Группа " + AppDelegate.shared.student.groupNumber!
         self.groupLabel.font = .boldSystemFont(ofSize: 18)
+        self.groupLabel.textColor = .black
         
         self.view.addSubview(self.groupLabel)
         self.groupLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -102,6 +112,8 @@ class SettingsScreen: UIViewController {
     }
     
     private func setUpResetSettingsButton() {
+        self.resetSettingsButton.titleLabel?.font = .boldSystemFont(ofSize: 18)
+        
         self.resetSettingsButton.setTitle("Выйти", for: .normal)
         
         self.resetSettingsButton.setTitleColor(.red, for: .normal)
@@ -126,6 +138,14 @@ class SettingsScreen: UIViewController {
     
     @objc private func resetSettings() {
         AppDelegate.shared.student.reset()
+        self.isSetUp = false
+        
+        self.nameLabel.removeFromSuperview()
+        self.instituteLabel.removeFromSuperview()
+        self.yearLabel.removeFromSuperview()
+        self.groupLabel.removeFromSuperview()
+        self.cardLabel.removeFromSuperview()
+        
         self.tabBarController?.selectedIndex = 0
     }
     

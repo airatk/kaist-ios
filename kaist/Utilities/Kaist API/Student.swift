@@ -223,22 +223,22 @@ class Student {
                     // Beautifying the building data
                     var building = subject["buildNum"]!
 
-                    switch building {
-                        case _ where building.rangeOfCharacter(from: .decimalDigits) != nil: building += "ке"
-                        case _ where building == "КАИ ОЛИМП": building = "СК «Олимп»"
-                        
-                        default: break
+                    if building.rangeOfCharacter(from: .decimalDigits) != nil {
+                        building += "ке"
+                    }
+                    
+                    if building.contains("ОЛИМП") {
+                        building = "СК «Олимп»"
+                        schedule[numberOfDay]![indexOfSubject]["audNum"] = ""
                     }
                     
                     schedule[numberOfDay]![indexOfSubject]["buildNum"] = "в " + building
                 }
             }
             
-            // Making all of 6 official educational days available for access
-            for numberOfDay in [ "1", "2", "3", "4", "5", "6" ] {
-                if schedule[numberOfDay] == nil {
-                    schedule[numberOfDay] = [ ["disciplName": "Выходной"] ]
-                }
+            // Making all of 6 official educational days available
+            for numberOfDay in [ "1", "2", "3", "4", "5", "6" ] where schedule[numberOfDay] == nil {
+                schedule[numberOfDay] = [ ["disciplName": "Выходной"] ]
             }
             
             DispatchQueue.main.async { completion(schedule, nil) }
@@ -438,10 +438,7 @@ class Student {
                     subject["additional"] = try tableCells[9].text()
                     subject["debts"] = try tableCells[10].text()
                     
-                    // Filling empties with zeros
-                    for (key, value) in subject where value.isEmpty {
-                        subject[key] = "0"
-                    }
+                    subject = subject.mapValues { $0.isEmpty ? "0" : $0 }  // Filling empties with zeros
                     
                     subjects.append(subject)
                 }

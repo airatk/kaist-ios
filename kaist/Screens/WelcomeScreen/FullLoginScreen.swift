@@ -46,38 +46,14 @@ class FullLoginScreen: UIViewController {
 
         self.view.backgroundColor = .white
         
-        self.setUpInputViewToolbar()
-        self.setUpInputViews()
         self.setUpTextFields()
         self.setUpActivityIndicators()
+        self.setUpInputViews()
+        
         self.setUpFooterWarningLabel()
         self.setUpEndLoginButton()
     }
     
-    
-    private func setUpInputViewToolbar() {
-        self.inputViewToolbar.tintColor = .black
-        self.inputViewToolbar.barTintColor = .darkWhite
-        self.inputViewToolbar.isTranslucent = false
-        self.inputViewToolbar.sizeToFit()
-        
-        self.inputViewToolbar.setItems([
-            UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.dismissKeyboard))
-        ], animated: false)
-    }
-    
-    private func setUpInputViews() {
-        self.institutePicker.delegate = self
-        self.yearPicker.delegate = self
-        self.groupPicker.delegate = self
-        self.namePicker.delegate = self
-        
-        self.instituteTextField.inputAccessoryView = self.inputViewToolbar
-        self.yearTextField.inputAccessoryView = self.inputViewToolbar
-        self.groupTextField.inputAccessoryView = self.inputViewToolbar
-        self.nameTextField.inputAccessoryView = self.inputViewToolbar
-        self.cardTextField.inputAccessoryView = self.inputViewToolbar
-    }
     
     private func setUpTextFields() {
         self.instituteTextField.delegate = self
@@ -174,6 +150,28 @@ class FullLoginScreen: UIViewController {
             self.cardFetchingIndicator.trailingAnchor.constraint(equalTo: self.cardTextField.trailingAnchor, constant: -15)
         ])
     }
+    
+    private func setUpInputViews() {
+        self.institutePicker.delegate = self
+        self.yearPicker.delegate = self
+        self.groupPicker.delegate = self
+        self.namePicker.delegate = self
+        
+        self.inputViewToolbar.tintColor = .black
+        self.inputViewToolbar.barTintColor = .darkWhite
+        self.inputViewToolbar.isTranslucent = false
+        self.inputViewToolbar.sizeToFit()
+        self.inputViewToolbar.setItems([
+            UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.dismissKeyboard))
+        ], animated: false)
+        
+        self.instituteTextField.inputAccessoryView = self.inputViewToolbar
+        self.yearTextField.inputAccessoryView = self.inputViewToolbar
+        self.groupTextField.inputAccessoryView = self.inputViewToolbar
+        self.nameTextField.inputAccessoryView = self.inputViewToolbar
+        self.cardTextField.inputAccessoryView = self.inputViewToolbar
+    }
+    
     
     private func setUpFooterWarningLabel() {
         self.footerWarningLabel.isHidden = true
@@ -334,17 +332,15 @@ extension FullLoginScreen: UITextFieldDelegate {
                 AppDelegate.shared.student.groupNumber = textField.text
                 AppDelegate.shared.student.groupScoreID = self.groups[textField.text!]
                 
-                #warning("Uncomment to enable the full functionality & delete 17896-thing exactly below")
-                AppDelegate.shared.student.groupScheduleID = "17896"
-//                AppDelegate.shared.student.getGroupScheduleID { (groupScheduleID, error) in
-//                    if let error = error {
-//                        self.footerWarningLabel.text = error.rawValue
-//                        self.footerWarningLabel.isHidden = false
-//
-//                        self.didChangeKeyboardVisibility(isHidden: true, beingAtTextField: textField)
-//                        self.groupFetchingIndicator.stopAnimating()
-//                    } else {
-//                        AppDelegate.shared.student.groupScheduleID = groupScheduleID
+                AppDelegate.shared.student.getGroupScheduleID { (groupScheduleID, error) in
+                    if let error = error {
+                        self.footerWarningLabel.text = error.rawValue
+                        self.footerWarningLabel.isHidden = false
+
+                        self.didChangeKeyboardVisibility(isHidden: true, beingAtTextField: textField)
+                        self.groupFetchingIndicator.stopAnimating()
+                    } else {
+                        AppDelegate.shared.student.groupScheduleID = groupScheduleID
                 
                         AppDelegate.shared.student.getData(ofType: .names) { (names, error) in
                             if let error = error {
@@ -360,8 +356,8 @@ extension FullLoginScreen: UITextFieldDelegate {
                             self.didChangeKeyboardVisibility(isHidden: true, beingAtTextField: textField)
                             self.groupFetchingIndicator.stopAnimating()
                         }
-//                    }
-//                }
+                    }
+                }
             case self.nameTextField:
                 AppDelegate.shared.student.fullName = textField.text
                 AppDelegate.shared.student.ID = self.names[textField.text!]

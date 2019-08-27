@@ -11,7 +11,7 @@ import UIKit
 
 extension UIImageView {
     
-    func setTintColor(_ tintColor: UIColor) {
+    open func setTintColor(_ tintColor: UIColor) {
         self.image = self.image?.withRenderingMode(.alwaysTemplate)
         self.tintColor = tintColor
     }

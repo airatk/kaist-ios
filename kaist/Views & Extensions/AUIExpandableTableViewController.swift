@@ -12,23 +12,22 @@ import UIKit
 class AUIExpandableTableViewController: UITableViewController {
     
     // Dynamic top bar height which fits great both of iPhone 8 & iPhone X
-    private var absoluteMaximumBarOffsetY: CGFloat = 44 + UIApplication.shared.statusBarFrame.height
+    private let absoluteMaximumBarOffsetY: CGFloat = 44 + UIApplication.shared.statusBarFrame.height
     private var previousBarsOffsetY: CGFloat = 0
     private var previousScrollViewContentOffsetY: CGFloat = 0
     
     
+    override func loadView() {
+        self.tableView = UITableView(frame: .zero, style: .grouped)
+    }
+    
     override func viewDidLoad() {
-        self.tableView = {
-            let tableView = UITableView(frame: .zero, style: .grouped)
-            
-            tableView.separatorStyle = .none
-            tableView.showsVerticalScrollIndicator = false
-            
-            tableView.backgroundColor = .white
-            tableView.backgroundView = AUIEmptyScreenView(emojiAtCenter: "✈️")
-            
-            return tableView
-        }()
+        super.viewDidLoad()
+        
+        self.tableView.separatorStyle = .none
+        self.tableView.showsVerticalScrollIndicator = false
+        self.tableView.backgroundColor = .white
+        self.tableView.backgroundView = AUIEmptyScreenView(emojiAtCenter: "✈️")
         
         self.refreshControl = UIRefreshControl()
     }

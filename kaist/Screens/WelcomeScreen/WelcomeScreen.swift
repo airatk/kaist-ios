@@ -17,6 +17,9 @@ class WelcomeScreen: UIViewController {
     private var fullLoginButton: UIButton!
     private var compactLoginButton: UIButton!
     
+    private let fullLoginScreen = FullLoginScreen()
+    private let compactLoginScreen = CompactLoginScreen()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,11 +107,11 @@ class WelcomeScreen: UIViewController {
     
     
     @objc private func throwToFullLoginController() {
-        self.navigationController?.pushViewController(FullLoginScreen(), animated: true)
+        self.navigationController?.pushViewController(self.fullLoginScreen, animated: true)
     }
     
     @objc private func throwToCompactLoginController() {
-        self.navigationController?.pushViewController(CompactLoginScreen(), animated: true)
+        self.navigationController?.pushViewController(self.compactLoginScreen, animated: true)
     }
     
 }

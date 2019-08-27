@@ -119,6 +119,8 @@ class ScoreScreen: AUIExpandableTableViewController {
             }(), forKey: "contentViewController")
             
             semesterPickerSheet.addAction(UIAlertAction(title: "Выбрано", style: .cancel, handler: { (_) in
+                guard self.selectedSemester != self.semesterPicker.selectedRow(inComponent: 0) + 1 else { return }
+                
                 self.setSelectedSemester(error != nil ? nil : self.semesterPicker.selectedRow(inComponent: 0) + 1)
                 
                 self.tableView.setContentOffset(CGPoint(x: 0, y: -100), animated: true)
