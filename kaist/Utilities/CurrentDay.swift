@@ -28,7 +28,7 @@ struct CurrentDay {
         ).date!
         
         // Sunday is the 1st weekday by default, so some fixes are needed
-        let firstWeekOfSemester = self.calendar.component(.weekOfYear, from: firstDayOfSemester) - (self.calendar.component(.weekday, from: firstDayOfSemester) == 1 ? 1 : 0)
+        let firstWeekOfSemester = self.calendar.component(.weekOfYear, from: firstDayOfSemester)  // Sunday does not count here
         let currentWeekOfYear = self.calendar.component(.weekOfYear, from: self.today) - (self.weekday == 7 ? 1 : 0)
         
         // The 1st week of semester cannot be even semantically as its index is equal to 1
