@@ -44,9 +44,9 @@ class ScoreCell: UITableViewCell {
     public let scoreLine2GainedScore = UILabel()
     public let scoreLine3GainedScore = UILabel()
     
-    private let scoreLine1HitMaximum = UIImageView(image: UIImage(named: "hit-maximum-score"))
-    private let scoreLine2HitMaximum = UIImageView(image: UIImage(named: "hit-maximum-score"))
-    private let scoreLine3HitMaximum = UIImageView(image: UIImage(named: "hit-maximum-score"))
+    private let scoreLine1HitMaximum = UIImageView(image: UIImage(named: "HitMaximumScore"))
+    private let scoreLine2HitMaximum = UIImageView(image: UIImage(named: "HitMaximumScore"))
+    private let scoreLine3HitMaximum = UIImageView(image: UIImage(named: "HitMaximumScore"))
     
     private var iconSize: CGFloat {
         return self.scoreLineHeight*0.6

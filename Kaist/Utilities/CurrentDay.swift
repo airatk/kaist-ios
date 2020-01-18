@@ -43,7 +43,7 @@ struct CurrentDay {
     }
     
     public static var imageNameWeekday: String {
-        return [ "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" ][self.weekday - 1]
+        return [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ][self.weekday - 1]
     }
 
     public static func date(shiftedToDays days: Int = 0) -> (day: Int, month: String) {

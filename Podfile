@@ -1,6 +1,6 @@
-platform :ios, '8.0'
+platform :ios, '11.0'
 
-target 'kaist' do
+target 'Kaist' do
 
     use_frameworks!
     

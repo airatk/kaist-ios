@@ -19,9 +19,9 @@ class AppController: UITabBarController {
         
         self.viewControllers = [
             self.getTab(for: StudentSubjectsScreen(), withTitle: dateTitle, withImageNamed: CurrentDay.imageNameWeekday),
-            self.getTab(for: ScoreScreen(), withTitle: "Баллы", withImageNamed: "score"),
-            self.getTab(for: MapScreen(), withTitle: "Карта", withImageNamed: "map"),
-            self.getTab(for: SettingsScreen(), withTitle: "Настройки", withImageNamed: "settings")
+            self.getTab(for: ScoreScreen(), withTitle: "Баллы", withImageNamed: "Score"),
+            self.getTab(for: MapScreen(), withTitle: "Карта", withImageNamed: "Map"),
+            self.getTab(for: SettingsScreen(), withTitle: "Настройки", withImageNamed: "Settings")
         ]
     }
     
