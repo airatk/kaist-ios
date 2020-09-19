@@ -1,6 +1,6 @@
 //
 //  CompactLoginScreen.swift
-//  kaist
+//  Kaist
 //
 //  Created by Airat K on 13/8/19.
 //  Copyright © 2019 Airat K. All rights reserved.
@@ -21,7 +21,11 @@ class CompactLoginScreen: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.backgroundColor = .white
+        if #available(iOS 13.0, *) {
+            self.view.backgroundColor = .systemBackground
+        } else {
+            self.view.backgroundColor = .white
+        }
         
         self.setUpInputViewToolbar()
         self.setUpGroupTextField()

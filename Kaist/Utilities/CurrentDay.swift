@@ -1,6 +1,6 @@
 //
 //  CurrentDay.swift
-//  kaist
+//  Kaist
 //
 //  Created by Airat K on 3/7/19.
 //  Copyright © 2019 Airat K. All rights reserved.
@@ -46,17 +46,23 @@ struct CurrentDay {
         return [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ][self.weekday - 1]
     }
 
-    public static func date(shiftedToDays days: Int = 0) -> (day: Int, month: String) {
+    public static func date(shiftedToDays days: Int = 0) -> (day: Int, month: String, monthIndex: String) {
         let date = self.calendar.date(byAdding: .day, value: days, to: self.today)!
         
         let day = self.calendar.component(.day, from: date)
         let month = self.calendar.component(.month, from: date)
         
-        return (day: day, month: [
-            "января", "февраля", "марта", "апреля",
-            "мая", "июня", "июля", "августа",
-            "сентября", "октября", "ноября", "декабря"
-        ][month - 1])
+        return (
+            day: day,
+            month: [
+                "января", "февраля", "марта", "апреля",
+                "мая", "июня", "июля", "августа",
+                "сентября", "октября", "ноября", "декабря"
+            ][month - 1],
+            monthIndex: [
+                "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
+            ][month - 1]
+        )
     }
 
 }

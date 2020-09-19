@@ -1,6 +1,6 @@
 //
 //  ScoreScreen.swift
-//  kaist
+//  Kaist
 //
 //  Created by Airat K on 2/7/19.
 //  Copyright © 2019 Airat K. All rights reserved.
@@ -20,12 +20,18 @@ class ScoreScreen: AUIExpandableTableViewController {
     private var initialScoretable: Student.Scoretable?
     
     private var tests: Student.Scoretable?
-    private var evaluatedTests: Student.Scoretable?
+    private var courseWorks: Student.Scoretable?
     private var exams: Student.Scoretable?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if #available(iOS 13.0, *) {
+            self.view.backgroundColor = .systemBackground
+        } else {
+            self.view.backgroundColor = .white
+        }
         
         self.setUpTitle()
         
@@ -54,12 +60,10 @@ class ScoreScreen: AUIExpandableTableViewController {
     
     private func setUpTitle() {
         self.semesterInTitle.titleLabel?.font = .boldSystemFont(ofSize: 17)
-        self.semesterInTitle.setTitleColor(.black, for: .normal)
         self.semesterInTitle.setTitleColor(.gray, for: .highlighted)
         self.semesterInTitle.frame = self.navigationController!.navigationBar.frame
         self.semesterInTitle.addTarget(self, action: #selector(self.presentSemesterPickerSheet), for: .touchUpInside)
         
-        self.semestersFetchingIndicator.color = .black
         self.semestersFetchingIndicator.frame = self.navigationController!.navigationBar.frame
         
         self.changeSemestersFetchingIndicatorVisibility(isHidden: false)
@@ -83,9 +87,9 @@ class ScoreScreen: AUIExpandableTableViewController {
     private func setScoretable(_ scoretable: Student.Scoretable?) {
         self.initialScoretable = scoretable
         
-        self.tests = scoretable?.filter { $0["type"] == "зачёт" }
-        self.evaluatedTests = scoretable?.filter { $0["type"] == "зачёт с оценкой" }
         self.exams = scoretable?.filter { $0["type"] == "экзамен" }
+        self.courseWorks = scoretable?.filter { $0["type"] == "курсовая работа" }
+        self.tests = scoretable?.filter { $0["type"] == "зачёт" }
     }
     
     
@@ -145,9 +149,9 @@ extension ScoreScreen {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-            case 0: return self.tests?.count ?? 0
-            case 1: return self.evaluatedTests?.count ?? 0
-            case 2: return self.exams?.count ?? 0
+            case 0: return self.exams?.count ?? 0
+            case 1: return self.courseWorks?.count ?? 0
+            case 2: return self.tests?.count ?? 0
             
             default: return 0
         }
@@ -155,9 +159,9 @@ extension ScoreScreen {
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
-            case 0: return "зачёты"
-            case 1: return "зачёты с оценкой"
-            case 2: return "экзамены"
+            case 0: return "экзамены"
+            case 1: return "курсовые работы"
+            case 2: return "зачёты"
             
             default: return nil
         }
@@ -175,9 +179,9 @@ extension ScoreScreen {
         
         var sectionScoretable: Student.Scoretable {
             switch indexPath.section {
-                case 0: return self.tests!
-                case 1: return self.evaluatedTests!
-                case 2: return self.exams!
+                case 0: return self.exams!
+                case 1: return self.courseWorks!
+                case 2: return self.tests!
                 
                 default: return Student.Scoretable()
             }

@@ -1,6 +1,6 @@
 //
 //  SettingsScreen.swift
-//  kaist
+//  Kaist
 //
 //  Created by Airat K on 28/6/19.
 //  Copyright © 2019 Airat K. All rights reserved.
@@ -24,6 +24,12 @@ class SettingsScreen: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if #available(iOS 13.0, *) {
+            self.view.backgroundColor = .systemBackground
+        } else {
+            self.view.backgroundColor = .white
+        }
         
         self.navigationItem.title = "Настройки"
         
@@ -75,39 +81,38 @@ class SettingsScreen: UIViewController {
         self.groupLabel.translatesAutoresizingMaskIntoConstraints = false
         self.cardLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.nameLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 30),
+            self.nameLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 36),
             self.nameLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.nameLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30),
+            self.nameLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 36),
             
             self.instituteLabel.topAnchor.constraint(equalTo: self.nameLabel.bottomAnchor, constant: 20),
             self.instituteLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.instituteLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30),
+            self.instituteLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 36),
             
-            self.yearLabel.topAnchor.constraint(equalTo: self.instituteLabel.bottomAnchor, constant: 10),
+            self.yearLabel.topAnchor.constraint(equalTo: self.instituteLabel.bottomAnchor, constant: 8),
             self.yearLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.yearLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30),
+            self.yearLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 36),
             
-            self.groupLabel.topAnchor.constraint(equalTo: self.yearLabel.bottomAnchor, constant: 10),
+            self.groupLabel.topAnchor.constraint(equalTo: self.yearLabel.bottomAnchor, constant: 8),
             self.groupLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.groupLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30),
+            self.groupLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 36),
             
-            self.cardLabel.topAnchor.constraint(equalTo: self.groupLabel.bottomAnchor, constant: 10),
+            self.cardLabel.topAnchor.constraint(equalTo: self.groupLabel.bottomAnchor, constant: 8),
             self.cardLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.cardLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30)
+            self.cardLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 36)
         ])
     }
     
     private func setUpCompactUserInfo() {
         self.groupLabel.text = "Группа " + AppDelegate.shared.student.groupNumber!
         self.groupLabel.font = .boldSystemFont(ofSize: 18)
-        self.groupLabel.textColor = .black
         
         self.view.addSubview(self.groupLabel)
         self.groupLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.groupLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 30),
+            self.groupLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 36),
             self.groupLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.groupLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30)
+            self.groupLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 36)
         ])
     }
     
@@ -119,7 +124,7 @@ class SettingsScreen: UIViewController {
         self.resetSettingsButton.setTitleColor(.red, for: .normal)
         self.resetSettingsButton.setTitleColor(UIColor.red.withAlphaComponent(0.25), for: .highlighted)
         
-        self.resetSettingsButton.layer.borderWidth = 0.5
+        self.resetSettingsButton.layer.borderWidth = 0.8
         self.resetSettingsButton.layer.borderColor = UIColor.gray.cgColor
         self.resetSettingsButton.layer.cornerRadius = 10
         self.resetSettingsButton.clipsToBounds = true
@@ -127,9 +132,9 @@ class SettingsScreen: UIViewController {
         self.view.addSubview(self.resetSettingsButton)
         self.resetSettingsButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.resetSettingsButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -15),
+            self.resetSettingsButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -18),
             self.resetSettingsButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.resetSettingsButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30),
+            self.resetSettingsButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 36),
             self.resetSettingsButton.heightAnchor.constraint(equalToConstant: 60)
         ])
         

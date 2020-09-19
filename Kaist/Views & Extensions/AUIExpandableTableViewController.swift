@@ -1,6 +1,6 @@
 //
 //  AUIExpandableTableViewController.swift
-//  kaist
+//  Kaist
 //
 //  Created by Airat K on 19/8/19.
 //  Copyright © 2019 Airat K. All rights reserved.
@@ -86,7 +86,7 @@ extension AUIExpandableTableViewController {
             navBar.frame = navBar.frame.offsetBy(dx: 0, dy: -dy)
             tabBar.frame = tabBar.frame.offsetBy(dx: 0, dy: dy)
         }, completion: { (_) in
-            AppDelegate.shared.statusBarBlur.isHidden = self.previousBarsOffsetY < 1
+            (self.tabBarController as! AppController).statusBarBlur.isHidden = self.previousBarsOffsetY < 1
         })
     }
     

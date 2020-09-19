@@ -1,6 +1,6 @@
 //
 //  StudentSubjectsScreen.swift
-//  kaist
+//  Kaist
 //
 //  Created by Airat K on 28/6/19.
 //  Copyright © 2019 Airat K. All rights reserved.
@@ -19,6 +19,12 @@ class StudentSubjectsScreen: AUIExpandableTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if #available(iOS 13.0, *) {
+            self.view.backgroundColor = .systemBackground
+        } else {
+            self.view.backgroundColor = .white
+        }
         
         self.navigationItem.titleView = {
             let weektypeChooser = UISegmentedControl(items: [
@@ -53,10 +59,15 @@ class StudentSubjectsScreen: AUIExpandableTableViewController {
         
         guard AppDelegate.shared.student.isSetUp else {
             self.present({
-                let welcomeScreen = UINavigationController(rootViewController: WelcomeScreen())
-            
-                welcomeScreen.navigationBar.setBackgroundImage(UIImage(), for: .default)
-                welcomeScreen.navigationBar.shadowImage = UIImage()
+                let welcomeScreen: UINavigationController = UINavigationController(rootViewController: WelcomeScreen())
+                let emptyImage: UIImage = UIImage()
+                
+                welcomeScreen.navigationBar.setBackgroundImage(emptyImage, for: .default)
+                welcomeScreen.navigationBar.shadowImage = emptyImage
+                
+                if #available(iOS 13.0, *) {
+                    welcomeScreen.isModalInPresentation = true
+                }
                 
                 return welcomeScreen
             }(), animated: true)
@@ -152,6 +163,19 @@ extension StudentSubjectsScreen {
         let askedDayWeekday = self.schedule!.keys.sorted()[section]
         let date = CurrentDay.date(shiftedToDays: Int(askedDayWeekday)! - CurrentDay.weekday + (self.isNextWeekSelected ? 7 : 0))
         
+        var indexOfSubject = 0
+        
+        for subject in self.schedule!["\(section + 1)"]! {
+            if !subject["dayDate"]!.isEmpty &&
+                subject["dayDate"]! != "неч" && subject["dayDate"]! != "чет" &&
+                !subject["dayDate"]!.replacingOccurrences(of: " ", with: "").contains("\(date.day).\(date.monthIndex)") {
+                self.schedule!["\(section + 1)"]!.remove(at: indexOfSubject)
+                indexOfSubject -= 1
+            }
+            
+            indexOfSubject += 1
+        }
+        
         return "\(weekdays[askedDayWeekday]!), \(date.day) \(date.month)"
     }
     
@@ -190,7 +214,7 @@ extension StudentSubjectsScreen {
         if dates.isEmpty {
             subjectCell.hide(.dates)
         } else {
-            subjectCell.dates.text = dates
+            subjectCell.dates.text = dates.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: ",", with: ", ")
         }
         
         return subjectCell

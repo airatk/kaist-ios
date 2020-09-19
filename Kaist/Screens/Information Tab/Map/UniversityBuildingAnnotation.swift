@@ -1,6 +1,6 @@
 //
 //  UniversityBuildingAnnotation.swift
-//  kaist
+//  Kaist
 //
 //  Created by Airat K on 9/8/19.
 //  Copyright © 2019 Airat K. All rights reserved.
@@ -20,10 +20,10 @@ class UniversityBuildingAnnotation: NSObject, MKAnnotation {
     public var coordinate: CLLocationCoordinate2D
     
     
-    init(title: String?, subtitle: String?, coordinate: CLLocationCoordinate2D) {
-        self.title = title
-        self.subtitle = subtitle
-        self.coordinate = coordinate
+    init(title: Any, subtitle: Any, latitude: Any, longitude: Any) {
+        self.title = title as? String
+        self.subtitle = subtitle as? String
+        self.coordinate = CLLocationCoordinate2D(latitude: latitude as! Double, longitude: longitude as! Double)
     }
     
 }

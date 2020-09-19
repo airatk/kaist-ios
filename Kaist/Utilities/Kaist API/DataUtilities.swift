@@ -1,6 +1,6 @@
 //
 //  DataFetchingError.swift
-//  kaist
+//  Kaist
 //
 //  Created by Airat K on 18/7/19.
 //  Copyright © 2019 Airat K. All rights reserved.

@@ -1,5 +1,5 @@
 # Каист
-_iOS app for students of KNTRU-KAI to make thier daily routine more pleasant_
+_iOS app for students of KNTRU-KAI to make their daily routine more pleasant_
 
 ### Stack
 * Swift
