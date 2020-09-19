@@ -1,6 +1,6 @@
 //
 //  Student.swift
-//  kaist
+//  Kaist
 //
 //  Created by Airat K on 12/7/19.
 //  Copyright © 2019 Airat K. All rights reserved.
@@ -213,7 +213,13 @@ class Student {
                     let time = subject["dayTime"]!.split(separator: ":").map { Int($0) }
                     
                     let beginTime = calendar.date(from: DateComponents(calendar: calendar, hour: time[0], minute: time[1]))!
-                    let endTime = calendar.date(byAdding: DateComponents(hour: 1, minute: 30), to: beginTime)!
+                    let endTime = calendar.date(byAdding: {
+                        if subject["disciplType"] == "л.р." {
+                            return DateComponents(hour: 3, minute: time[0] == 11 ? 40 : 10)
+                        } else {
+                            return DateComponents(hour: 1, minute: 30)
+                        }
+                    }(), to: beginTime)!
                     
                     let begin = dateFormatter.string(from: beginTime)
                     let end = dateFormatter.string(from: endTime)
@@ -228,7 +234,7 @@ class Student {
                     }
                     
                     if building.contains("ОЛИМП") {
-                        building = "СК «Олимп»"
+                        building = "СК Олимп"
                         schedule[numberOfDay]![indexOfSubject]["audNum"] = ""
                     }
                     
@@ -417,15 +423,15 @@ class Student {
                     let title = try tableCells[1].text()
                     guard !title.isEmpty else { continue }
                     
-                    if title.hasSuffix(" (зач./оц.)") {
+                    if title.hasSuffix(" (экз.)") {
+                        subject["title"] = String(title.dropLast(7))
+                        subject["type"] = "экзамен"
+                    } else if title.hasSuffix(" (зач./оц.)") {
                         subject["title"] = String(title.dropLast(11))
-                        subject["type"] = "зачёт с оценкой"
+                        subject["type"] = "курсовая работа"
                     } else if title.hasSuffix(" (зач.)") {
                         subject["title"] = String(title.dropLast(7))
                         subject["type"] = "зачёт"
-                    } else if title.hasSuffix(" (экз.)") {
-                        subject["title"] = String(title.dropLast(7))
-                        subject["type"] = "экзамен"
                     }
                     
                     subject["1 gained"] = try tableCells[2].text()

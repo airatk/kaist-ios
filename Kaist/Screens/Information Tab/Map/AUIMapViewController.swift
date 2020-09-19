@@ -1,6 +1,6 @@
 //
 //  AUIMapViewController.swift
-//  kaist
+//  Kaist
 //
 //  Created by Airat K on 7/8/19.
 //  Copyright © 2019 Airat K. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  CurrentDay.swift
-//  kaist
+//  Kaist
 //
 //  Created by Airat K on 3/7/19.
 //  Copyright © 2019 Airat K. All rights reserved.

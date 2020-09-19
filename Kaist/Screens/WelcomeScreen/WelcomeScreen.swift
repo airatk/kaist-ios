@@ -1,6 +1,6 @@
 //
 //  WelcomeScreen.swift
-//  kaist
+//  Kaist
 //
 //  Created by Airat K on 12/8/19.
 //  Copyright © 2019 Airat K. All rights reserved.
@@ -24,7 +24,11 @@ class WelcomeScreen: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = .white
+        if #available(iOS 13.0, *) {
+            self.view.backgroundColor = .systemBackground
+        } else {
+            self.view.backgroundColor = .white
+        }
         
         self.setUpWelcomeLabel()
         self.setUpHintLabel()
@@ -77,14 +81,14 @@ class WelcomeScreen: UIViewController {
         self.fullLoginButton.translatesAutoresizingMaskIntoConstraints = false
         self.compactLoginButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.compactLoginButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -15),
+            self.compactLoginButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: self.view.frame.height - 130),
             self.compactLoginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.compactLoginButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30),
+            self.compactLoginButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 36),
             self.compactLoginButton.heightAnchor.constraint(equalToConstant: 60),
             
-            self.fullLoginButton.bottomAnchor.constraint(equalTo: self.compactLoginButton.topAnchor, constant: -10),
+            self.fullLoginButton.bottomAnchor.constraint(equalTo: self.compactLoginButton.topAnchor, constant: -12),
             self.fullLoginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.fullLoginButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 30),
+            self.fullLoginButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 36),
             self.fullLoginButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }

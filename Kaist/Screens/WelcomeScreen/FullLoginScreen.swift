@@ -1,6 +1,6 @@
 //
 //  FullLoginScreen.swift
-//  kaist
+//  Kaist
 //
 //  Created by Airat K on 13/8/19.
 //  Copyright © 2019 Airat K. All rights reserved.
@@ -44,7 +44,11 @@ class FullLoginScreen: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.backgroundColor = .white
+        if #available(iOS 13.0, *) {
+            self.view.backgroundColor = .systemBackground
+        } else {
+            self.view.backgroundColor = .white
+        }
         
         self.setUpTextFields()
         self.setUpActivityIndicators()
@@ -158,7 +162,11 @@ class FullLoginScreen: UIViewController {
         self.namePicker.delegate = self
         
         self.inputViewToolbar.tintColor = .black
-        self.inputViewToolbar.barTintColor = .darkWhite
+        if #available(iOS 13.0, *) {
+            self.inputViewToolbar.barTintColor = .systemGray3
+        } else {
+            self.inputViewToolbar.barTintColor = .darkWhite
+        }
         self.inputViewToolbar.isTranslucent = false
         self.inputViewToolbar.sizeToFit()
         self.inputViewToolbar.setItems([

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="j5A-Xy-HsD">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="j5A-Xy-HsD">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,28 +16,28 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreenLogo" translatesAutoresizingMaskIntoConstraints="NO" id="Lhy-pa-PLM">
-                                <rect key="frame" x="50" y="275" width="314" height="314"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="LaunchScreenLogo" translatesAutoresizingMaskIntoConstraints="NO" id="F8z-1r-VtV">
+                                <rect key="frame" x="36" y="277" width="342" height="342"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="Lhy-pa-PLM" secondAttribute="height" multiplier="1:1" id="8p7-Kt-8zV"/>
+                                    <constraint firstAttribute="width" secondItem="F8z-1r-VtV" secondAttribute="height" multiplier="1:1" id="7st-xK-RRw"/>
                                 </constraints>
                             </imageView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="hEa-8y-fMY"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="hEa-8y-fMY" firstAttribute="trailing" secondItem="Lhy-pa-PLM" secondAttribute="trailing" constant="50" id="6dP-Lb-HHU"/>
-                            <constraint firstItem="Lhy-pa-PLM" firstAttribute="leading" secondItem="hEa-8y-fMY" secondAttribute="leading" constant="50" id="b1L-Fx-OjE"/>
-                            <constraint firstItem="Lhy-pa-PLM" firstAttribute="centerY" secondItem="nWW-Qg-kY2" secondAttribute="centerY" constant="-16" id="k5w-4t-V8R"/>
+                            <constraint firstItem="F8z-1r-VtV" firstAttribute="centerX" secondItem="nWW-Qg-kY2" secondAttribute="centerX" id="EFW-3u-oqF"/>
+                            <constraint firstItem="F8z-1r-VtV" firstAttribute="centerY" secondItem="nWW-Qg-kY2" secondAttribute="centerY" id="XtJ-tE-HxJ"/>
+                            <constraint firstItem="F8z-1r-VtV" firstAttribute="leading" secondItem="nWW-Qg-kY2" secondAttribute="leading" constant="36" id="iVv-ae-PdR"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="hEa-8y-fMY"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gas-o5-BsU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-42" y="-186"/>
+            <point key="canvasLocation" x="-42.028985507246382" y="-186.16071428571428"/>
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchScreenLogo" width="480" height="480"/>
+        <image name="LaunchScreenLogo" width="1410" height="1410"/>
     </resources>
 </document>

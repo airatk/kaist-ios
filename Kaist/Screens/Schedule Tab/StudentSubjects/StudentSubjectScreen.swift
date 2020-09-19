@@ -1,6 +1,6 @@
 //
 //  StudentSubjectsScreen.swift
-//  kaist
+//  Kaist
 //
 //  Created by Airat K on 28/6/19.
 //  Copyright © 2019 Airat K. All rights reserved.
@@ -19,6 +19,12 @@ class StudentSubjectsScreen: AUIExpandableTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if #available(iOS 13.0, *) {
+            self.view.backgroundColor = .systemBackground
+        } else {
+            self.view.backgroundColor = .white
+        }
         
         self.navigationItem.titleView = {
             let weektypeChooser = UISegmentedControl(items: [
@@ -53,10 +59,15 @@ class StudentSubjectsScreen: AUIExpandableTableViewController {
         
         guard AppDelegate.shared.student.isSetUp else {
             self.present({
-                let welcomeScreen = UINavigationController(rootViewController: WelcomeScreen())
-            
-                welcomeScreen.navigationBar.setBackgroundImage(UIImage(), for: .default)
-                welcomeScreen.navigationBar.shadowImage = UIImage()
+                let welcomeScreen: UINavigationController = UINavigationController(rootViewController: WelcomeScreen())
+                let emptyImage: UIImage = UIImage()
+                
+                welcomeScreen.navigationBar.setBackgroundImage(emptyImage, for: .default)
+                welcomeScreen.navigationBar.shadowImage = emptyImage
+                
+                if #available(iOS 13.0, *) {
+                    welcomeScreen.isModalInPresentation = true
+                }
                 
                 return welcomeScreen
             }(), animated: true)
