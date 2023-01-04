@@ -19,7 +19,6 @@
 		606B379422CAA07F00929369 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 606B379322CAA07F00929369 /* LaunchScreen.storyboard */; };
 		6078FBA423D306A70086DC28 /* Pods_Kaist.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8B0C209EC1A4ADBC54564D4 /* Pods_Kaist.framework */; };
 		6087CE4825DD03ED00784F21 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 6087CE4625DD03ED00784F21 /* README.md */; };
-		6087CE4925DD03ED00784F21 /* META.md in Resources */ = {isa = PBXBuildFile; fileRef = 6087CE4725DD03ED00784F21 /* META.md */; };
 		6087CE4C25DD041400784F21 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 6087CE4B25DD041400784F21 /* .gitignore */; };
 		608843FF23031968009C11F2 /* FullLoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608843FE23031968009C11F2 /* FullLoginScreen.swift */; };
 		608844012303197E009C11F2 /* CompactLoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608844002303197E009C11F2 /* CompactLoginScreen.swift */; };
@@ -53,7 +52,6 @@
 		606B379122CA858900929369 /* AppController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppController.swift; sourceTree = "<group>"; };
 		606B379322CAA07F00929369 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6087CE4625DD03ED00784F21 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		6087CE4725DD03ED00784F21 /* META.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = META.md; sourceTree = "<group>"; };
 		6087CE4B25DD041400784F21 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		608843FE23031968009C11F2 /* FullLoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullLoginScreen.swift; sourceTree = "<group>"; };
 		608844002303197E009C11F2 /* CompactLoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactLoginScreen.swift; sourceTree = "<group>"; };
@@ -147,7 +145,6 @@
 		6068568A22C610420010D324 = {
 			isa = PBXGroup;
 			children = (
-				6087CE4725DD03ED00784F21 /* META.md */,
 				6087CE4625DD03ED00784F21 /* README.md */,
 				6087CE4B25DD041400784F21 /* .gitignore */,
 				6068569522C610420010D324 /* Kaist */,
@@ -294,7 +291,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1020;
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1320;
 				ORGANIZATIONNAME = "Airat K";
 				TargetAttributes = {
 					6068569222C610420010D324 = {
@@ -328,7 +325,6 @@
 				60574CCE230054DB000723E3 /* UniversityBuildings.plist in Resources */,
 				6068569E22C610430010D324 /* Assets.xcassets in Resources */,
 				6087CE4825DD03ED00784F21 /* README.md in Resources */,
-				6087CE4925DD03ED00784F21 /* META.md in Resources */,
 				6087CE4C25DD041400784F21 /* .gitignore in Resources */,
 				606B379422CAA07F00929369 /* LaunchScreen.storyboard in Resources */,
 			);

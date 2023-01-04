@@ -65,7 +65,7 @@ class WelcomeScreen: UIViewController {
         NSLayoutConstraint.activate([
             self.hintLabel.topAnchor.constraint(equalTo: self.welcomeLabel.bottomAnchor, constant: 25),
             self.hintLabel.leadingAnchor.constraint(equalTo: self.welcomeLabel.leadingAnchor),
-            self.hintLabel.widthAnchor.constraint(equalToConstant: 260)
+            self.hintLabel.trailingAnchor.constraint(equalTo: self.welcomeLabel.trailingAnchor)
         ])
     }
     
@@ -81,7 +81,7 @@ class WelcomeScreen: UIViewController {
         self.fullLoginButton.translatesAutoresizingMaskIntoConstraints = false
         self.compactLoginButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.compactLoginButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: self.view.frame.height - 130),
+            self.compactLoginButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -12),
             self.compactLoginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             self.compactLoginButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 36),
             self.compactLoginButton.heightAnchor.constraint(equalToConstant: 60),

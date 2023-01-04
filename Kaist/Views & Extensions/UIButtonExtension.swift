@@ -11,7 +11,7 @@ import UIKit
 
 extension UIButton {
     
-    open func setEnabled(_ isEnabled: Bool) {
+    public func setEnabled(_ isEnabled: Bool) {
         self.isEnabled = isEnabled
         self.backgroundColor = isEnabled ? .lightBlue : .dimmedBlue
     }

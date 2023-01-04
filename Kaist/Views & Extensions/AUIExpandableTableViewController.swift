@@ -37,9 +37,10 @@ class AUIExpandableTableViewController: UITableViewController {
 extension AUIExpandableTableViewController {
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard scrollView.contentOffset.y >= 0 &&  // Is not at the top edge
-            scrollView.contentOffset.y < scrollView.contentSize.height - scrollView.frame.height  // Is not at the bottom adge
-        else {
+        let isAtTopEdge: Bool = scrollView.contentOffset.y < 0
+        let isAtBottomEdge: Bool = scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.frame.height
+        
+        guard !isAtTopEdge && !isAtBottomEdge else {
             self.offsetBarsBy(dy: -self.previousBarsOffsetY, animated: true)
             self.previousBarsOffsetY = 0
             return
