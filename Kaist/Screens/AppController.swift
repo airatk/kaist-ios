@@ -22,12 +22,11 @@ class AppController: UITabBarController {
         
         self.view.addSubview(self.statusBarBlur)
         
-        let currentDate = CurrentDay.date()
+        let currentDate = CalendarService.date()
         let dateTitle = "\(currentDate.day) \(currentDate.month)"
         
         self.viewControllers = [
-            self.getTab(for: StudentSubjectsScreen(), withTitle: dateTitle, withImageNamed: CurrentDay.imageNameWeekday),
-            self.getTab(for: ScoreScreen(), withTitle: "Баллы", withImageNamed: "Score"),
+            self.getTab(for: StudentSubjectsScreen(), withTitle: dateTitle, withImageNamed: CalendarService.imageNameWeekday),
             self.getTab(for: MapScreen(), withTitle: "Карта", withImageNamed: "Map"),
             self.getTab(for: SettingsScreen(), withTitle: "Настройки", withImageNamed: "Settings")
         ]

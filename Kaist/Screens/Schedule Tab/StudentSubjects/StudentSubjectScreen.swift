@@ -28,7 +28,7 @@ class StudentSubjectsScreen: AUIExpandableTableViewController {
         
         self.navigationItem.titleView = {
             let weektypeChooser = UISegmentedControl(items: [
-                "текущая, \(CurrentDay.isWeekEven ? "чётная" : "нечётная")",
+                "текущая, \(CalendarService.isWeekEven ? "чётная" : "нечётная")",
                 "следующая"
             ])
             
@@ -78,9 +78,7 @@ class StudentSubjectsScreen: AUIExpandableTableViewController {
             
             return
         }
-        
-        self.tabBarController?.tabBar.items?[1].isEnabled = AppDelegate.shared.student.isFull
-        
+
         if self.initialSchedule == nil {
             self.tableView.setContentOffset(CGPoint(x: 0, y: -100), animated: true)
             self.refreshControl?.beginRefreshing()
@@ -94,7 +92,7 @@ class StudentSubjectsScreen: AUIExpandableTableViewController {
         
         guard self.schedule != nil else { return }  // Still need to change self.schedule itself, so no `let` is allowed
         
-        let oppositeWeektypeTrait = (self.isNextWeekSelected ? CurrentDay.isWeekEven : !CurrentDay.isWeekEven) ? "чет" : "неч"
+        let oppositeWeektypeTrait = (self.isNextWeekSelected ? CalendarService.isWeekEven : !CalendarService.isWeekEven) ? "чет" : "неч"
         var indexOfSubject = 0
         
         for (numberOfDay, subjects) in self.schedule! {
@@ -161,7 +159,7 @@ extension StudentSubjectsScreen {
         ]
         
         let askedDayWeekday = self.schedule!.keys.sorted()[section]
-        let date = CurrentDay.date(shiftedToDays: Int(askedDayWeekday)! - CurrentDay.weekday + (self.isNextWeekSelected ? 7 : 0))
+        let date = CalendarService.date(shiftedToDays: Int(askedDayWeekday)! - CalendarService.weekday + (self.isNextWeekSelected ? 7 : 0))
         
         var indexOfSubject = 0
         
@@ -182,7 +180,7 @@ extension StudentSubjectsScreen {
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         guard let weekday = view as? UITableViewHeaderFooterView else { return }
         
-        weekday.textLabel?.textColor = ((section + 1) == CurrentDay.weekday && !self.isNextWeekSelected) ? .lightBlue : .darkGray
+        weekday.textLabel?.textColor = ((section + 1) == CalendarService.weekday && !self.isNextWeekSelected) ? .lightBlue : .darkGray
         weekday.textLabel?.textColor = weekday.textLabel?.textColor.withAlphaComponent(0.8)
         weekday.textLabel?.font = .boldSystemFont(ofSize: 12)
     }

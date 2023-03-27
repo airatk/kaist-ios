@@ -10,112 +10,200 @@ import UIKit
 
 
 class WelcomeScreen: UIViewController {
-    
-    private let welcomeLabel = UILabel()
-    private let hintLabel = UILabel()
-    
-    private var fullLoginButton: UIButton!
-    private var compactLoginButton: UIButton!
-    
-    private let fullLoginScreen = FullLoginScreen()
-    private let compactLoginScreen = CompactLoginScreen()
-    
-    
+
+    private let welcomeView: UIStackView = UIStackView()
+
+    private let headerView: UIStackView = UIStackView()
+    private let welcomeLabel: UILabel = UILabel()
+    private let descriptionLabel: UILabel = UILabel()
+
+    private let groupNumberView: UIStackView = UIStackView()
+    private let groupNumberField: RoundedTextField = RoundedTextField()
+    private let checkGroupNumberButton: UIButton = UIButton()
+    private let groupNumberHint: UILabel = UILabel()
+    private let groupNumberActivityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.presentationController?.delegate = self
+
+        self.view.backgroundColor = .systemBackground
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard)))
+        self.view.addSubview(self.welcomeView)
+
+        self.setUpWelcomeView()
+    }
+
+}
+
+extension WelcomeScreen {
+
+    private func setUpWelcomeView() {
+        self.welcomeView.axis = .vertical
+        self.welcomeView.spacing = 32
+
+        self.welcomeView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            self.welcomeView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 24),
+            self.welcomeView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 16),
+            self.welcomeView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -16),
+        ])
+
+        self.welcomeView.addArrangedSubview(self.headerView)
+        self.welcomeView.addArrangedSubview(self.groupNumberView)
+
+        self.setUpHeaderView()
+        self.setUpGroupNumberView()
+    }
+
+    private func setUpHeaderView() {
+        self.headerView.axis = .vertical
+        self.headerView.spacing = 16
+
+        self.headerView.addArrangedSubview(self.welcomeLabel)
+        self.headerView.addArrangedSubview(self.descriptionLabel)
+
+        self.welcomeLabel.text = "Добро пожаловать♥️"
+        self.welcomeLabel.numberOfLines = 0
+        self.welcomeLabel.font = .boldSystemFont(ofSize: 42)
+
+        self.descriptionLabel.text = "«Благодарю за скачивание моего приложения! Уверен, лучше приложения для каиста ты не найдёшь» — разработчик."
+        self.descriptionLabel.numberOfLines = 0
+    }
+
+    private func setUpGroupNumberView() {
+        self.groupNumberView.axis = .vertical
+        self.groupNumberView.spacing = 16
+
+        self.groupNumberView.addArrangedSubview(self.makeFormRow(usingField: self.groupNumberField, usingButton: self.checkGroupNumberButton))
+        self.groupNumberView.addArrangedSubview(self.groupNumberHint)
+
+        self.groupNumberField.placeholder = "Номер группы"
+        self.groupNumberField.textContentType = .telephoneNumber
+        self.groupNumberField.keyboardType = .asciiCapableNumberPad
+        self.groupNumberField.returnKeyType = .send
+        self.groupNumberField.delegate = self
+
+        self.groupNumberHint.text = "Введи номер твоей учебной группы (например, 4201😉)."
+        self.groupNumberHint.textColor = .systemGray
+        self.groupNumberHint.numberOfLines = 0
+        self.groupNumberHint.font = .systemFont(ofSize: 13)
+
+        self.checkGroupNumberButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+        self.checkGroupNumberButton.setImage(UIImage(), for: .disabled)
+        self.checkGroupNumberButton.backgroundColor = .systemGray
+        self.checkGroupNumberButton.tintColor = .systemBackground
+        self.checkGroupNumberButton.layer.cornerRadius = 12
+        self.checkGroupNumberButton.clipsToBounds = true
+        self.checkGroupNumberButton.addTarget(self, action: #selector(self.checkGroupNumber), for: .touchUpInside)
+        self.checkGroupNumberButton.addActivityIndicator(self.groupNumberActivityIndicator)
         
-        if #available(iOS 13.0, *) {
-            self.view.backgroundColor = .systemBackground
-        } else {
-            self.view.backgroundColor = .white
+        self.groupNumberActivityIndicator.color = .systemBackground
+    }
+
+
+    private func makeFormRow(usingField textField: UITextField, usingButton button: UIButton) -> UIStackView {
+        let formRow: UIStackView = UIStackView(arrangedSubviews: [ textField, button ])
+
+        formRow.axis = .horizontal
+        formRow.spacing = 8
+
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        button.translatesAutoresizingMaskIntoConstraints = false
+
+        let universalSize: CGFloat = 60.0
+
+        NSLayoutConstraint.activate([
+            textField.heightAnchor.constraint(equalToConstant: universalSize),
+
+            button.widthAnchor.constraint(equalToConstant: universalSize),
+            button.heightAnchor.constraint(equalToConstant: universalSize),
+        ])
+
+        return formRow
+    }
+
+}
+
+extension WelcomeScreen: UIAdaptivePresentationControllerDelegate {
+
+    func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        return false
+    }
+
+}
+
+extension WelcomeScreen: UITextFieldDelegate {
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        UIView.popAnimate {
+            self.headerView.hideChangingTransparency()
         }
-        
-        self.setUpWelcomeLabel()
-        self.setUpHintLabel()
-        self.setUpLoginButtons()
     }
-    
-    
-    private func setUpWelcomeLabel() {
-        self.welcomeLabel.text = "Добро\nпожаловать♥️"
-        self.welcomeLabel.font = .boldSystemFont(ofSize: 34)
-        self.welcomeLabel.numberOfLines = 2
-        
-        self.view.addSubview(self.welcomeLabel)
-        self.welcomeLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.welcomeLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-            self.welcomeLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.welcomeLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 36)
-        ])
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        UIView.popAnimate {
+            self.headerView.showChangingTransparency()
+        }
     }
-    
-    private func setUpHintLabel() {
-        self.hintLabel.text = [
-            "Номер зачётки позволит видеть баллы — не только расписание.\n",
-            "В студенческом билете он, кстати, тот же.\n\n",
-            "Выбери желаемый путь настройки."
-        ].joined()
-        self.hintLabel.font = .systemFont(ofSize: 16)
-        self.hintLabel.textColor = .gray
-        self.hintLabel.numberOfLines = 0
-        
-        self.view.addSubview(self.hintLabel)
-        self.hintLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.hintLabel.topAnchor.constraint(equalTo: self.welcomeLabel.bottomAnchor, constant: 25),
-            self.hintLabel.leadingAnchor.constraint(equalTo: self.welcomeLabel.leadingAnchor),
-            self.hintLabel.trailingAnchor.constraint(equalTo: self.welcomeLabel.trailingAnchor)
-        ])
+
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text as? NSString else { return false }
+
+        textField.text = text.replacingCharacters(in: range, with: string).trimmingCharacters(in: .whitespacesAndNewlines)
+
+        return false
     }
-    
-    private func setUpLoginButtons() {
-        self.fullLoginButton = self.getLoginButton(withTitle: "с зачёткой")
-        self.compactLoginButton = self.getLoginButton(withTitle: "без зачётки")
-        
-        self.fullLoginButton.addTarget(self, action: #selector(self.throwToFullLoginController), for: .touchUpInside)
-        self.compactLoginButton.addTarget(self, action: #selector(self.throwToCompactLoginController), for: .touchUpInside)
-        
-        self.view.addSubview(self.fullLoginButton)
-        self.view.addSubview(self.compactLoginButton)
-        self.fullLoginButton.translatesAutoresizingMaskIntoConstraints = false
-        self.compactLoginButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.compactLoginButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -12),
-            self.compactLoginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.compactLoginButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 36),
-            self.compactLoginButton.heightAnchor.constraint(equalToConstant: 60),
-            
-            self.fullLoginButton.bottomAnchor.constraint(equalTo: self.compactLoginButton.topAnchor, constant: -12),
-            self.fullLoginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.fullLoginButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 36),
-            self.fullLoginButton.heightAnchor.constraint(equalToConstant: 60)
-        ])
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+        case self.groupNumberField:
+            self.checkGroupNumber()
+
+        default:
+            break
+        }
+
+        return true
     }
-    
-    private func getLoginButton(withTitle title: String) -> UIButton {
-        let loginButton = UIButton()
-        
-        loginButton.setTitle(title, for: .normal)
-        
-        loginButton.setTitleColor(.white, for: .normal)
-        loginButton.setTitleColor(.lightText, for: .highlighted)
-        
-        loginButton.backgroundColor = .lightBlue
-        
-        loginButton.layer.cornerRadius = 10
-        loginButton.clipsToBounds = true
-        
-        return loginButton
+
+
+    @objc
+    private func dismissKeyboard() {
+        self.view.endEditing(true)
     }
-    
-    
-    @objc private func throwToFullLoginController() {
-        self.navigationController?.pushViewController(self.fullLoginScreen, animated: true)
+
+    @objc
+    private func checkGroupNumber() {
+        guard let groupNumber = self.groupNumberField.text, !groupNumber.isEmpty else {
+            self.groupNumberField.shake()
+            return
+        }
+
+        self.dismissKeyboard()
+        self.groupNumberActivityIndicator.startAnimating()
+        self.checkGroupNumberButton.isEnabled = false
+
+        AppDelegate.shared.student.groupNumber = self.groupNumberField.text
+
+        AppDelegate.shared.student.getGroupScheduleID { (groupScheduleID, error) in
+            defer {
+                self.groupNumberActivityIndicator.stopAnimating()
+                self.checkGroupNumberButton.isEnabled = true
+            }
+
+            if let error = error {
+                ErrorAlert.show(self, errorTitle: "Ошибка входа", errorMessage: error.localizedDescription)
+                return
+            }
+
+            AppDelegate.shared.student.groupScheduleID = groupScheduleID
+
+            self.dismiss(animated: true)
+        }
     }
-    
-    @objc private func throwToCompactLoginController() {
-        self.navigationController?.pushViewController(self.compactLoginScreen, animated: true)
-    }
-    
+
 }

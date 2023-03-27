@@ -17,3 +17,15 @@ extension UIButton {
     }
     
 }
+
+
+extension UIButton {
+
+    func addActivityIndicator(_ activityIndicator: UIActivityIndicatorView) {
+        self.addSubview(activityIndicator)
+
+        activityIndicator.center = self.center
+        activityIndicator.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
+    }
+
+}

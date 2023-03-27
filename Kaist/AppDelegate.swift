@@ -9,9 +9,10 @@
 import UIKit
 
 
-@UIApplicationMain class AppDelegate: UIResponder, UIApplicationDelegate {
+@main
+class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    internal var window: UIWindow?
+    var window: UIWindow?
     
     public let student = Student()
     

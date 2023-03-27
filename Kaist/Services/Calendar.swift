@@ -9,7 +9,7 @@
 import Foundation
 
 
-struct CurrentDay {
+struct CalendarService {
     
     private static let calendar = Calendar(identifier: .gregorian)
     private static let today = Date()

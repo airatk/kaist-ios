@@ -21,9 +21,3 @@ enum ScheduleType: String {
     case classes = "schedule"
     case exams = "examSchedule"
 }
-
-enum DataType: String {
-    case years = "p_kurs"
-    case groups = "p_group"
-    case names = "p_stud"
-}
