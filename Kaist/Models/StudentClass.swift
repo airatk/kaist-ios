@@ -40,32 +40,75 @@ struct StudentClass: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        self.dates = try container.decode(String.self, forKey: .dayDate).trimmingCharacters(in: .whitespaces)
-
-        let auditorium = try container.decode(String.self, forKey: .audNum).trimmingCharacters(in: .whitespaces)
-        self.auditorium = auditorium.contains("----") ? "" : auditorium
-
-        self.discipline = try container.decode(String.self, forKey: .disciplName).trimmingCharacters(in: .whitespacesAndNewlines)
-
-        let building = try container.decode(String.self, forKey: .buildNum).trimmingCharacters(in: .whitespaces)
-        self.building = building.contains("----") ? "" : building
-
-        self.departmentUnit = try container.decode(String.self, forKey: .orgUnitName).trimmingCharacters(in: .whitespacesAndNewlines)
-        self.startTime = try container.decode(String.self, forKey: .dayTime).trimmingCharacters(in: .whitespaces)
-        self.weekday = try container.decode(String.self, forKey: .dayNum).trimmingCharacters(in: .whitespaces)
-        self.isJoint = !(try container.decode(String.self, forKey: .potok).isEmpty)
-        self.lecturer = try container.decode(String.self, forKey: .prepodName).trimmingCharacters(in: .whitespaces).capitalized
-
-        let rawClassType = try container.decode(String.self, forKey: .disciplType).trimmingCharacters(in: .whitespaces)
-        self.type = classTypeMapping[rawClassType, default: rawClassType]
+        self.dates = format(dates: try container.decode(String.self, forKey: .dayDate))
+        self.auditorium = format(auditorium: try container.decode(String.self, forKey: .audNum))
+        self.discipline = format(discipline: try container.decode(String.self, forKey: .disciplName))
+        self.building = format(building: try container.decode(String.self, forKey: .buildNum))
+        self.departmentUnit = format(departmentUnit: try container.decode(String.self, forKey: .orgUnitName))
+        self.startTime = format(startTime: try container.decode(String.self, forKey: .dayTime))
+        self.weekday = format(weekday: try container.decode(String.self, forKey: .dayNum))
+        self.isJoint = format(isJoint: try container.decode(String.self, forKey: .potok))
+        self.lecturer = format(lecturer: try container.decode(String.self, forKey: .prepodName))
+        self.type = format(type: try container.decode(String.self, forKey: .disciplType))
     }
 
 }
 
 
-let classTypeMapping: [String: String] = [
-    "лек": "лекция",
-    "пр": "практика",
-    "л.р.": "лабораторная работа",
-    "конс": "консультация",
-]
+fileprivate func format(dates rawDates: String) -> String {
+    return rawDates.trimmingCharacters(in: .whitespaces)
+}
+
+fileprivate func format(auditorium rawAuditorium: String) -> String {
+    let formatted: String = rawAuditorium.trimmingCharacters(in: .whitespaces)
+
+    guard !formatted.contains("----"), formatted != "КСК КАИ ОЛИМП" else { return "" }
+
+    return "в аудитории \(formatted)"
+}
+
+fileprivate func format(discipline rawDiscipline: String) -> String {
+    return rawDiscipline.trimmingCharacters(in: .whitespaces)
+}
+
+fileprivate func format(building rawBuilding: String) -> String {
+    let formatted: String = rawBuilding.trimmingCharacters(in: .whitespaces)
+
+    guard !formatted.contains("----") else { return "" }
+    guard formatted != "КСК КАИ ОЛИМП" else { return "в КСК «Олимп»" }
+
+    return "в \(formatted)ке"
+}
+
+fileprivate func format(departmentUnit rawDepartmentUnit: String) -> String {
+    return rawDepartmentUnit.trimmingCharacters(in: .whitespaces)
+}
+
+fileprivate func format(startTime rawStartTime: String) -> String {
+    let formatted: String = rawStartTime.trimmingCharacters(in: .whitespaces)
+
+    return "с \(formatted)"
+}
+
+fileprivate func format(weekday rawWeekday: String) -> String {
+    return rawWeekday.trimmingCharacters(in: .whitespaces)
+}
+
+fileprivate func format(isJoint rawIsJoint: String) -> Bool {
+    return !rawIsJoint.trimmingCharacters(in: .whitespaces).isEmpty
+}
+
+fileprivate func format(lecturer rawLecturer: String) -> String {
+    return rawLecturer.trimmingCharacters(in: .whitespaces).capitalized
+}
+
+fileprivate func format(type rawType: String) -> String {
+    let formatted: String = rawType.trimmingCharacters(in: .whitespaces)
+
+    return [
+        "лек": "лекция",
+        "пр": "практика",
+        "л.р.": "лабораторная работа",
+        "конс": "консультация",
+    ][formatted, default: formatted]
+}
