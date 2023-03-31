@@ -1,5 +1,5 @@
 //
-//  UITextFieldExtenstion.swift
+//  RoundedTextField.swift
 //  Kaist
 //
 //  Created by Airat K on 27/3/2023.
@@ -29,7 +29,7 @@ class RoundedTextField: UITextField {
     override func textRect(forBounds bounds: CGRect) -> CGRect {
         return super.textRect(forBounds: bounds).inset(by: self.insets)
     }
-    
+
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
         return super.textRect(forBounds: bounds).inset(by: self.insets)
     }

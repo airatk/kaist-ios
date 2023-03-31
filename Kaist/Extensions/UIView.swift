@@ -16,6 +16,9 @@ extension UIView {
         UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 500.0, initialSpringVelocity: 0.0, animations: animations)
     }
 
+}
+
+extension UIView {
 
     func hideChangingTransparency() {
         self.alpha = 0.0
@@ -27,6 +30,9 @@ extension UIView {
         self.isHidden = false
     }
 
+}
+
+extension UIView {
 
     func shake(for duration: TimeInterval = 0.2, withTranslation translation: Float = 4, count: Float = 3) {
         let animation: CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "transform.translation.x")

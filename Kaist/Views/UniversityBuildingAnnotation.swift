@@ -11,19 +11,19 @@ import MapKit
 
 
 class UniversityBuildingAnnotation: NSObject, MKAnnotation {
-    
-    public static let reuseID = "UniversityBuildingAnnotation"
+
+    public static let reuseId = "UniversityBuildingAnnotation"
     public static let clusteringID = "UniversityBuildingsCluster"
-    
+
     public var title: String?
     public var subtitle: String?
     public var coordinate: CLLocationCoordinate2D
-    
-    
+
+
     init(title: Any, subtitle: Any, latitude: Any, longitude: Any) {
         self.title = title as? String
         self.subtitle = subtitle as? String
         self.coordinate = CLLocationCoordinate2D(latitude: latitude as! Double, longitude: longitude as! Double)
     }
-    
+
 }

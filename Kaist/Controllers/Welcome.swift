@@ -1,5 +1,5 @@
 //
-//  WelcomeScreen.swift
+//  WelcomeController.swift
 //  Kaist
 //
 //  Created by Airat K on 12/8/19.
@@ -9,7 +9,7 @@
 import UIKit
 
 
-class WelcomeScreen: UIViewController {
+class WelcomeController: UIViewController {
 
     private let welcomeView: UIStackView = UIStackView()
 
@@ -38,7 +38,7 @@ class WelcomeScreen: UIViewController {
 
 }
 
-extension WelcomeScreen {
+extension WelcomeController {
 
     private func setUpWelcomeView() {
         self.welcomeView.axis = .vertical
@@ -70,7 +70,7 @@ extension WelcomeScreen {
         self.welcomeLabel.numberOfLines = 0
         self.welcomeLabel.font = .boldSystemFont(ofSize: 42)
 
-        self.descriptionLabel.text = "«Благодарю за скачивание моего приложения! Уверен, лучше приложения для каиста ты не найдёшь» — разработчик."
+        self.descriptionLabel.text = "Расписание твоих занятий и занятий преподавателей, местоположения каёвских зданий, чётность учебной недели — всё для тебя в этом приложении, каист!✈️"
         self.descriptionLabel.numberOfLines = 0
     }
 
@@ -87,7 +87,7 @@ extension WelcomeScreen {
         self.groupNumberField.returnKeyType = .send
         self.groupNumberField.delegate = self
 
-        self.groupNumberHint.text = "Введи номер твоей учебной группы (например, 4201😉)."
+        self.groupNumberHint.text = "Введи номер твоей учебной группы (например, 4201)."
         self.groupNumberHint.textColor = .systemGray
         self.groupNumberHint.numberOfLines = 0
         self.groupNumberHint.font = .systemFont(ofSize: 13)
@@ -100,7 +100,7 @@ extension WelcomeScreen {
         self.checkGroupNumberButton.clipsToBounds = true
         self.checkGroupNumberButton.addTarget(self, action: #selector(self.checkGroupNumber), for: .touchUpInside)
         self.checkGroupNumberButton.addActivityIndicator(self.groupNumberActivityIndicator)
-        
+
         self.groupNumberActivityIndicator.color = .systemBackground
     }
 
@@ -128,7 +128,7 @@ extension WelcomeScreen {
 
 }
 
-extension WelcomeScreen: UIAdaptivePresentationControllerDelegate {
+extension WelcomeController: UIAdaptivePresentationControllerDelegate {
 
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
         return false
@@ -136,7 +136,7 @@ extension WelcomeScreen: UIAdaptivePresentationControllerDelegate {
 
 }
 
-extension WelcomeScreen: UITextFieldDelegate {
+extension WelcomeController: UITextFieldDelegate {
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
         UIView.popAnimate {
@@ -187,9 +187,9 @@ extension WelcomeScreen: UITextFieldDelegate {
         self.groupNumberActivityIndicator.startAnimating()
         self.checkGroupNumberButton.isEnabled = false
 
-        AppDelegate.shared.student.groupNumber = self.groupNumberField.text
+        StudentApiService.client.groupNumber = self.groupNumberField.text
 
-        AppDelegate.shared.student.getGroupScheduleID { (groupScheduleID, error) in
+        StudentApiService.client.getGroup { (group, error) in
             defer {
                 self.groupNumberActivityIndicator.stopAnimating()
                 self.checkGroupNumberButton.isEnabled = true
@@ -200,7 +200,7 @@ extension WelcomeScreen: UITextFieldDelegate {
                 return
             }
 
-            AppDelegate.shared.student.groupScheduleID = groupScheduleID
+            StudentApiService.client.groupScheduleId = group?.scheduleId
 
             self.dismiss(animated: true)
         }

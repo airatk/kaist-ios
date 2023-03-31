@@ -10,17 +10,17 @@ import UIKit
 
 
 extension UIColor {
-    
+
     public class var lightBlue: UIColor {
         return UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
     }
-    
+
     public class var dimmedBlue: UIColor {
         return UIColor(red: 102.0/255.0, green: 176.0/255.0, blue: 255.0/255.0, alpha: 1.0)
     }
-    
+
     public class var darkWhite: UIColor {
         return UIColor(red: 209.0/255.0, green: 212.0/255.0, blue: 218.0/255.0, alpha: 1.0)
     }
-    
+
 }

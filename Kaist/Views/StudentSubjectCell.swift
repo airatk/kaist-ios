@@ -1,5 +1,5 @@
 //
-//  StudentSubjectCell.swift
+//  StudentClassCell.swift
 //  Kaist
 //
 //  Created by Airat K on 17/7/19.
@@ -9,14 +9,13 @@
 import UIKit
 
 
-class StudentSubjectCell: UITableViewCell {
-    
-    public static let reuseID = "SubjectCell"
-    
-    
+class StudentClassCell: UITableViewCell {
+
+    public static let reuseId = "StudentClassCell"
+
     private let iconSize: CGFloat = 14
     private let iconRightMagrin: CGFloat = 8
-    
+
     public let title = UILabel()
     public let type = UILabel()
     public let lecturerIcon = UIImageView(image: UIImage(named: "Lecturer"))
@@ -27,95 +26,95 @@ class StudentSubjectCell: UITableViewCell {
     public let time = UILabel()
     public let place = UILabel()
     public let dates = UILabel()
-    
+
     private var departmentToLecturerConstraint = NSLayoutConstraint()
     private var departmentToTypeConstraint = NSLayoutConstraint()
-    
+
     private var bottomToDatesConstraint = NSLayoutConstraint()
     private var bottomToTimeConstraint = NSLayoutConstraint()
     private var bottomToTitleConstraint = NSLayoutConstraint()
-    
-    
+
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+
         self.setUpSubviews()
         self.addSubviews()
-        
+
         self.selectionStyle = .none
     }
-    
-    
+
+
     override func prepareForReuse() {
         super.prepareForReuse()
-        
+
         self.title.text = nil
-        
+
         self.type.isHidden = false
         self.type.text = nil
-        
+
         self.lecturerIcon.isHidden = false
         self.lecturer.isHidden = false
         self.lecturer.text = nil
-        
+
         self.departmentIcon.isHidden = false
         self.department.isHidden = false
         self.department.text = nil
         self.departmentToTypeConstraint.isActive = false
         self.departmentToLecturerConstraint.isActive = true
-        
+
         self.coordinatesIcon.isHidden = false
         self.time.isHidden = false
         self.time.text = nil
         self.place.isHidden = false
         self.place.text = nil
-        
+
         self.dates.isHidden = false
         self.dates.text = nil
-        
+
         self.bottomToTitleConstraint.isActive = false
         self.bottomToTimeConstraint.isActive = false
         self.bottomToDatesConstraint.isActive = true
     }
-    
+
 }
 
-extension StudentSubjectCell {
-    
+extension StudentClassCell {
+
     private func setUpSubviews() {
         let largeFont = UIFont.boldSystemFont(ofSize: 16)
         let middleFont = UIFont.systemFont(ofSize: 14)
         let smallFont = UIFont.systemFont(ofSize: 12)
-        
+
         self.title.font = largeFont
         self.title.numberOfLines = 0
-        
+
         self.type.font = smallFont
         self.type.textColor = .gray
-        
+
         self.lecturerIcon.setTintColor(.darkGray)
         self.lecturer.font = middleFont
         self.lecturer.numberOfLines = 0
-        
+
         self.departmentIcon.setTintColor(.darkGray)
         self.department.font = middleFont
         self.department.numberOfLines = 0
-        
+
         self.coordinatesIcon.setTintColor(.lightBlue)
         self.time.font = smallFont
         self.time.textColor = .lightBlue
         self.place.font = smallFont
         self.place.textColor = .darkGray
-        
+
         self.dates.font = smallFont
         self.dates.textColor = .gray
         self.dates.numberOfLines = 0
     }
-    
+
     private func addSubviews() {
         self.contentView.addSubview(self.title)
         self.title.translatesAutoresizingMaskIntoConstraints = false
@@ -124,7 +123,7 @@ extension StudentSubjectCell {
             self.title.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
             self.title.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor)
         ])
-        
+
         self.contentView.addSubview(self.type)
         self.type.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -132,7 +131,7 @@ extension StudentSubjectCell {
             self.type.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
             self.type.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor)
         ])
-        
+
         self.contentView.addSubview(self.lecturerIcon)
         self.contentView.addSubview(self.lecturer)
         self.lecturerIcon.translatesAutoresizingMaskIntoConstraints = false
@@ -142,31 +141,31 @@ extension StudentSubjectCell {
             self.lecturerIcon.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
             self.lecturerIcon.widthAnchor.constraint(equalToConstant: self.iconSize),
             self.lecturerIcon.heightAnchor.constraint(equalTo: self.lecturerIcon.widthAnchor, multiplier: 1),
-            
+
             self.lecturer.topAnchor.constraint(equalTo: self.type.bottomAnchor, constant: 8),
             self.lecturer.leadingAnchor.constraint(equalTo: self.lecturerIcon.trailingAnchor, constant: self.iconRightMagrin),
             self.lecturer.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor)
         ])
-        
+
         self.contentView.addSubview(self.departmentIcon)
         self.contentView.addSubview(self.department)
         self.departmentIcon.translatesAutoresizingMaskIntoConstraints = false
         self.department.translatesAutoresizingMaskIntoConstraints = false
-        
+
         self.departmentToLecturerConstraint = self.department.topAnchor.constraint(equalTo: self.lecturer.bottomAnchor, constant: 5)
         self.departmentToTypeConstraint = self.department.topAnchor.constraint(equalTo: self.type.bottomAnchor, constant: 8)
-        
+
         NSLayoutConstraint.activate([
             self.departmentIcon.topAnchor.constraint(equalTo: self.department.topAnchor, constant: 1.75),
             self.departmentIcon.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
             self.departmentIcon.widthAnchor.constraint(equalToConstant: self.iconSize),
             self.departmentIcon.heightAnchor.constraint(equalTo: self.departmentIcon.widthAnchor, multiplier: 1),
-            
+
             self.departmentToLecturerConstraint,
             self.department.leadingAnchor.constraint(equalTo: self.departmentIcon.trailingAnchor, constant: self.iconRightMagrin),
             self.department.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor)
         ])
-        
+
         self.contentView.addSubview(self.coordinatesIcon)
         self.contentView.addSubview(self.time)
         self.contentView.addSubview(self.place)
@@ -178,14 +177,14 @@ extension StudentSubjectCell {
             self.coordinatesIcon.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
             self.coordinatesIcon.widthAnchor.constraint(equalToConstant: self.iconSize),
             self.coordinatesIcon.heightAnchor.constraint(equalTo: self.coordinatesIcon.widthAnchor, multiplier: 1),
-            
+
             self.time.topAnchor.constraint(equalTo: self.department.bottomAnchor, constant: 6),
             self.time.leadingAnchor.constraint(equalTo: self.coordinatesIcon.trailingAnchor, constant: self.iconRightMagrin),
-            
+
             self.place.centerYAnchor.constraint(equalTo: self.time.centerYAnchor),
             self.place.leadingAnchor.constraint(equalTo: self.time.trailingAnchor, constant: 8)
         ])
-        
+
         self.contentView.addSubview(self.dates)
         self.dates.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -193,25 +192,25 @@ extension StudentSubjectCell {
             self.dates.leadingAnchor.constraint(equalTo: self.time.leadingAnchor),
             self.dates.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor)
         ])
-        
+
         self.bottomToDatesConstraint = self.contentView.bottomAnchor.constraint(equalTo: self.dates.bottomAnchor, constant: 12)
         self.bottomToTimeConstraint = self.contentView.bottomAnchor.constraint(equalTo: self.time.bottomAnchor, constant: 12)
         self.bottomToTitleConstraint = self.contentView.heightAnchor.constraint(equalToConstant: 44)
-        
+
         self.bottomToDatesConstraint.isActive = true
     }
-    
+
 }
 
-extension StudentSubjectCell {
-    
+extension StudentClassCell {
+
     public enum SubviewsToHide {
         case dates
         case lecturer
         case allButTitle
     }
-    
-    public func hide(_ subview: StudentSubjectCell.SubviewsToHide) {
+
+    public func hide(_ subview: StudentClassCell.SubviewsToHide) {
         switch subview {
             case .dates:
                 self.dates.isHidden = true
@@ -240,6 +239,16 @@ extension StudentSubjectCell {
                 self.bottomToTimeConstraint.isActive = false
                 self.bottomToTitleConstraint.isActive = true
         }
+    }
+    
+    func setStudentClass(_ studentClass: StudentClass) {
+        self.title.text = studentClass.discipline
+        self.type.text = studentClass.type
+        self.lecturer.text = studentClass.lecturer
+        self.department.text = studentClass.departmentUnit
+        self.time.text = studentClass.startTime
+        self.place.text = studentClass.auditorium.isEmpty ? studentClass.building : "\(studentClass.building), \(studentClass.auditorium)"
+        self.dates.text = studentClass.dates
     }
 
 }
