@@ -1,5 +1,5 @@
 //
-//  AUIMapViewController.swift
+//  MapViewController.swift
 //  Kaist
 //
 //  Created by Airat K on 7/8/19.

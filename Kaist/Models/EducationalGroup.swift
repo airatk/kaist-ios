@@ -9,10 +9,10 @@
 import Foundation
 
 
-struct StudentGroup: Decodable {
+struct EducationalGroup: Decodable {
 
     let scheduleId: String
-    let groupNumber: String
+    let number: String
 
     enum CodingKeys: String, CodingKey {
 
@@ -25,7 +25,7 @@ struct StudentGroup: Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         self.scheduleId = String(try container.decode(Int.self, forKey: .id))
-        self.groupNumber = try container.decode(String.self, forKey: .group)
+        self.number = try container.decode(String.self, forKey: .group)
     }
 
 }

@@ -1,5 +1,5 @@
 //
-//  StudentApiService.swift
+//  Student.swift
 //  Kaist
 //
 //  Created by Airat K on 12/7/19.
@@ -44,7 +44,7 @@ extension StudentApiService {
 
 extension StudentApiService {
 
-    func getGroup(onComplete handleCompletion: @escaping ContentResponseHandler<StudentGroup>) {
+    func getGroup(onComplete handleCompletion: @escaping ContentResponseHandler<EducationalGroup>) {
         let url: URL = self.makeUrlWithQuery(queryItems:
             URLQueryItem(name: "p_p_id", value: "pubStudentSchedule_WAR_publicStudentSchedule10"),
             URLQueryItem(name: "p_p_lifecycle", value: "2"),
@@ -52,7 +52,7 @@ extension StudentApiService {
             URLQueryItem(name: "query", value: self.groupNumber)
         )
 
-        self.get(from: url) { (groups: [StudentGroup]?, error: DataFetchErrorType?) in
+        self.get(from: url) { (groups: [EducationalGroup]?, error: DataFetchError?) in
             if let error = error {
                 DispatchQueue.main.async { handleCompletion(nil, error) }
                 return
@@ -67,7 +67,7 @@ extension StudentApiService {
         }
     }
 
-    func getSchedule(ofType scheduleType: ScheduleType, onComplete handleCompletion: @escaping ContentResponseHandler<StudentSchedule>) {
+    func getSchedule(ofType scheduleType: ScheduleType, onComplete handleCompletion: @escaping ContentResponseHandler<Schedule<StudentClass>>) {
         let url: URL = self.makeUrlWithQuery(queryItems:
             URLQueryItem(name: "p_p_id", value: "pubStudentSchedule_WAR_publicStudentSchedule10"),
             URLQueryItem(name: "p_p_lifecycle", value: "2"),
@@ -75,19 +75,15 @@ extension StudentApiService {
             URLQueryItem(name: "groupId", value: self.groupScheduleId)
         )
 
-        self.get(from: url) { (schedule: StudentSchedule?, error: DataFetchErrorType?) in
+        self.get(from: url) { (schedule: Schedule<StudentClass>?, error: DataFetchError?) in
             if let error = error {
                 handleCompletion(nil, error)
                 return
             }
 
-            guard var schedule = schedule, !schedule.isEmpty else {
+            guard let schedule = schedule, !schedule.isEmpty else {
                 handleCompletion(nil, .onServerError)
                 return
-            }
-
-            for numberOfDay in CalendarService.Weekdays.allCases where schedule[numberOfDay.rawValue] == nil {
-                schedule[numberOfDay.rawValue] = []
             }
 
             handleCompletion(schedule, nil)

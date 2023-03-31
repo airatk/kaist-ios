@@ -205,9 +205,11 @@ extension StudentClassCell {
 extension StudentClassCell {
 
     public enum SubviewsToHide {
+
         case dates
         case lecturer
         case allButTitle
+
     }
 
     public func hide(_ subview: StudentClassCell.SubviewsToHide) {

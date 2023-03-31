@@ -1,5 +1,5 @@
 //
-//  DataFetchingError.swift
+//  DataTypes.swift
 //  Kaist
 //
 //  Created by Airat K on 18/7/19.
@@ -9,7 +9,7 @@
 import Foundation
 
 
-enum DataFetchErrorType: LocalizedError {
+enum DataFetchError: LocalizedError {
 
     case onURLCreation
     case noServerResponse
@@ -36,15 +36,5 @@ enum ScheduleType: String {
 
     case classes = "schedule"
     case exams = "examSchedule"
-
-}
-
-
-enum ClassType: String {
-
-    case lecture = "лек"
-    case practice = "пр"
-    case lab = "л.р."
-    case consultation = "конс"
 
 }

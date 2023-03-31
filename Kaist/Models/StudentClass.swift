@@ -40,16 +40,32 @@ struct StudentClass: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        self.dates = try container.decode(String.self, forKey: .dayDate).trimmingCharacters(in: .whitespacesAndNewlines)
-        self.auditorium = try container.decode(String.self, forKey: .audNum).trimmingCharacters(in: .whitespacesAndNewlines)
+        self.dates = try container.decode(String.self, forKey: .dayDate).trimmingCharacters(in: .whitespaces)
+
+        let auditorium = try container.decode(String.self, forKey: .audNum).trimmingCharacters(in: .whitespaces)
+        self.auditorium = auditorium.contains("----") ? "" : auditorium
+
         self.discipline = try container.decode(String.self, forKey: .disciplName).trimmingCharacters(in: .whitespacesAndNewlines)
-        self.building = try container.decode(String.self, forKey: .buildNum).trimmingCharacters(in: .whitespacesAndNewlines)
+
+        let building = try container.decode(String.self, forKey: .buildNum).trimmingCharacters(in: .whitespaces)
+        self.building = building.contains("----") ? "" : building
+
         self.departmentUnit = try container.decode(String.self, forKey: .orgUnitName).trimmingCharacters(in: .whitespacesAndNewlines)
-        self.startTime = try container.decode(String.self, forKey: .dayTime).trimmingCharacters(in: .whitespacesAndNewlines)
-        self.weekday = try container.decode(String.self, forKey: .dayNum).trimmingCharacters(in: .whitespacesAndNewlines)
+        self.startTime = try container.decode(String.self, forKey: .dayTime).trimmingCharacters(in: .whitespaces)
+        self.weekday = try container.decode(String.self, forKey: .dayNum).trimmingCharacters(in: .whitespaces)
         self.isJoint = !(try container.decode(String.self, forKey: .potok).isEmpty)
-        self.lecturer = try container.decode(String.self, forKey: .prepodName).trimmingCharacters(in: .whitespacesAndNewlines).capitalized
-        self.type = try container.decode(String.self, forKey: .disciplType).trimmingCharacters(in: .whitespacesAndNewlines)
+        self.lecturer = try container.decode(String.self, forKey: .prepodName).trimmingCharacters(in: .whitespaces).capitalized
+
+        let rawClassType = try container.decode(String.self, forKey: .disciplType).trimmingCharacters(in: .whitespaces)
+        self.type = classTypeMapping[rawClassType, default: rawClassType]
     }
 
 }
+
+
+let classTypeMapping: [String: String] = [
+    "лек": "лекция",
+    "пр": "практика",
+    "л.р.": "лабораторная работа",
+    "конс": "консультация",
+]

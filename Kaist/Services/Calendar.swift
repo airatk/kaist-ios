@@ -1,5 +1,5 @@
 //
-//  CurrentDay.swift
+//  Calendar.swift
 //  Kaist
 //
 //  Created by Airat K on 3/7/19.
@@ -62,29 +62,6 @@ struct CalendarService {
                 "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
             ][month - 1]
         )
-    }
-
-}
-
-extension CalendarService {
-
-    enum Weekdays: String, Decodable, CaseIterable {
-
-        case monday = "1"
-        case tuesday = "2"
-        case wednesday = "3"
-        case thursday = "4"
-        case friday = "5"
-        case saterday = "6"
-
-    }
-
-}
-
-extension CalendarService.Weekdays: Comparable {
-
-    static func < (lhs: CalendarService.Weekdays, rhs: CalendarService.Weekdays) -> Bool {
-        return lhs.rawValue < rhs.rawValue
     }
 
 }

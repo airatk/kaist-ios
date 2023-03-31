@@ -22,8 +22,8 @@ class BaseKaiApiService {
 
 extension BaseKaiApiService {
 
-    typealias NoContentResponseHandler = (_ error: DataFetchErrorType?) -> Void
-    typealias ContentResponseHandler<ContentType: Decodable> = (_ content: ContentType?, _ error: DataFetchErrorType?) -> Void
+    typealias NoContentResponseHandler = (_ error: DataFetchError?) -> Void
+    typealias ContentResponseHandler<ContentType: Decodable> = (_ content: ContentType?, _ error: DataFetchError?) -> Void
 
 }
 

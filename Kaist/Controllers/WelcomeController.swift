@@ -187,8 +187,6 @@ extension WelcomeController: UITextFieldDelegate {
         self.groupNumberActivityIndicator.startAnimating()
         self.checkGroupNumberButton.isEnabled = false
 
-        StudentApiService.client.groupNumber = self.groupNumberField.text
-
         StudentApiService.client.getGroup { (group, error) in
             defer {
                 self.groupNumberActivityIndicator.stopAnimating()
@@ -201,6 +199,7 @@ extension WelcomeController: UITextFieldDelegate {
             }
 
             StudentApiService.client.groupScheduleId = group?.scheduleId
+            StudentApiService.client.groupNumber = group?.number
 
             self.dismiss(animated: true)
         }

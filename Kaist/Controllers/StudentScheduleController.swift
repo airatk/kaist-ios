@@ -13,8 +13,8 @@ class StudentScheduleController: ExpandableTableViewController {
 
     private var isNextWeekSelected: Bool = false
 
-    private var loadedSchedule: StudentApiService.StudentSchedule?
-    private var selectedSchedule: StudentApiService.StudentSchedule?
+    private var loadedSchedule: Schedule<StudentClass>?
+    private var selectedSchedule: Schedule<StudentClass>?
 
 
     override func viewDidLoad() {
@@ -117,27 +117,28 @@ extension StudentScheduleController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         tableView.backgroundView?.isHidden = self.selectedSchedule != nil
 
-        return self.selectedSchedule?.count ?? 0
+        guard let schedule = self.selectedSchedule, !schedule.isEmpty else { return 0 }
+
+        return 6
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.selectedSchedule![String(section + 1)]!.count
+        return self.selectedSchedule![section]!.count
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let weekdays = [
-            "1": "Понедельник",
-            "2": "Вторник",
-            "3": "Среда",
-            "4": "Четверг",
-            "5": "Пятница",
-            "6": "Суббота"
+        let weekdays: [String] = [
+            "Понедельник",
+            "Вторник",
+            "Среда",
+            "Четверг",
+            "Пятница",
+            "Суббота"
         ]
 
-        let askedDayWeekday = self.selectedSchedule!.keys.sorted()[section]
-        let date = CalendarService.date(shiftedToDays: Int(askedDayWeekday)! - CalendarService.currentWeekday + (self.isNextWeekSelected ? 7 : 0))
+        let date = CalendarService.date(shiftedToDays: (section + 1) - CalendarService.currentWeekday + (self.isNextWeekSelected ? 7 : 0))
 
-        return "\(weekdays[askedDayWeekday]!), \(date.day) \(date.month)"
+        return "\(weekdays[section]), \(date.day) \(date.month)"
     }
 
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -151,7 +152,7 @@ extension StudentScheduleController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let studentClassCell = tableView.dequeueReusableCell(withIdentifier: StudentClassCell.reuseId, for: indexPath) as! StudentClassCell
 
-        let studentClass = self.selectedSchedule![String(indexPath.section + 1)]![indexPath.row]
+        let studentClass = self.selectedSchedule![indexPath.section]![indexPath.row]
 
         studentClassCell.setStudentClass(studentClass)
 
