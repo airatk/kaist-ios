@@ -44,12 +44,12 @@ extension StudentApiService {
 
 extension StudentApiService {
 
-    func getGroup(onComplete handleCompletion: @escaping ContentResponseHandler<EducationalGroup>) {
+    func getGroup(withNumber groupNumber: String, onComplete handleCompletion: @escaping ContentResponseHandler<EducationalGroup>) {
         let url: URL = self.makeUrlWithQuery(queryItems:
             URLQueryItem(name: "p_p_id", value: "pubStudentSchedule_WAR_publicStudentSchedule10"),
             URLQueryItem(name: "p_p_lifecycle", value: "2"),
             URLQueryItem(name: "p_p_resource_id", value: "getGroupsURL"),
-            URLQueryItem(name: "query", value: self.groupNumber)
+            URLQueryItem(name: "query", value: groupNumber)
         )
 
         self.get(from: url) { (groups: [EducationalGroup]?, error: DataFetchError?) in

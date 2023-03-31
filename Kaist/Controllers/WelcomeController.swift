@@ -82,8 +82,7 @@ extension WelcomeController {
         self.groupNumberView.addArrangedSubview(self.groupNumberHint)
 
         self.groupNumberField.placeholder = "Номер группы"
-        self.groupNumberField.textContentType = .telephoneNumber
-        self.groupNumberField.keyboardType = .asciiCapableNumberPad
+        self.groupNumberField.keyboardType = .numberPad
         self.groupNumberField.returnKeyType = .send
         self.groupNumberField.delegate = self
 
@@ -187,7 +186,7 @@ extension WelcomeController: UITextFieldDelegate {
         self.groupNumberActivityIndicator.startAnimating()
         self.checkGroupNumberButton.isEnabled = false
 
-        StudentApiService.client.getGroup { (group, error) in
+        StudentApiService.client.getGroup(withNumber: groupNumber) { (group, error) in
             defer {
                 self.groupNumberActivityIndicator.stopAnimating()
                 self.checkGroupNumberButton.isEnabled = true

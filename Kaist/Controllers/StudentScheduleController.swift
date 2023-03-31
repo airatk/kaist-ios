@@ -38,12 +38,6 @@ class StudentScheduleController: ExpandableTableViewController {
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-
-        self.refreshControl?.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.refreshControl!.centerXAnchor.constraint(equalTo: self.tableView.centerXAnchor),
-            self.refreshControl!.topAnchor.constraint(equalTo: self.tableView.safeAreaLayoutGuide.topAnchor, constant: 30)
-        ])
     }
 
     override func viewDidAppear(_ animated: Bool) {
