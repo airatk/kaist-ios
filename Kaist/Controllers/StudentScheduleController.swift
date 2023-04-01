@@ -43,7 +43,7 @@ class StudentScheduleController: ExpandableTableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        guard StudentApiService.client.isSetUp else {
+        guard StudentApiService.client.isSignedIn else {
             self.present({
                 let welcomeScreen: UINavigationController = UINavigationController(rootViewController: WelcomeController())
                 let emptyImage: UIImage = UIImage()

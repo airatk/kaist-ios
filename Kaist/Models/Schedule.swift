@@ -16,7 +16,7 @@ struct Schedule<Class: Decodable>: Decodable {
     let wednesday: [Class]
     let thursday: [Class]
     let friday: [Class]
-    let saterday: [Class]
+    let saturday: [Class]
 
     enum CodingKeys: String, CodingKey {
 
@@ -25,7 +25,7 @@ struct Schedule<Class: Decodable>: Decodable {
         case wednesday = "3"
         case thursday = "4"
         case friday = "5"
-        case saterday = "6"
+        case saturday = "6"
 
     }
 
@@ -37,7 +37,7 @@ struct Schedule<Class: Decodable>: Decodable {
         self.wednesday = (try? container.decode([Class].self, forKey: .wednesday)) ?? []
         self.thursday = (try? container.decode([Class].self, forKey: .thursday)) ?? []
         self.friday = (try? container.decode([Class].self, forKey: .friday)) ?? []
-        self.saterday = (try? container.decode([Class].self, forKey: .saterday)) ?? []
+        self.saturday = (try? container.decode([Class].self, forKey: .saturday)) ?? []
     }
 
 }
@@ -51,7 +51,7 @@ extension Schedule {
         case 2: return self.wednesday
         case 3: return self.thursday
         case 4: return self.friday
-        case 5: return self.saterday
+        case 5: return self.saturday
         
         default: return nil
         }
@@ -64,7 +64,7 @@ extension Schedule {
             self.wednesday.isEmpty &&
             self.thursday.isEmpty &&
             self.friday.isEmpty &&
-            self.saterday.isEmpty
+            self.saturday.isEmpty
         )
     }
 

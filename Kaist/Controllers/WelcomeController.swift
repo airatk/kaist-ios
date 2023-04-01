@@ -186,7 +186,7 @@ extension WelcomeController: UITextFieldDelegate {
         self.groupNumberActivityIndicator.startAnimating()
         self.checkGroupNumberButton.isEnabled = false
 
-        StudentApiService.client.getGroup(withNumber: groupNumber) { (group, error) in
+        StudentApiService.client.saveGroup(withNumber: groupNumber) { error in
             defer {
                 self.groupNumberActivityIndicator.stopAnimating()
                 self.checkGroupNumberButton.isEnabled = true
@@ -194,13 +194,9 @@ extension WelcomeController: UITextFieldDelegate {
 
             if let error = error {
                 ErrorAlert.show(self, errorTitle: "Ошибка входа", errorMessage: error.localizedDescription)
-                return
+            } else {
+                self.dismiss(animated: true)
             }
-
-            StudentApiService.client.groupScheduleId = group?.scheduleId
-            StudentApiService.client.groupNumber = group?.number
-
-            self.dismiss(animated: true)
         }
     }
 

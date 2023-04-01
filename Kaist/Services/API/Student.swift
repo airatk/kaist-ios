@@ -25,8 +25,8 @@ class StudentApiService: BaseKaiApiService {
         set { self.userDefaults.set(newValue, forKey: self.groupScheduleIdKey) }
     }
 
-    var isSetUp: Bool {
-        self.userDefaults.string(forKey: self.groupScheduleIdKey) != nil
+    var isSignedIn: Bool {
+        self.userDefaults.string(forKey: self.groupNumberKey) != nil && self.userDefaults.string(forKey: self.groupScheduleIdKey) != nil
     }
 
     func signOut() {
@@ -38,13 +38,7 @@ class StudentApiService: BaseKaiApiService {
 
 extension StudentApiService {
 
-    typealias StudentSchedule = [String: [StudentClass]]
-
-}
-
-extension StudentApiService {
-
-    func getGroup(withNumber groupNumber: String, onComplete handleCompletion: @escaping ContentResponseHandler<EducationalGroup>) {
+    func saveGroup(withNumber groupNumber: String, onComplete handleCompletion: @escaping NoContentResponseHandler) {
         let url: URL = self.makeUrlWithQuery(queryItems:
             URLQueryItem(name: "p_p_id", value: "pubStudentSchedule_WAR_publicStudentSchedule10"),
             URLQueryItem(name: "p_p_lifecycle", value: "2"),
@@ -54,16 +48,19 @@ extension StudentApiService {
 
         self.get(from: url) { (groups: [EducationalGroup]?, error: DataFetchError?) in
             if let error = error {
-                DispatchQueue.main.async { handleCompletion(nil, error) }
+                handleCompletion(error)
                 return
             }
 
             guard let groups = groups, groups.count == 1, let group = groups.first else {
-                DispatchQueue.main.async { handleCompletion(nil, .onServerError) }
+                handleCompletion(.onServerError)
                 return
             }
 
-            handleCompletion(group, nil)
+            self.groupNumber = group.number
+            self.groupScheduleId = group.scheduleId
+
+            handleCompletion(nil)
         }
     }
 

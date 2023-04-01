@@ -1,5 +1,5 @@
 //
-//  UIViewExtenstion.swift
+//  UIViewExtension.swift
 //  Kaist
 //
 //  Created by Airat K on 27/3/2023.
