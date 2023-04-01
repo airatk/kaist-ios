@@ -145,7 +145,6 @@ extension StudentScheduleController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let studentClassCell = tableView.dequeueReusableCell(withIdentifier: StudentClassCell.reuseId, for: indexPath) as! StudentClassCell
-
         let studentClass = self.selectedSchedule![indexPath.section]![indexPath.row]
 
         studentClassCell.setStudentClass(studentClass)

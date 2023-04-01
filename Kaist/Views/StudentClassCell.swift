@@ -11,28 +11,28 @@ import UIKit
 
 class StudentClassCell: UITableViewCell {
 
-    public static let reuseId = "StudentClassCell"
+    static let reuseId = "StudentClassCell"
 
-    private let iconSize: CGFloat = 14
-    private let iconRightMagrin: CGFloat = 8
+    private let contentStackView: UIStackView = UIStackView()
 
-    public let title = UILabel()
-    public let type = UILabel()
-    public let lecturerIcon = UIImageView(image: UIImage(named: "Lecturer"))
-    public let lecturer = UILabel()
-    public let departmentIcon = UIImageView(image: UIImage(named: "Department"))
-    public let department = UILabel()
-    public let coordinatesIcon = UIImageView(image: UIImage(named: "Coordinates"))
-    public let time = UILabel()
-    public let place = UILabel()
-    public let dates = UILabel()
+    private let titleStackView: UIStackView = UIStackView()
+    private let title = UILabel()
+    private let type = UILabel()
 
-    private var departmentToLecturerConstraint = NSLayoutConstraint()
-    private var departmentToTypeConstraint = NSLayoutConstraint()
+    private let lecturerStackView: UIStackView = UIStackView()
+    private let lecturerIcon = UIImageView(image: UIImage(named: "Lecturer"))
+    private let lecturer = UILabel()
 
-    private var bottomToDatesConstraint = NSLayoutConstraint()
-    private var bottomToTimeConstraint = NSLayoutConstraint()
-    private var bottomToTitleConstraint = NSLayoutConstraint()
+    private let departmentUnitStackView: UIStackView = UIStackView()
+    private let departmentUnitIcon = UIImageView(image: UIImage(named: "Department"))
+    private let departmentUnit = UILabel()
+
+    private let coordinatesStackView: UIStackView = UIStackView()
+    private let coordinatesIcon = UIImageView(image: UIImage(named: "Coordinates"))
+    private let startTime = UILabel()
+    private let place = UILabel()
+
+    private let dates = UILabel()
 
 
     required init?(coder aDecoder: NSCoder) {
@@ -42,10 +42,10 @@ class StudentClassCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        self.setUpSubviews()
-        self.addSubviews()
-
         self.selectionStyle = .none
+        self.contentView.addSubview(self.contentStackView)
+
+        self.setUpContentStackView()
     }
 
 
@@ -53,204 +53,160 @@ class StudentClassCell: UITableViewCell {
         super.prepareForReuse()
 
         self.title.text = nil
-
-        self.type.isHidden = false
         self.type.text = nil
-
-        self.lecturerIcon.isHidden = false
-        self.lecturer.isHidden = false
         self.lecturer.text = nil
-
-        self.departmentIcon.isHidden = false
-        self.department.isHidden = false
-        self.department.text = nil
-        self.departmentToTypeConstraint.isActive = false
-        self.departmentToLecturerConstraint.isActive = true
-
-        self.coordinatesIcon.isHidden = false
-        self.time.isHidden = false
-        self.time.text = nil
-        self.place.isHidden = false
+        self.departmentUnit.text = nil
+        self.startTime.text = nil
         self.place.text = nil
-
-        self.dates.isHidden = false
         self.dates.text = nil
 
-        self.bottomToTitleConstraint.isActive = false
-        self.bottomToTimeConstraint.isActive = false
-        self.bottomToDatesConstraint.isActive = true
+        self.type.isHidden = false
+        self.lecturerStackView.isHidden = false
+        self.departmentUnitStackView.isHidden = false
+        self.coordinatesStackView.isHidden = false
+        self.dates.isHidden = false
     }
 
 }
 
 extension StudentClassCell {
 
-    private func setUpSubviews() {
-        let largeFont = UIFont.boldSystemFont(ofSize: 16)
-        let middleFont = UIFont.systemFont(ofSize: 14)
-        let smallFont = UIFont.systemFont(ofSize: 12)
-
-        self.title.font = largeFont
-        self.title.numberOfLines = 0
-
-        self.type.font = smallFont
-        self.type.textColor = .gray
-
-        self.lecturerIcon.setTintColor(.darkGray)
-        self.lecturer.font = middleFont
-        self.lecturer.numberOfLines = 0
-
-        self.departmentIcon.setTintColor(.darkGray)
-        self.department.font = middleFont
-        self.department.numberOfLines = 0
-
-        self.coordinatesIcon.setTintColor(.lightBlue)
-        self.time.font = smallFont
-        self.time.textColor = .lightBlue
-        self.place.font = smallFont
-        self.place.textColor = .darkGray
-
-        self.dates.font = smallFont
-        self.dates.textColor = .gray
-        self.dates.numberOfLines = 0
-    }
-
-    private func addSubviews() {
-        self.contentView.addSubview(self.title)
-        self.title.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.title.topAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.topAnchor),
-            self.title.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
-            self.title.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor)
-        ])
-
-        self.contentView.addSubview(self.type)
-        self.type.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.type.topAnchor.constraint(equalTo: self.title.bottomAnchor, constant: 3),
-            self.type.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
-            self.type.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor)
-        ])
-
-        self.contentView.addSubview(self.lecturerIcon)
-        self.contentView.addSubview(self.lecturer)
-        self.lecturerIcon.translatesAutoresizingMaskIntoConstraints = false
-        self.lecturer.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.lecturerIcon.centerYAnchor.constraint(equalTo: self.lecturer.centerYAnchor),
-            self.lecturerIcon.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
-            self.lecturerIcon.widthAnchor.constraint(equalToConstant: self.iconSize),
-            self.lecturerIcon.heightAnchor.constraint(equalTo: self.lecturerIcon.widthAnchor, multiplier: 1),
-
-            self.lecturer.topAnchor.constraint(equalTo: self.type.bottomAnchor, constant: 8),
-            self.lecturer.leadingAnchor.constraint(equalTo: self.lecturerIcon.trailingAnchor, constant: self.iconRightMagrin),
-            self.lecturer.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor)
-        ])
-
-        self.contentView.addSubview(self.departmentIcon)
-        self.contentView.addSubview(self.department)
-        self.departmentIcon.translatesAutoresizingMaskIntoConstraints = false
-        self.department.translatesAutoresizingMaskIntoConstraints = false
-
-        self.departmentToLecturerConstraint = self.department.topAnchor.constraint(equalTo: self.lecturer.bottomAnchor, constant: 5)
-        self.departmentToTypeConstraint = self.department.topAnchor.constraint(equalTo: self.type.bottomAnchor, constant: 8)
-
-        NSLayoutConstraint.activate([
-            self.departmentIcon.topAnchor.constraint(equalTo: self.department.topAnchor, constant: 1.75),
-            self.departmentIcon.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
-            self.departmentIcon.widthAnchor.constraint(equalToConstant: self.iconSize),
-            self.departmentIcon.heightAnchor.constraint(equalTo: self.departmentIcon.widthAnchor, multiplier: 1),
-
-            self.departmentToLecturerConstraint,
-            self.department.leadingAnchor.constraint(equalTo: self.departmentIcon.trailingAnchor, constant: self.iconRightMagrin),
-            self.department.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor)
-        ])
-
-        self.contentView.addSubview(self.coordinatesIcon)
-        self.contentView.addSubview(self.time)
-        self.contentView.addSubview(self.place)
-        self.coordinatesIcon.translatesAutoresizingMaskIntoConstraints = false
-        self.time.translatesAutoresizingMaskIntoConstraints = false
-        self.place.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.coordinatesIcon.centerYAnchor.constraint(equalTo: self.time.centerYAnchor),
-            self.coordinatesIcon.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
-            self.coordinatesIcon.widthAnchor.constraint(equalToConstant: self.iconSize),
-            self.coordinatesIcon.heightAnchor.constraint(equalTo: self.coordinatesIcon.widthAnchor, multiplier: 1),
-
-            self.time.topAnchor.constraint(equalTo: self.department.bottomAnchor, constant: 6),
-            self.time.leadingAnchor.constraint(equalTo: self.coordinatesIcon.trailingAnchor, constant: self.iconRightMagrin),
-
-            self.place.centerYAnchor.constraint(equalTo: self.time.centerYAnchor),
-            self.place.leadingAnchor.constraint(equalTo: self.time.trailingAnchor, constant: 8)
-        ])
-
-        self.contentView.addSubview(self.dates)
-        self.dates.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.dates.topAnchor.constraint(equalTo: self.time.bottomAnchor, constant: 10),
-            self.dates.leadingAnchor.constraint(equalTo: self.time.leadingAnchor),
-            self.dates.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor)
-        ])
-
-        self.bottomToDatesConstraint = self.contentView.bottomAnchor.constraint(equalTo: self.dates.bottomAnchor, constant: 12)
-        self.bottomToTimeConstraint = self.contentView.bottomAnchor.constraint(equalTo: self.time.bottomAnchor, constant: 12)
-        self.bottomToTitleConstraint = self.contentView.heightAnchor.constraint(equalToConstant: 44)
-
-        self.bottomToDatesConstraint.isActive = true
-    }
-
-}
-
-extension StudentClassCell {
-
-    public enum SubviewsToHide {
-
-        case dates
-        case lecturer
-        case allButTitle
-
-    }
-
-    public func hide(_ subview: StudentClassCell.SubviewsToHide) {
-        switch subview {
-            case .dates:
-                self.dates.isHidden = true
-
-                self.bottomToDatesConstraint.isActive = false
-                self.bottomToTitleConstraint.isActive = false
-                self.bottomToTimeConstraint.isActive = true
-            case .lecturer:
-                self.lecturerIcon.isHidden = true
-                self.lecturer.isHidden = true
-
-                self.departmentToLecturerConstraint.isActive = false
-                self.departmentToTypeConstraint.isActive = true
-            case .allButTitle:
-                self.type.isHidden = true
-                self.lecturerIcon.isHidden = true
-                self.lecturer.isHidden = true
-                self.departmentIcon.isHidden = true
-                self.department.isHidden = true
-                self.coordinatesIcon.isHidden = true
-                self.time.isHidden = true
-                self.place.isHidden = true
-                self.dates.isHidden = true
-
-                self.bottomToDatesConstraint.isActive = false
-                self.bottomToTimeConstraint.isActive = false
-                self.bottomToTitleConstraint.isActive = true
-        }
-    }
-    
     func setStudentClass(_ studentClass: StudentClass) {
         self.title.text = studentClass.discipline
+
+        guard studentClass.isActualClass else {
+            self.hide(.allButTitle)
+            return
+        }
+
         self.type.text = studentClass.type
-        self.lecturer.text = studentClass.lecturer
-        self.department.text = studentClass.departmentUnit
-        self.time.text = studentClass.startTime
-        self.place.text = studentClass.auditorium.isEmpty ? studentClass.building : "\(studentClass.building), \(studentClass.auditorium)"
-        self.dates.text = studentClass.dates
+        
+        if studentClass.lecturer.isEmpty {
+            self.hide(.lecturer)
+        } else {
+            self.lecturer.text = studentClass.lecturer
+        }
+        self.departmentUnit.text = studentClass.departmentUnit
+        self.startTime.text = studentClass.startTime
+
+        if studentClass.auditorium.isEmpty {
+            self.place.text = studentClass.building
+        } else {
+            self.place.text = [ studentClass.building, studentClass.auditorium ].joined(separator: ", ")
+        }
+
+        if studentClass.dates.isEmpty {
+            self.hide(.dates)
+        } else {
+            self.dates.text = studentClass.dates
+        }
+    }
+
+}
+
+private extension StudentClassCell {
+
+    enum SubviewsToHide {
+
+        case allButTitle
+        case lecturer
+        case dates
+
+    }
+
+    func hide(_ subviewsToHide: SubviewsToHide) {
+        switch subviewsToHide {
+        case .allButTitle:
+            self.type.isHidden = true
+            self.lecturerStackView.isHidden = true
+            self.departmentUnitStackView.isHidden = true
+            self.coordinatesStackView.isHidden = true
+            self.dates.isHidden = true
+        case .lecturer:
+            self.lecturerStackView.isHidden = true
+        case .dates:
+            self.dates.isHidden = true
+        }
+    }
+
+}
+
+private extension StudentClassCell {
+
+    func setUpContentStackView() {
+        self.contentStackView.axis = .vertical
+        self.contentStackView.spacing = 8
+
+        self.contentStackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            self.contentStackView.topAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.topAnchor),
+            self.contentStackView.bottomAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.bottomAnchor),
+            self.contentStackView.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
+            self.contentStackView.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor),
+        ])
+
+        self.contentStackView.addArrangedSubview(self.titleStackView)
+        self.contentStackView.addArrangedSubview(self.lecturerStackView)
+        self.contentStackView.addArrangedSubview(self.departmentUnitStackView)
+        self.contentStackView.addArrangedSubview(self.coordinatesStackView)
+        self.contentStackView.addArrangedSubview(self.dates)
+
+        self.setUpTitleStackView()
+        self.setUpLecturerStackView()
+        self.setUpDepartmentUnit()
+        self.setUpCoordinatesStackView()
+        self.setUpDates()
+    }
+
+    func setUpTitleStackView() {
+        self.titleStackView.axis = .vertical
+        self.titleStackView.spacing = 3
+
+        self.titleStackView.addArrangedSubview(self.title)
+        self.titleStackView.addArrangedSubview(self.type)
+
+        self.title.font = .largeFont
+        self.title.numberOfLines = 0
+
+        self.type.font = .smallFont
+        self.type.textColor = .gray
+    }
+
+    func setUpLecturerStackView() {
+        self.lecturerStackView.setUpAsIconRow(usingIcon: self.lecturerIcon, usingLabels: self.lecturer)
+
+        self.lecturerIcon.setTintColor(.darkGray)
+
+        self.lecturer.font = .middleFont
+        self.lecturer.numberOfLines = 0
+    }
+
+    func setUpDepartmentUnit() {
+        self.departmentUnitStackView.setUpAsIconRow(usingIcon: self.departmentUnitIcon, usingLabels: self.departmentUnit)
+
+        self.departmentUnitIcon.setTintColor(.darkGray)
+
+        self.departmentUnit.font = .middleFont
+        self.departmentUnit.numberOfLines = 0
+    }
+
+    func setUpCoordinatesStackView() {
+        self.coordinatesStackView.setUpAsIconRow(usingIcon: self.coordinatesIcon, usingLabels: self.startTime, self.place)
+
+        self.coordinatesIcon.setTintColor(.lightBlue)
+
+        self.startTime.font = .smallFont
+        self.startTime.textColor = .lightBlue
+
+        self.place.font = .smallFont
+        self.place.textColor = .gray
+    }
+
+    func setUpDates() {
+        self.dates.font = .smallFont
+        self.dates.textColor = .gray
+        self.dates.numberOfLines = 0
     }
 
 }

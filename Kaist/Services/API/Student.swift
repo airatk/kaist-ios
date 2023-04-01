@@ -53,7 +53,7 @@ extension StudentApiService {
             }
 
             guard let groups = groups, groups.count == 1, let group = groups.first else {
-                handleCompletion(.onServerError)
+                handleCompletion(.noSuchGroup)
                 return
             }
 
@@ -79,7 +79,7 @@ extension StudentApiService {
             }
 
             guard let schedule = schedule, !schedule.isEmpty else {
-                handleCompletion(nil, .onServerError)
+                handleCompletion(nil, .noScheduleData)
                 return
             }
 

@@ -71,7 +71,7 @@ extension ExpandableTableViewController {
 
 
     private func hideBarsAfterSmallScroll() {
-        let dy = self.previousBarsOffsetY >= self.absoluteMaximumBarOffsetY/2 ? self.absoluteMaximumBarOffsetY - self.previousBarsOffsetY : -self.previousBarsOffsetY
+        let dy = (self.previousBarsOffsetY >= self.absoluteMaximumBarOffsetY / 2) ? self.absoluteMaximumBarOffsetY - self.previousBarsOffsetY : -self.previousBarsOffsetY
 
         self.offsetBarsBy(dy: dy, animated: true)
         self.previousBarsOffsetY += dy

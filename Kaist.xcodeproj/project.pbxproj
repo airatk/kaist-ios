@@ -27,6 +27,8 @@
 		609976C0230D8ACC00119689 /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609976BF230D8ACC00119689 /* UIImageViewExtension.swift */; };
 		609F7D1B22FACCE6003F8965 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609F7D1A22FACCE6003F8965 /* MapViewController.swift */; };
 		60A5D678230546A30004B667 /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A5D677230546A30004B667 /* UIButtonExtension.swift */; };
+		60A9232929D812A500DE5BED /* UIStackViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A9232829D812A500DE5BED /* UIStackViewExtension.swift */; };
+		60A9232B29D815F500DE5BED /* UIFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A9232A29D815F500DE5BED /* UIFontExtension.swift */; };
 		60AD001A22FDB6F900A5DE32 /* UniversityBuildingAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD001922FDB6F900A5DE32 /* UniversityBuildingAnnotation.swift */; };
 		60B2E42D22CB182600BEAB23 /* StudentScheduleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E42A22CB182600BEAB23 /* StudentScheduleController.swift */; };
 		60B2E42E22CB182600BEAB23 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B2E42C22CB182600BEAB23 /* SettingsController.swift */; };
@@ -61,6 +63,8 @@
 		609976BF230D8ACC00119689 /* UIImageViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
 		609F7D1A22FACCE6003F8965 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		60A5D677230546A30004B667 /* UIButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
+		60A9232829D812A500DE5BED /* UIStackViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStackViewExtension.swift; sourceTree = "<group>"; };
+		60A9232A29D815F500DE5BED /* UIFontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFontExtension.swift; sourceTree = "<group>"; };
 		60AD001922FDB6F900A5DE32 /* UniversityBuildingAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversityBuildingAnnotation.swift; sourceTree = "<group>"; };
 		60B2E42A22CB182600BEAB23 /* StudentScheduleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentScheduleController.swift; sourceTree = "<group>"; };
 		60B2E42C22CB182600BEAB23 /* SettingsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
@@ -90,6 +94,8 @@
 				609976BF230D8ACC00119689 /* UIImageViewExtension.swift */,
 				60A5D677230546A30004B667 /* UIButtonExtension.swift */,
 				602D845529D20AEA00B72695 /* UIViewExtension.swift */,
+				60A9232829D812A500DE5BED /* UIStackViewExtension.swift */,
+				60A9232A29D815F500DE5BED /* UIFontExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -268,6 +274,8 @@
 				60CBD93622DF46A000D387CF /* StudentClassCell.swift in Sources */,
 				609976C0230D8ACC00119689 /* UIImageViewExtension.swift in Sources */,
 				60B92B192302D95500D29D2F /* UIColorExtension.swift in Sources */,
+				60A9232929D812A500DE5BED /* UIStackViewExtension.swift in Sources */,
+				60A9232B29D815F500DE5BED /* UIFontExtension.swift in Sources */,
 				605BCC4122E3852F0099DFCF /* EmptyView.swift in Sources */,
 				60AD001A22FDB6F900A5DE32 /* UniversityBuildingAnnotation.swift in Sources */,
 				602D845B29D2E25800B72695 /* EducationalGroup.swift in Sources */,

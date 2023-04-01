@@ -16,16 +16,18 @@ enum DataFetchError: LocalizedError {
     case onResponseParsing
     case onServerError
 
+    case noSuchGroup
+    case noScheduleData
+
     var errorDescription: String? {
         switch self {
-        case .onURLCreation:
-            return "Нет соединения с интернетом."
-        case .noServerResponse:
-            return "Не удалось получить данные."
-        case .onResponseParsing:
-            return "Не удалось обработать полученные данные. Обратитесь к разработчику."
-        case .onServerError:
-           return "Ошибка обработки запроса. Обратитесь к разработчику."
+        case .onURLCreation: return "Нет соединения с интернетом."
+        case .noServerResponse: return "Не удалось получить данные."
+        case .onResponseParsing: return "Не удалось обработать полученные данные. Обратитесь к разработчику."
+        case .onServerError: return "Ошибка обработки запроса. Обратитесь к разработчику."
+
+        case .noSuchGroup: return "Такой группы нет."
+        case .noScheduleData: return "На kai.ru данных о твоём расписании нет."
         }
     }
 
