@@ -42,7 +42,6 @@ class StudentClassCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        self.selectionStyle = .none
         self.contentView.addSubview(self.contentStackView)
 
         self.setUpContentStackView()
@@ -198,6 +197,7 @@ private extension StudentClassCell {
 
         self.startTime.font = .smallFont
         self.startTime.textColor = .lightBlue
+        self.startTime.setContentHuggingPriority(.required, for: .horizontal)
 
         self.place.font = .smallFont
         self.place.textColor = .gray

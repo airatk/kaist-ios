@@ -153,3 +153,11 @@ extension StudentScheduleController {
     }
 
 }
+
+extension StudentScheduleController {
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+
+}
