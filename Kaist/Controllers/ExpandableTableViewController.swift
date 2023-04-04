@@ -25,6 +25,8 @@ class ExpandableTableViewController: UITableViewController {
         super.viewDidLoad()
 
         self.tableView.showsVerticalScrollIndicator = false
+        self.tableView.showsHorizontalScrollIndicator = false
+
         self.tableView.backgroundView = EmptyView(emojiAtCenter: "✈️")
 
         self.refreshControl = UIRefreshControl()

@@ -15,7 +15,6 @@ class StudentClassCell: UITableViewCell {
 
     private let contentStackView: UIStackView = UIStackView()
 
-    private let titleStackView: UIStackView = UIStackView()
     private let title = UILabel()
     private let type = UILabel()
 
@@ -74,14 +73,14 @@ extension StudentClassCell {
         self.title.text = studentClass.discipline
 
         guard studentClass.isActualClass else {
-            self.hide(.allButTitle)
+            self.hideSubviews(.allButTitle)
             return
         }
 
         self.type.text = studentClass.type
-        
+
         if studentClass.lecturer.isEmpty {
-            self.hide(.lecturer)
+            self.hideSubviews(.lecturer)
         } else {
             self.lecturer.text = studentClass.lecturer
         }
@@ -95,7 +94,7 @@ extension StudentClassCell {
         }
 
         if studentClass.dates.isEmpty {
-            self.hide(.dates)
+            self.hideSubviews(.dates)
         } else {
             self.dates.text = studentClass.dates
         }
@@ -105,7 +104,7 @@ extension StudentClassCell {
 
 private extension StudentClassCell {
 
-    enum SubviewsToHide {
+    enum SubviewGroup {
 
         case allButTitle
         case lecturer
@@ -113,14 +112,14 @@ private extension StudentClassCell {
 
     }
 
-    func hide(_ subviewsToHide: SubviewsToHide) {
-        switch subviewsToHide {
+    func hideSubviews(_ subviewGroup: SubviewGroup) {
+        switch subviewGroup {
         case .allButTitle:
-            self.type.isHidden = true
-            self.lecturerStackView.isHidden = true
-            self.departmentUnitStackView.isHidden = true
-            self.coordinatesStackView.isHidden = true
             self.dates.isHidden = true
+            self.coordinatesStackView.isHidden = true
+            self.departmentUnitStackView.isHidden = true
+            self.lecturerStackView.isHidden = true
+            self.type.isHidden = true
         case .lecturer:
             self.lecturerStackView.isHidden = true
         case .dates:
@@ -134,10 +133,10 @@ private extension StudentClassCell {
 
     func setUpContentStackView() {
         self.contentStackView.axis = .vertical
-        self.contentStackView.spacing = 8
+        self.contentStackView.spacing = 8.0
 
         self.contentStackView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         NSLayoutConstraint.activate([
             self.contentStackView.topAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.topAnchor),
             self.contentStackView.bottomAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.bottomAnchor),
@@ -145,29 +144,29 @@ private extension StudentClassCell {
             self.contentStackView.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor),
         ])
 
-        self.contentStackView.addArrangedSubview(self.titleStackView)
+        self.contentStackView.addArrangedSubview(self.title)
+        self.contentStackView.addArrangedSubview(self.type)
         self.contentStackView.addArrangedSubview(self.lecturerStackView)
         self.contentStackView.addArrangedSubview(self.departmentUnitStackView)
         self.contentStackView.addArrangedSubview(self.coordinatesStackView)
         self.contentStackView.addArrangedSubview(self.dates)
 
-        self.setUpTitleStackView()
+        self.contentStackView.setCustomSpacing(3.0, after: self.title)
+
+        self.setUpTitle()
+        self.setUpType()
         self.setUpLecturerStackView()
         self.setUpDepartmentUnit()
         self.setUpCoordinatesStackView()
         self.setUpDates()
     }
 
-    func setUpTitleStackView() {
-        self.titleStackView.axis = .vertical
-        self.titleStackView.spacing = 3
-
-        self.titleStackView.addArrangedSubview(self.title)
-        self.titleStackView.addArrangedSubview(self.type)
-
+    func setUpTitle() {
         self.title.font = .largeFont
         self.title.numberOfLines = 0
+    }
 
+    func setUpType() {
         self.type.font = .smallFont
         self.type.textColor = .gray
     }

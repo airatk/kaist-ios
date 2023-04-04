@@ -13,9 +13,7 @@ extension UIStackView {
 
     func setUpAsIconRow(usingIcon icon: UIImageView, usingLabels labels: UILabel...) {
         self.addArrangedSubview(icon)
-        for label in labels {
-            self.addArrangedSubview(label)
-        }
+        labels.forEach { self.addArrangedSubview($0) }
 
         self.axis = .horizontal
         self.alignment = .center
@@ -23,7 +21,11 @@ extension UIStackView {
 
         icon.translatesAutoresizingMaskIntoConstraints = false
         icon.widthAnchor.constraint(equalToConstant: 14.0).isActive = true
-        icon.heightAnchor.constraint(equalToConstant: 14.0).isActive = true
+
+        let iconHeightConstraint: NSLayoutConstraint = icon.heightAnchor.constraint(equalTo: icon.widthAnchor)
+
+        iconHeightConstraint.priority = .defaultHigh
+        iconHeightConstraint.isActive = true
     }
 
 }
