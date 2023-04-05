@@ -52,20 +52,20 @@ extension Schedule {
         case 3: return self.thursday
         case 4: return self.friday
         case 5: return self.saturday
-        
+
         default: return nil
         }
     }
 
     var isEmpty: Bool {
-        return (
-            self.monday.isEmpty &&
-            self.tuesday.isEmpty &&
-            self.wednesday.isEmpty &&
-            self.thursday.isEmpty &&
-            self.friday.isEmpty &&
-            self.saturday.isEmpty
-        )
+        return [
+            self.monday,
+            self.tuesday,
+            self.wednesday,
+            self.thursday,
+            self.friday,
+            self.saturday,
+        ].reduce(true) { $0 && $1.isEmpty }
     }
 
 }

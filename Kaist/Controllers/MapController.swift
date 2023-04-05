@@ -36,8 +36,12 @@ class MapController: MapViewController {
         self.mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: UniversityBuildingAnnotation.reuseId)
         self.mapView.addAnnotations(currentlyShownUniversityBuildingAnnotations)
 
-        if CLLocationManager.locationServicesEnabled() {
-            self.checkLocationAuthorization()
+        DispatchQueue.global(qos: .userInitiated).async {
+            if CLLocationManager.locationServicesEnabled() {
+                DispatchQueue.main.async {
+                    self.checkLocationAuthorization()
+                }
+            }
         }
     }
 

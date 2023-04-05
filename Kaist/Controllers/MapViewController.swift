@@ -35,14 +35,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
 
     func checkLocationAuthorization() {
         switch CLLocationManager.authorizationStatus() {
-            case .authorizedAlways, .authorizedWhenInUse:
-                self.mapView.showsUserLocation = true
-            case .notDetermined:
-                self.locationManager.requestWhenInUseAuthorization()
-            case .denied, .restricted:
-                break
+        case .authorizedAlways, .authorizedWhenInUse:
+            self.mapView.showsUserLocation = true
+        case .notDetermined:
+            self.locationManager.requestWhenInUseAuthorization()
+        case .denied, .restricted:
+            break
 
-            @unknown default: break
+        @unknown
+        default: break
         }
     }
 

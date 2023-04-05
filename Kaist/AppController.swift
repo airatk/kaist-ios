@@ -11,7 +11,8 @@ import UIKit
 
 class AppController: UITabBarController {
 
-    public var statusBarBlur: UIView!
+    var statusBarBlur: UIView!
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,9 +27,9 @@ class AppController: UITabBarController {
         let dateTitle: String = "\(currentDate.day) \(currentDate.localizedMonth)"
 
         self.viewControllers = [
-            self.getTab(for: StudentScheduleController(), withTitle: dateTitle, withImageNamed: CalendarService.currentWeekdayImageName),
-            self.getTab(for: MapController(), withTitle: "Карта", withImageNamed: "Map"),
-            self.getTab(for: SettingsController(), withTitle: "Настройки", withImageNamed: "Settings")
+            self.makeTab(for: StudentScheduleController(), usingTitle: dateTitle, usingImageNamed: CalendarService.currentWeekdayImageName),
+            self.makeTab(for: MapController(), usingTitle: "Карта", usingImageNamed: "Map"),
+            self.makeTab(for: SettingsController(), usingTitle: "Настройки", usingImageNamed: "Settings")
         ]
     }
 
@@ -36,7 +37,7 @@ class AppController: UITabBarController {
 
 extension AppController {
 
-    private func getTab(for screen: UIViewController, withTitle title: String, withImageNamed imageName: String) -> UIViewController {
+    private func makeTab(for screen: UIViewController, usingTitle title: String, usingImageNamed imageName: String) -> UIViewController {
         let navigationController = UINavigationController(rootViewController: screen)
 
         navigationController.tabBarItem = UITabBarItem(title: title, image: UIImage(named: imageName), selectedImage: nil)

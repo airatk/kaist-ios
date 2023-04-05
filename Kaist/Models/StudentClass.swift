@@ -20,7 +20,7 @@ struct StudentClass: Decodable {
     let weekday: String
     let isJoint: Bool
     let lecturer: String
-    let isActualClass: Bool
+    let isFullDayClass: Bool
     let type: String
 
     enum CodingKeys: CodingKey {
@@ -51,7 +51,7 @@ struct StudentClass: Decodable {
         self.weekday = format(weekday: try container.decode(String.self, forKey: .dayNum))
         self.isJoint = format(isJoint: try container.decode(String.self, forKey: .potok))
         self.lecturer = format(lecturer: try container.decode(String.self, forKey: .prepodName))
-        self.isActualClass = format(isActualClass: try container.decode(String.self, forKey: .disciplNum))
+        self.isFullDayClass = format(isActualClass: try container.decode(String.self, forKey: .disciplNum))
         self.type = format(type: try container.decode(String.self, forKey: .disciplType))
     }
 

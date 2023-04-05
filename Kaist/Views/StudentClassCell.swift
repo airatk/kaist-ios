@@ -72,7 +72,7 @@ extension StudentClassCell {
     func setStudentClass(_ studentClass: StudentClass) {
         self.title.text = studentClass.discipline
 
-        guard studentClass.isActualClass else {
+        guard studentClass.isFullDayClass else {
             self.hideSubviews(.allButTitle)
             return
         }
@@ -104,7 +104,7 @@ extension StudentClassCell {
 
 private extension StudentClassCell {
 
-    enum SubviewGroup {
+    enum SubviewsGroup {
 
         case allButTitle
         case lecturer
@@ -112,8 +112,9 @@ private extension StudentClassCell {
 
     }
 
-    func hideSubviews(_ subviewGroup: SubviewGroup) {
-        switch subviewGroup {
+
+    func hideSubviews(_ subviewsGroup: SubviewsGroup) {
+        switch subviewsGroup {
         case .allButTitle:
             self.dates.isHidden = true
             self.coordinatesStackView.isHidden = true
@@ -176,7 +177,7 @@ private extension StudentClassCell {
 
         self.lecturerIcon.setTintColor(.darkGray)
 
-        self.lecturer.font = .middleFont
+        self.lecturer.font = .mediumFont
         self.lecturer.numberOfLines = 0
     }
 
@@ -185,7 +186,7 @@ private extension StudentClassCell {
 
         self.departmentUnitIcon.setTintColor(.darkGray)
 
-        self.departmentUnit.font = .middleFont
+        self.departmentUnit.font = .mediumFont
         self.departmentUnit.numberOfLines = 0
     }
 
