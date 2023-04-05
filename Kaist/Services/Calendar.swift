@@ -9,59 +9,83 @@
 import Foundation
 
 
-struct CalendarService {
+class CalendarService {
 
-    private static let calendar = Calendar(identifier: .gregorian)
-    private static let today = Date()
+    static let localizedMonths: [String] = [
+        "января",
+        "февраля",
+        "марта",
+        "апреля",
+        "мая",
+        "июня",
+        "июля",
+        "августа",
+        "сентября",
+        "октября",
+        "ноября",
+        "декабря",
+    ]
+    static let localizedWeekdays: [String] = [
+        "Понедельник",
+        "Вторник",
+        "Среда",
+        "Четверг",
+        "Пятница",
+        "Суббота",
+    ]
+    static let weekdayImageNames: [String] = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+    ]
 
-    public static var isCurrentSemesterFirst: Bool {
-        return self.calendar.component(.month, from: self.today) > 8
+    private static let calendar: Calendar = Calendar(identifier: .gregorian)
+
+}
+
+extension CalendarService {
+
+    static var currentWeekdayImageName: String {
+        return self.weekdayImageNames[self.getWeekdayIndex()]
     }
 
-    public static var isWeekEven: Bool {
-        let firstDayOfSemester = DateComponents(
-            calendar: self.calendar,
-            year: self.calendar.component(.year, from: self.today),
-            month: self.isCurrentSemesterFirst ? 9 : 1,
-            day: self.isCurrentSemesterFirst ? 1 : 26
-        ).date!
 
-        // Sunday is the 1st weekday by default, so some fixes are needed
-        let firstWeekOfSemester = self.calendar.component(.weekOfYear, from: firstDayOfSemester)  // Sunday does not count here
-        let currentWeekOfYear = self.calendar.component(.weekOfYear, from: self.today) - (self.currentWeekday == 7 ? 1 : 0)
+    static func getWeekdayIndex(ofDate date: Date = Date()) -> Int {
+        let weekday = self.calendar.component(.weekday, from: date) - 2
 
-        // The 1st week of semester cannot be even semantically as its index is equal to 1
-        return currentWeekOfYear % 2 != firstWeekOfSemester % 2
+        return (weekday != -1) ? weekday : 6
     }
 
-    public static var currentWeekday: Int {
-        let weekday = self.calendar.component(.weekday, from: self.today) - 1
+    static func getDate(shiftedRaltiveToTodayByDays days: Int = 0) -> DateData {
+        let date: Date = self.calendar.date(byAdding: .day, value: days, to: Date())!
 
-        // Sunday is the 1st weekday by default, so need to throw it from 0 to 7.
-        return weekday == 0 ? 7 : weekday
+        let day: Int = self.calendar.component(.day, from: date)
+        let monthIndex: Int = self.calendar.component(.month, from: date) - 1
+        let weekdayIndex: Int = self.getWeekdayIndex(ofDate: date)
+
+        return DateData(day: day, localizedMonth: self.localizedMonths[monthIndex], localizedWeekday: self.localizedWeekdays[weekdayIndex])
     }
 
-    public static var imageNameWeekday: String {
-        return [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ][self.currentWeekday - 1]
+    static func checkIfWeekIsEven(forDate date: Date = Date()) -> Bool {
+        let year: Int = self.calendar.component(.year, from: date)
+        let firstDayOfYear: Date = self.calendar.date(from: DateComponents(year: year, month: 1, day: 1))!
+        let timeInterval: Int = Int(floor((date.timeIntervalSince1970 - firstDayOfYear.timeIntervalSince1970) / 8.64e7))
+        let weekNumber: Int = Int(floor(Double(timeInterval + self.getWeekdayIndex(ofDate: firstDayOfYear)) / 7.0))
+
+        return weekNumber % 2 == 0
     }
 
-    public static func date(shiftedToDays days: Int = 0) -> (day: Int, month: String, monthIndex: String) {
-        let date = self.calendar.date(byAdding: .day, value: days, to: self.today)!
+}
 
-        let day = self.calendar.component(.day, from: date)
-        let month = self.calendar.component(.month, from: date)
 
-        return (
-            day: day,
-            month: [
-                "января", "февраля", "марта", "апреля",
-                "мая", "июня", "июля", "августа",
-                "сентября", "октября", "ноября", "декабря"
-            ][month - 1],
-            monthIndex: [
-                "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
-            ][month - 1]
-        )
-    }
+struct DateData {
+
+    let day: Int
+    let localizedMonth: String
+    let localizedWeekday: String
 
 }

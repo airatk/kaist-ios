@@ -22,16 +22,19 @@ class AppController: UITabBarController {
 
         self.view.addSubview(self.statusBarBlur)
 
-        let currentDate = CalendarService.date()
-        let dateTitle = "\(currentDate.day) \(currentDate.month)"
+        let currentDate: DateData = CalendarService.getDate()
+        let dateTitle: String = "\(currentDate.day) \(currentDate.localizedMonth)"
 
         self.viewControllers = [
-            self.getTab(for: StudentScheduleController(), withTitle: dateTitle, withImageNamed: CalendarService.imageNameWeekday),
+            self.getTab(for: StudentScheduleController(), withTitle: dateTitle, withImageNamed: CalendarService.currentWeekdayImageName),
             self.getTab(for: MapController(), withTitle: "Карта", withImageNamed: "Map"),
             self.getTab(for: SettingsController(), withTitle: "Настройки", withImageNamed: "Settings")
         ]
     }
 
+}
+
+extension AppController {
 
     private func getTab(for screen: UIViewController, withTitle title: String, withImageNamed imageName: String) -> UIViewController {
         let navigationController = UINavigationController(rootViewController: screen)

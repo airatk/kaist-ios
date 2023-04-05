@@ -21,7 +21,10 @@ class StudentScheduleController: ExpandableTableViewController {
         super.viewDidLoad()
 
         self.navigationItem.titleView = {
-            let weektypeChooser = UISegmentedControl(items: [ "текущая, \(CalendarService.isWeekEven ? "чётная" : "нечётная")", "следующая" ])
+            let weektypeChooser: UISegmentedControl = UISegmentedControl(items: [
+                "текущая, \(CalendarService.checkIfWeekIsEven() ? "чётная" : "нечётная")",
+                "следующая",
+            ])
 
             weektypeChooser.apportionsSegmentWidthsByContent = true
             weektypeChooser.selectedSegmentIndex = 0
@@ -121,24 +124,15 @@ extension StudentScheduleController {
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let weekdays: [String] = [
-            "Понедельник",
-            "Вторник",
-            "Среда",
-            "Четверг",
-            "Пятница",
-            "Суббота"
-        ]
+        let date: DateData = CalendarService.getDate(shiftedRaltiveToTodayByDays: section - CalendarService.getWeekdayIndex() + (self.isNextWeekSelected ? 7 : 0))
 
-        let date = CalendarService.date(shiftedToDays: (section + 1) - CalendarService.currentWeekday + (self.isNextWeekSelected ? 7 : 0))
-
-        return "\(weekdays[section]), \(date.day) \(date.month)"
+        return "\(date.localizedWeekday), \(date.day) \(date.localizedMonth)"
     }
 
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         guard let weekday = view as? UITableViewHeaderFooterView else { return }
 
-        weekday.textLabel?.textColor = ((section + 1) == CalendarService.currentWeekday && !self.isNextWeekSelected) ? .lightBlue : .darkGray
+        weekday.textLabel?.textColor = (section == CalendarService.getWeekdayIndex() && !self.isNextWeekSelected) ? .lightBlue : .darkGray
         weekday.textLabel?.textColor = weekday.textLabel?.textColor.withAlphaComponent(0.8)
         weekday.textLabel?.font = .boldSystemFont(ofSize: 12)
     }
