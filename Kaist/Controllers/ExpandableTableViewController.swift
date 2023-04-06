@@ -13,6 +13,7 @@ class ExpandableTableViewController: UITableViewController {
 
     // Dynamic top bar height which fits great both of iPhone 8 & iPhone X
     private let absoluteMaximumBarOffsetY: CGFloat = 44 + UIApplication.shared.statusBarFrame.height
+
     private var previousBarsOffsetY: CGFloat = 0
     private var previousScrollViewContentOffsetY: CGFloat = 0
 
@@ -57,6 +58,7 @@ extension ExpandableTableViewController {
         dy /= 2  // Slowing down bars' movement
 
         self.offsetBarsBy(dy: dy, animated: false)
+
         self.previousBarsOffsetY += dy
         self.previousScrollViewContentOffsetY = scrollView.contentOffset.y
     }
@@ -73,21 +75,28 @@ extension ExpandableTableViewController {
 
 
     private func hideBarsAfterSmallScroll() {
-        let dy = (self.previousBarsOffsetY >= self.absoluteMaximumBarOffsetY / 2) ? self.absoluteMaximumBarOffsetY - self.previousBarsOffsetY : -self.previousBarsOffsetY
+        let dy = (self.previousBarsOffsetY >= self.absoluteMaximumBarOffsetY / 2.0) ? (self.absoluteMaximumBarOffsetY - self.previousBarsOffsetY) : -self.previousBarsOffsetY
 
         self.offsetBarsBy(dy: dy, animated: true)
+
         self.previousBarsOffsetY += dy
     }
 
     private func offsetBarsBy(dy: CGFloat, animated: Bool) {
+        guard dy != 0.0 else { return }
+
         guard let navBar = self.navigationController?.navigationBar else { return }
         guard let tabBar = self.tabBarController?.tabBar else { return }
 
         UIView.animate(withDuration: animated ? 0.25 : 0, delay: animated ? 0.1 : 0, animations: {
-            navBar.frame = navBar.frame.offsetBy(dx: 0, dy: -dy)
+            navBar.bounds = navBar.bounds.offsetBy(dx: 0, dy: dy)
             tabBar.frame = tabBar.frame.offsetBy(dx: 0, dy: dy)
+
+            navBar.titleTextAttributes = [
+                .foregroundColor: UIColor.label.withAlphaComponent(1.0 - navBar.bounds.origin.y / 34.0),
+            ]
         }, completion: { (_) in
-            (self.tabBarController as! AppController).statusBarBlur.isHidden = self.previousBarsOffsetY < 1
+            (self.tabBarController as! AppController).statusBarBlur.isHidden = navBar.bounds.origin.y < 44.0
         })
     }
 

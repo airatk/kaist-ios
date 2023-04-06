@@ -11,28 +11,15 @@ import UIKit
 
 class StudentScheduleController: ExpandableTableViewController {
 
-    private var isNextWeekSelected: Bool = false
+    private let currentWeekdayIndex: Int = CalendarService.getWeekdayIndex()
 
-    private var loadedSchedule: Schedule<StudentClass>?
-    private var selectedSchedule: Schedule<StudentClass>?
+    private var schedule: Schedule<StudentClass>?
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationItem.titleView = {
-            let weektypeChooser: UISegmentedControl = UISegmentedControl(items: [
-                "текущая, \(CalendarService.checkIfWeekIsEven() ? "чётная" : "нечётная")",
-                "следующая",
-            ])
-
-            weektypeChooser.apportionsSegmentWidthsByContent = true
-            weektypeChooser.selectedSegmentIndex = 0
-
-            weektypeChooser.addTarget(self, action: #selector(self.selectWeekType), for: .valueChanged)
-
-            return weektypeChooser
-        }()
+        self.navigationItem.title = "Занятия"
 
         self.refreshControl?.addTarget(self, action: #selector(self.refreshSchedule), for: .valueChanged)
 
@@ -61,14 +48,13 @@ class StudentScheduleController: ExpandableTableViewController {
                 return welcomeScreen
             }(), animated: true)
 
-            self.loadedSchedule = nil
-            self.selectedSchedule = nil
+            self.schedule = nil
             self.tableView.reloadData()
 
             return
         }
 
-        if self.loadedSchedule == nil {
+        if self.schedule == nil {
             self.tableView.setContentOffset(CGPoint(x: 0, y: -100), animated: true)
             self.refreshControl?.beginRefreshing()
             self.refreshSchedule()
@@ -79,19 +65,6 @@ class StudentScheduleController: ExpandableTableViewController {
 
 extension StudentScheduleController {
 
-    private func resetSchedule() {
-        self.selectedSchedule = self.loadedSchedule
-    }
-
-
-    @objc
-    private func selectWeekType(_ sender: UISegmentedControl) {
-        self.isNextWeekSelected = sender.selectedSegmentIndex == 1
-
-        self.resetSchedule()
-        self.tableView.reloadData()
-    }
-
     @objc
     private func refreshSchedule() {
         StudentApiService.client.getSchedule(ofType: .classes) { (schedule, error) in
@@ -99,8 +72,7 @@ extension StudentScheduleController {
                 self.tableView.backgroundView = EmptyView(message: error.localizedDescription)
             }
 
-            self.loadedSchedule = schedule
-            self.resetSchedule()
+            self.schedule = schedule
 
             self.tableView.reloadData()
             self.refreshControl?.endRefreshing()
@@ -112,34 +84,40 @@ extension StudentScheduleController {
 extension StudentScheduleController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        tableView.backgroundView?.isHidden = self.selectedSchedule != nil
+        tableView.backgroundView?.isHidden = self.schedule != nil
 
-        guard let schedule = self.selectedSchedule, !schedule.isEmpty else { return 0 }
+        guard let schedule = self.schedule, !schedule.isEmpty else { return 0 }
 
         return 6
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.selectedSchedule![section]!.count
+        return self.schedule![section]!.count
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let date: DateData = CalendarService.getDate(shiftedRaltiveToTodayByDays: section - CalendarService.getWeekdayIndex() + (self.isNextWeekSelected ? 7 : 0))
+        let date: DateData = CalendarService.getDate(shiftedRaltiveToTodayByDays: section - self.currentWeekdayIndex)
+        let sectionTitle: String = "\(date.localizedWeekday), \(date.day) \(date.localizedMonth)"
 
-        return "\(date.localizedWeekday), \(date.day) \(date.localizedMonth)"
+        guard section % 7 == 0 else { return sectionTitle }
+
+        return [
+            (CalendarService.checkIfWeekIsEven() ? "чётная" : "нечётная") + " неделя",
+            sectionTitle,
+        ].joined(separator: "\n")
     }
 
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         guard let weekday = view as? UITableViewHeaderFooterView else { return }
 
-        weekday.textLabel?.textColor = (section == CalendarService.getWeekdayIndex() && !self.isNextWeekSelected) ? .lightBlue : .darkGray
+        weekday.textLabel?.textColor = (section == self.currentWeekdayIndex) ? .lightBlue : .darkGray
         weekday.textLabel?.textColor = weekday.textLabel?.textColor.withAlphaComponent(0.8)
         weekday.textLabel?.font = .boldSystemFont(ofSize: 12)
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let studentClassCell = tableView.dequeueReusableCell(withIdentifier: StudentClassCell.reuseId, for: indexPath) as! StudentClassCell
-        let studentClass = self.selectedSchedule![indexPath.section]![indexPath.row]
+        let studentClass = self.schedule![indexPath.section]![indexPath.row]
 
         studentClassCell.setStudentClass(studentClass)
 
