@@ -11,11 +11,12 @@ import UIKit
 
 class ExpandableTableViewController: UITableViewController {
 
-    // Dynamic top bar height which fits great both of iPhone 8 & iPhone X
-    private let absoluteMaximumBarOffsetY: CGFloat = 44 + UIApplication.shared.statusBarFrame.height
+    private var absoluteMaximumBarOffsetY: CGFloat {
+        44.0 + (self.tableView.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? -44.0)
+    }
 
-    private var previousBarsOffsetY: CGFloat = 0
-    private var previousScrollViewContentOffsetY: CGFloat = 0
+    private var previousBarsOffsetY: CGFloat = 0.0
+    private var previousScrollViewContentOffsetY: CGFloat = 0.0
 
 
     override func loadView() {
@@ -38,24 +39,25 @@ class ExpandableTableViewController: UITableViewController {
 extension ExpandableTableViewController {
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let isAtTopEdge: Bool = scrollView.contentOffset.y < 0
-        let isAtBottomEdge: Bool = scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.frame.height
+        let isAtTopEdge: Bool = scrollView.contentOffset.y < 0.0
+        let isAtBottomEdge: Bool = scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.height)
 
         guard !isAtTopEdge && !isAtBottomEdge else {
             self.offsetBarsBy(dy: -self.previousBarsOffsetY, animated: true)
-            self.previousBarsOffsetY = 0
+            self.previousBarsOffsetY = 0.0
             return
         }
 
-        var dy = scrollView.contentOffset.y - self.previousScrollViewContentOffsetY
+        var dy: CGFloat = scrollView.contentOffset.y - self.previousScrollViewContentOffsetY
 
         if (self.previousBarsOffsetY + dy) > self.absoluteMaximumBarOffsetY {
             dy = self.absoluteMaximumBarOffsetY - self.previousBarsOffsetY
-        } else if (self.previousBarsOffsetY + dy) < 0 {
+        } else if (self.previousBarsOffsetY + dy) < 0.0 {
             dy = -self.previousBarsOffsetY
         }
 
-        dy /= 2  // Slowing down bars' movement
+        // MARK: Decreasing bars' movement speed.
+        dy /= 2
 
         self.offsetBarsBy(dy: dy, animated: false)
 
@@ -64,7 +66,8 @@ extension ExpandableTableViewController {
     }
 
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard !decelerate else { return }  // Hiding bars only on arupt movements
+        // MARK: Hiding bars only on arupt movements.
+        guard !decelerate else { return }
 
         self.hideBarsAfterSmallScroll()
     }
@@ -73,9 +76,13 @@ extension ExpandableTableViewController {
         self.hideBarsAfterSmallScroll()
     }
 
+}
+
+extension ExpandableTableViewController {
 
     private func hideBarsAfterSmallScroll() {
-        let dy = (self.previousBarsOffsetY >= self.absoluteMaximumBarOffsetY / 2.0) ? (self.absoluteMaximumBarOffsetY - self.previousBarsOffsetY) : -self.previousBarsOffsetY
+        let isHalfOfBarsHidden: Bool = self.previousBarsOffsetY >= (self.absoluteMaximumBarOffsetY / 2.0)
+        let dy: CGFloat = isHalfOfBarsHidden ? (self.absoluteMaximumBarOffsetY - self.previousBarsOffsetY) : -self.previousBarsOffsetY
 
         self.offsetBarsBy(dy: dy, animated: true)
 
@@ -95,8 +102,10 @@ extension ExpandableTableViewController {
             navBar.titleTextAttributes = [
                 .foregroundColor: UIColor.label.withAlphaComponent(1.0 - navBar.bounds.origin.y / 34.0),
             ]
-        }, completion: { (_) in
-            (self.tabBarController as! AppController).statusBarBlur.isHidden = navBar.bounds.origin.y < 44.0
+        }, completion: { _ in
+            guard let appController = self.tabBarController as? AppController else { return }
+
+            appController.statusBarBlur.isHidden = navBar.bounds.origin.y < 44.0
         })
     }
 

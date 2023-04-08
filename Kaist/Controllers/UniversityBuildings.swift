@@ -1,5 +1,5 @@
 //
-//  MapController.swift
+//  UniversityBuildings.swift
 //  Kaist
 //
 //  Created by Airat K on 2/7/19.
@@ -11,7 +11,7 @@ import MapKit
 import CoreLocation
 
 
-class MapController: MapViewController {
+class UniversityBuildingsController: MapViewController {
 
     private let searchController: UISearchController = UISearchController(searchResultsController: nil)
 
@@ -80,7 +80,7 @@ class MapController: MapViewController {
 
 }
 
-extension MapController {
+extension UniversityBuildingsController {
 
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         self.checkLocationAuthorization()
@@ -116,19 +116,19 @@ extension MapController {
 
 }
 
-extension MapController: UISearchControllerDelegate {
+extension UniversityBuildingsController: UISearchControllerDelegate {
 
 
 
 }
 
-extension MapController: UISearchBarDelegate {
+extension UniversityBuildingsController: UISearchBarDelegate {
 
 
 
 }
 
-extension MapController: UISearchResultsUpdating {
+extension UniversityBuildingsController: UISearchResultsUpdating {
 
     func updateSearchResults(for searchController: UISearchController) {
         self.mapView.removeAnnotations(self.currentlyShownUniversityBuildingAnnotations)
@@ -147,7 +147,7 @@ extension MapController: UISearchResultsUpdating {
 
 }
 
-extension MapController: UITabBarControllerDelegate {
+extension UniversityBuildingsController: UITabBarControllerDelegate {
 
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         self.mapView.deselectAnnotation(self.mapView.selectedAnnotations.first, animated: true)

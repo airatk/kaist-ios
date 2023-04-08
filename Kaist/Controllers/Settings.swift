@@ -1,5 +1,5 @@
 //
-//  SettingsController.swift
+//  Settings.swift
 //  Kaist
 //
 //  Created by Airat K on 28/6/19.

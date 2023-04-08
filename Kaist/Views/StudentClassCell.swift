@@ -72,7 +72,7 @@ extension StudentClassCell {
     func setStudentClass(_ studentClass: StudentClass) {
         self.title.text = studentClass.discipline
 
-        guard studentClass.isFullDayClass else {
+        guard studentClass.isFullDay else {
             self.hideSubviews(.allButTitle)
             return
         }

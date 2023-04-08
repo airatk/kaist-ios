@@ -64,7 +64,7 @@ extension StudentApiService {
         }
     }
 
-    func getSchedule(ofType scheduleType: ScheduleType, onComplete handleCompletion: @escaping ContentResponseHandler<Schedule<StudentClass>>) {
+    func getSchedule(ofType scheduleType: ScheduleType, onComplete handleCompletion: @escaping ContentResponseHandler<ClassesSchedule<StudentClass>>) {
         let url: URL = self.makeUrlWithQuery(queryItems:
             URLQueryItem(name: "p_p_id", value: "pubStudentSchedule_WAR_publicStudentSchedule10"),
             URLQueryItem(name: "p_p_lifecycle", value: "2"),
@@ -72,7 +72,7 @@ extension StudentApiService {
             URLQueryItem(name: "groupId", value: self.groupScheduleId)
         )
 
-        self.get(from: url) { (schedule: Schedule<StudentClass>?, error: DataFetchError?) in
+        self.get(from: url) { (schedule: ClassesSchedule<StudentClass>?, error: DataFetchError?) in
             if let error = error {
                 handleCompletion(nil, error)
                 return

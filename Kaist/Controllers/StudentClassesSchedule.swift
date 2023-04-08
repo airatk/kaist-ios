@@ -1,5 +1,5 @@
 //
-//  StudentScheduleController.swift
+//  StudentClassesSchedule.swift
 //  Kaist
 //
 //  Created by Airat K on 28/6/19.
@@ -9,11 +9,11 @@
 import UIKit
 
 
-class StudentScheduleController: ExpandableTableViewController {
+class StudentClassesScheduleController: ExpandableTableViewController {
 
     private let currentWeekdayIndex: Int = CalendarService.getWeekdayIndex()
 
-    private var schedule: Schedule<StudentClass>?
+    private var schedule: ClassesSchedule<StudentClass>?
 
 
     override func viewDidLoad() {
@@ -35,7 +35,7 @@ class StudentScheduleController: ExpandableTableViewController {
 
         guard StudentApiService.client.isSignedIn else {
             self.present({
-                let welcomeScreen: UINavigationController = UINavigationController(rootViewController: WelcomeController())
+                let welcomeScreen: UINavigationController = UINavigationController(rootViewController: WelcomeScreenController())
                 let emptyImage: UIImage = UIImage()
 
                 welcomeScreen.navigationBar.setBackgroundImage(emptyImage, for: .default)
@@ -63,7 +63,7 @@ class StudentScheduleController: ExpandableTableViewController {
 
 }
 
-extension StudentScheduleController {
+extension StudentClassesScheduleController {
 
     @objc
     private func refreshSchedule() {
@@ -81,7 +81,7 @@ extension StudentScheduleController {
 
 }
 
-extension StudentScheduleController {
+extension StudentClassesScheduleController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         tableView.backgroundView?.isHidden = self.schedule != nil
@@ -126,7 +126,7 @@ extension StudentScheduleController {
 
 }
 
-extension StudentScheduleController {
+extension StudentClassesScheduleController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)

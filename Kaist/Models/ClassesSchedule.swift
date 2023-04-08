@@ -1,5 +1,5 @@
 //
-//  Schedule.swift
+//  ClassesSchedule.swift
 //  Kaist
 //
 //  Created by Airat K on 31/3/2023.
@@ -9,7 +9,7 @@
 import Foundation
 
 
-struct Schedule<Class: Decodable>: Decodable {
+struct ClassesSchedule<Class: Decodable>: Decodable {
 
     let monday: [Class]
     let tuesday: [Class]
@@ -42,7 +42,7 @@ struct Schedule<Class: Decodable>: Decodable {
 
 }
 
-extension Schedule {
+extension ClassesSchedule {
 
     subscript(index: Int) -> [Class]? {
         switch index {

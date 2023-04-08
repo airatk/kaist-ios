@@ -1,5 +1,5 @@
 //
-//  WelcomeController.swift
+//  WelcomeScreen.swift
 //  Kaist
 //
 //  Created by Airat K on 12/8/19.
@@ -9,7 +9,7 @@
 import UIKit
 
 
-class WelcomeController: UIViewController {
+class WelcomeScreenController: UIViewController {
 
     private let welcomeView: UIStackView = UIStackView()
 
@@ -38,7 +38,7 @@ class WelcomeController: UIViewController {
 
 }
 
-extension WelcomeController {
+extension WelcomeScreenController {
 
     private func setUpWelcomeView() {
         self.welcomeView.axis = .vertical
@@ -127,7 +127,7 @@ extension WelcomeController {
 
 }
 
-extension WelcomeController: UIAdaptivePresentationControllerDelegate {
+extension WelcomeScreenController: UIAdaptivePresentationControllerDelegate {
 
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
         return false
@@ -135,7 +135,7 @@ extension WelcomeController: UIAdaptivePresentationControllerDelegate {
 
 }
 
-extension WelcomeController: UITextFieldDelegate {
+extension WelcomeScreenController: UITextFieldDelegate {
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
         UIView.popAnimate {

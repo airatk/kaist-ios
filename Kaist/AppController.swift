@@ -27,8 +27,8 @@ class AppController: UITabBarController {
         let dateTitle: String = "\(currentDate.day) \(currentDate.localizedMonth)"
 
         self.viewControllers = [
-            self.makeTab(for: StudentScheduleController(), usingTitle: dateTitle, usingImageNamed: CalendarService.currentWeekdayImageName),
-            self.makeTab(for: MapController(), usingTitle: "Карта", usingImageNamed: "Map"),
+            self.makeTab(for: StudentClassesScheduleController(), usingTitle: dateTitle, usingImageNamed: CalendarService.currentWeekdayImageName),
+            self.makeTab(for: UniversityBuildingsController(), usingTitle: "Карта", usingImageNamed: "Map"),
             self.makeTab(for: SettingsController(), usingTitle: "Настройки", usingImageNamed: "Settings")
         ]
     }
