@@ -6,8 +6,15 @@
 //  Copyright © 2023 Airat K. All rights reserved.
 //
 
+import Foundation
+
+
 func format(discipline rawDiscipline: String) -> String {
-    return rawDiscipline.trimmingCharacters(in: .whitespaces)
+    var formatted: String = rawDiscipline.trimmingCharacters(in: .whitespaces)
+
+    formatted = formatted.replacingOccurrences(of: "/", with: " / ")
+
+    return formatted
 }
 
 func format(type rawType: String) -> String {
@@ -37,16 +44,13 @@ func format(lecturer rawLecturer: String) -> String {
     return rawLecturer.trimmingCharacters(in: .whitespaces).capitalized
 }
 
-func format(lecturerUsername rawLecturerUsername: String) -> String {
-    return rawLecturerUsername.trimmingCharacters(in: .whitespaces)
-}
-
 func format(auditorium rawAuditorium: String) -> String {
     let formatted: String = rawAuditorium.trimmingCharacters(in: .whitespaces)
 
-    guard !formatted.contains("----"), formatted != "КСК КАИ ОЛИМП" else { return "" }
+    guard !formatted.contains("----"), formatted != "КСК КАИ ОЛИМП", formatted != "лыжная база" else { return "" }
     guard formatted != "актовый зал" else { return "в актовом зале" }
     guard !formatted.contains("лекционный зал") else { return formatted.replacingOccurrences(of: "лекционный зал", with: "в лекционном зале") }
+    guard formatted != "кафедра" else { return "на кафедре" }
 
     return "в аудитории \(formatted)"
 }
@@ -56,6 +60,7 @@ func format(building rawBuilding: String) -> String {
 
     guard !formatted.contains("----") else { return "" }
     guard formatted != "КСК КАИ ОЛИМП" else { return "в КСК «Олимп»" }
+    guard formatted != "Лыжная база" else { return "на лыжной базе" }
 
     return "в \(formatted)ке"
 }
@@ -70,9 +75,12 @@ func format(date rawDate: String) -> String {
 
 func format(dates rawDates: String) -> String {
     var formatted: String = rawDates.trimmingCharacters(in: .whitespaces)
-    
+
+    formatted = formatted.trimmingCharacters(in: CharacterSet(charactersIn: "/-"))
     formatted = formatted.replacingOccurrences(of: "/", with: " / ")
+    formatted = formatted.replacingOccurrences(of: ",", with: ", ")
     formatted = formatted.split(separator: " ").filter { !$0.isEmpty } .joined(separator: " ")
+    formatted = formatted.replacingOccurrences(of: "/ /", with: "/")
 
     formatted = formatted.replacingOccurrences(of: "чет", with: "чётная")
     formatted = formatted.replacingOccurrences(of: "неч", with: "нечётная")

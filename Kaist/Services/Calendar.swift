@@ -32,6 +32,7 @@ class CalendarService {
         "Четверг",
         "Пятница",
         "Суббота",
+        "Воскресенье",
     ]
     static let weekdayImageNames: [String] = [
         "Monday",

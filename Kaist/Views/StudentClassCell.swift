@@ -69,7 +69,14 @@ class StudentClassCell: UITableViewCell {
 
 extension StudentClassCell {
 
-    func setStudentClass(_ studentClass: StudentClass) {
+    func setStudentClass(_ studentClass: StudentClass?) {
+        guard let studentClass = studentClass else {
+            self.title.text = "Выходной"
+            self.hideSubviews(.allButTitle)
+
+            return
+        }
+
         self.title.text = studentClass.discipline
 
         guard studentClass.isFullDay else {
@@ -84,7 +91,11 @@ extension StudentClassCell {
         } else {
             self.lecturer.text = studentClass.lecturer
         }
-        self.departmentUnit.text = studentClass.departmentUnit
+        if studentClass.departmentUnit.isEmpty {
+            self.hideSubviews(.departmentUnit)
+        } else {
+            self.departmentUnit.text = studentClass.departmentUnit
+        }
         self.startTime.text = studentClass.startTime
 
         if studentClass.auditorium.isEmpty {
@@ -108,6 +119,7 @@ private extension StudentClassCell {
 
         case allButTitle
         case lecturer
+        case departmentUnit
         case dates
 
     }
@@ -123,6 +135,8 @@ private extension StudentClassCell {
             self.type.isHidden = true
         case .lecturer:
             self.lecturerStackView.isHidden = true
+        case .departmentUnit:
+            self.departmentUnitStackView.isHidden = true
         case .dates:
             self.dates.isHidden = true
         }
