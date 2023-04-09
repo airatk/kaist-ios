@@ -1,5 +1,5 @@
 //
-//  UIButtonExtension.swift
+//  UIButton.swift
 //  Kaist
 //
 //  Created by Airat K on 15/8/19.

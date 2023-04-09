@@ -1,5 +1,5 @@
 //
-//  UIImageViewExtension.swift
+//  UIImageView.swift
 //  Kaist
 //
 //  Created by Airat K on 21/8/19.

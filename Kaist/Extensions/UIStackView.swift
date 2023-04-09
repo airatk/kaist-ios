@@ -1,5 +1,5 @@
 //
-//  UIStackViewExtension.swift
+//  UIStackView.swift
 //  Kaist
 //
 //  Created by Airat K on 1/4/2023.

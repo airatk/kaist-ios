@@ -1,5 +1,5 @@
 //
-//  UIColorExtension.swift
+//  UIColor.swift
 //  Kaist
 //
 //  Created by Airat K on 13/8/19.
