@@ -19,6 +19,7 @@ class StudentClassesScheduleController: ExpandableTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.title = "Занятия"
 
         self.refreshControl?.addTarget(self, action: #selector(self.refreshSchedule), for: .valueChanged)
@@ -26,39 +27,16 @@ class StudentClassesScheduleController: ExpandableTableViewController {
         self.tableView.register(StudentClassCell.self, forCellReuseIdentifier: StudentClassCell.reuseId)
     }
 
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(self.resetAndRefreshSchedule), name: .refreshSchedule, object: nil)
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
 
-        guard StudentApiService.client.isSignedIn else {
-            self.present({
-                let welcomeScreen: UINavigationController = UINavigationController(rootViewController: WelcomeScreenController())
-                let emptyImage: UIImage = UIImage()
-
-                welcomeScreen.navigationBar.setBackgroundImage(emptyImage, for: .default)
-                welcomeScreen.navigationBar.shadowImage = emptyImage
-
-                if #available(iOS 13.0, *) {
-                    welcomeScreen.isModalInPresentation = true
-                }
-
-                return welcomeScreen
-            }(), animated: true)
-
-            self.schedule = nil
-            self.tableView.reloadData()
-
-            return
-        }
-
-        if self.schedule == nil {
-            self.tableView.setContentOffset(CGPoint(x: 0, y: -100), animated: true)
-            self.refreshControl?.beginRefreshing()
-            self.refreshSchedule()
-        }
+        NotificationCenter.default.removeObserver(self, name: .refreshSchedule, object: nil)
     }
 
 }
@@ -66,7 +44,15 @@ class StudentClassesScheduleController: ExpandableTableViewController {
 extension StudentClassesScheduleController {
 
     @objc
+    private func resetAndRefreshSchedule() {
+        self.resetSchedule()
+        self.refreshSchedule()
+    }
+
+    @objc
     private func refreshSchedule() {
+        self.refreshControl?.beginRefreshing()
+
         StudentApiService.client.getSchedule(ofType: .classes) { (schedule, error) in
             if let error = error {
                 self.tableView.backgroundView = EmptyView(message: error.localizedDescription)
@@ -77,6 +63,11 @@ extension StudentClassesScheduleController {
             self.tableView.reloadData()
             self.refreshControl?.endRefreshing()
         }
+    }
+
+    private func resetSchedule() {
+        self.schedule = nil
+        self.tableView.reloadData()
     }
 
 }
@@ -92,7 +83,11 @@ extension StudentClassesScheduleController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.schedule![section]!.count
+        let numberOfClassesInDay: Int = self.schedule![section]!.count
+        
+        guard numberOfClassesInDay > 0 else { return 1 }
+
+        return numberOfClassesInDay
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -116,8 +111,8 @@ extension StudentClassesScheduleController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let studentClassCell = tableView.dequeueReusableCell(withIdentifier: StudentClassCell.reuseId, for: indexPath) as! StudentClassCell
-        let studentClass = self.schedule![indexPath.section]![indexPath.row]
+        let studentClassCell: StudentClassCell = tableView.dequeueReusableCell(withIdentifier: StudentClassCell.reuseId, for: indexPath) as! StudentClassCell
+        let studentClass: StudentClass? = self.schedule![indexPath.section]![safeIndex: indexPath.row]
 
         studentClassCell.setStudentClass(studentClass)
 

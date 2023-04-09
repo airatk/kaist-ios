@@ -11,13 +11,12 @@ import UIKit
 
 class AppController: UITabBarController {
 
-    var statusBarBlur: UIView!
+    var statusBarBlur: UIVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .prominent))
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.statusBarBlur = UIVisualEffectView(effect: UIBlurEffect(style: .prominent))
         self.statusBarBlur.frame = UIApplication.shared.statusBarFrame
         self.statusBarBlur.isHidden = true
 
@@ -31,6 +30,40 @@ class AppController: UITabBarController {
             self.makeTab(for: UniversityBuildingsController(), usingTitle: "Карта", usingImageNamed: "Map"),
             self.makeTab(for: SettingsController(), usingTitle: "Настройки", usingImageNamed: "Settings")
         ]
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(self.welcomeUser), name: .welcomeUser, object: nil)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        guard StudentApiService.client.isSignedIn else {
+            NotificationCenter.default.post(name: .welcomeUser, object: nil)
+            return
+        }
+
+        NotificationCenter.default.post(name: .refreshSchedule, object: nil)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        NotificationCenter.default.removeObserver(self, name: .welcomeUser, object: nil)
+    }
+
+}
+
+extension AppController {
+
+    @objc
+    private func welcomeUser() {
+        self.present(WelcomeScreenController(), animated: true) {
+            self.selectedIndex = 0
+        }
     }
 
 }

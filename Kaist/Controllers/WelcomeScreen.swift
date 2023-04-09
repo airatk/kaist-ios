@@ -194,8 +194,11 @@ extension WelcomeScreenController: UITextFieldDelegate {
 
             if let error = error {
                 ErrorAlert.show(self, errorTitle: "Ошибка входа", errorMessage: error.localizedDescription)
-            } else {
-                self.dismiss(animated: true)
+                return
+            }
+
+            self.dismiss(animated: true) {
+                NotificationCenter.default.post(name: .refreshSchedule, object: nil)
             }
         }
     }

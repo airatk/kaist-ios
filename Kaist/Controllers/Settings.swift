@@ -19,8 +19,6 @@ class SettingsController: UIViewController {
 
     private let resetSettingsButton = UIButton()
 
-    private var isSetUp = false
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,11 +31,7 @@ class SettingsController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        guard !self.isSetUp else { return }
-
         self.setUpCompactUserInfo()
-
-        self.isSetUp = true
     }
 
     private func setUpCompactUserInfo() {
@@ -81,15 +75,13 @@ class SettingsController: UIViewController {
     @objc private func resetSettings() {
         StudentApiService.client.signOut()
 
-        self.isSetUp = false
-
         self.nameLabel.removeFromSuperview()
         self.instituteLabel.removeFromSuperview()
         self.yearLabel.removeFromSuperview()
         self.groupLabel.removeFromSuperview()
         self.cardLabel.removeFromSuperview()
 
-        self.tabBarController?.selectedIndex = 0
+        NotificationCenter.default.post(name: .welcomeUser, object: nil)
     }
 
 }
