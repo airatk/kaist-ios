@@ -9,6 +9,9 @@
 import Foundation
 
 
+typealias DateData = (day: Int, localizedMonth: String, localizedWeekday: String)
+
+
 class CalendarService {
 
     static let localizedMonths: [String] = [
@@ -74,19 +77,10 @@ extension CalendarService {
     static func checkIfWeekIsEven(forDate date: Date = Date()) -> Bool {
         let year: Int = self.calendar.component(.year, from: date)
         let firstDayOfYear: Date = self.calendar.date(from: DateComponents(year: year, month: 1, day: 1))!
-        let timeInterval: Int = Int(floor((date.timeIntervalSince1970 - firstDayOfYear.timeIntervalSince1970) / 8.64e7))
+        let timeInterval: Int = Int(floor((date.timeIntervalSince1970 - firstDayOfYear.timeIntervalSince1970) / 8.64e4))
         let weekNumber: Int = Int(floor(Double(timeInterval + self.getWeekdayIndex(ofDate: firstDayOfYear)) / 7.0))
 
         return weekNumber % 2 == 0
     }
-
-}
-
-
-struct DateData {
-
-    let day: Int
-    let localizedMonth: String
-    let localizedWeekday: String
 
 }
